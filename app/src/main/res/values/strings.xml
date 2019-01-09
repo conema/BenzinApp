@@ -3,4 +3,16 @@
     <string name="title_home">Home</string>
     <string name="title_stations">Stazioni</string>
     <string name="title_car">Auto</string>
+
+    <string name="stats_data_text">I tuoi dati</string>
+    <string name="stats_from">Dal</string>
+
+    <string name="stats_kml_label">in media</string>
+    <string name="stats_km_label">percorsi</string>
+    <string name="stats_euro_label">spesi in rifornimento</string>
+
+    <string name="shortcut_title">Scorciatoie</string>
+
+    <string name="last_stations_title">Le tue ultime stazioni</string>
+    <string name="last_stations_price">Prezzo</string>
 </resources>
