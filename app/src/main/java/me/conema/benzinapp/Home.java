@@ -3,6 +3,7 @@ package me.conema.benzinapp;
 import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -13,12 +14,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+
 import me.conema.benzinapp.classes.App;
 import me.conema.benzinapp.classes.AppFactory;
+import me.conema.benzinapp.classes.Car;
+import me.conema.benzinapp.classes.CarFactory;
 import me.conema.benzinapp.classes.Station;
 
 public class Home extends AppCompatActivity {
@@ -86,6 +94,7 @@ public class Home extends AppCompatActivity {
         });
 
         updateLastStations();
+        updateCarStats();
     }
 
 
@@ -93,7 +102,8 @@ public class Home extends AppCompatActivity {
         //Last stations
         GridLayout lastStations = findViewById(R.id.last_stations_grid);
 
-        //TODO: Delete view
+        //Delete child view (old station)
+        lastStations.removeAllViews();
 
         App app = AppFactory.getInstance().getApp();
 
@@ -109,6 +119,66 @@ public class Home extends AppCompatActivity {
             //TODO: station img
 
             lastStations.addView(view);
+        }
+    }
+
+    private void updateCarStats() {
+        ArrayList<Car> cars = CarFactory.getInstance().getCars();
+
+        LinearLayout statsList = findViewById(R.id.stats_list);
+        LinearLayout statsCircles = findViewById(R.id.stats_circles);
+
+        //Delete child view (old line and circle stats)
+        statsList.removeAllViews();
+        statsCircles.removeAllViews();
+
+        //Circle total
+        View view = getLayoutInflater().from(this).inflate(R.layout.car_circle, statsCircles, false);
+
+        TextView circleName = view.findViewById(R.id.stats_circle_name);
+        circleName.setText("Totale");
+
+        ImageView circle = view.findViewById(R.id.stats_circle);
+        circle.setColorFilter(getResources().getColor(R.color.colorCarGray1), PorterDuff.Mode.SRC_ATOP);
+
+        statsCircles.addView(view);
+
+        //Line total
+        view = getLayoutInflater().from(this).inflate(R.layout.car_stats, statsList, false);
+        ProgressBar progressBar = view.findViewById(R.id.stats_progressbar);
+        progressBar.setProgress(80);
+
+        //TODO: progress bar working
+
+        TextView statsL = view.findViewById(R.id.stats_l);
+        statsL.setText("x L");
+
+        statsList.addView(view);
+
+        for (Car car : cars) {
+            //Circle
+            view = getLayoutInflater().from(this).inflate(R.layout.car_circle, statsCircles, false);
+
+            circleName = view.findViewById(R.id.stats_circle_name);
+            circleName.setText(car.getName());
+
+            circle = view.findViewById(R.id.stats_circle);
+            circle.setColorFilter(car.getColor(), PorterDuff.Mode.SRC_ATOP);
+
+            statsCircles.addView(view);
+
+            //Line
+            view = getLayoutInflater().from(this).inflate(R.layout.car_stats, statsList, false);
+
+            progressBar = view.findViewById(R.id.stats_progressbar);
+            progressBar.setProgress(80);
+
+            //TODO: progress bar working
+
+            statsL = view.findViewById(R.id.stats_l);
+            statsL.setText(car.getKmDone() + "L");
+
+            statsList.addView(view);
         }
     }
 }

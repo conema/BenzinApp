@@ -6,7 +6,7 @@ public class StationFactory {
     private static StationFactory singleton;
     private ArrayList<Station> stationList = new ArrayList<>();
 
-    static StationFactory getInstance() {
+    public static StationFactory getInstance() {
         if (singleton == null) {
             singleton = new StationFactory();
         }

@@ -1,5 +1,7 @@
 package me.conema.benzinapp.classes;
 
+import android.graphics.Color;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,14 +16,16 @@ public class Car {
     private int kmDone;
     private float kml;
     private ArrayList weekHistory;
+    private int color;
 
-    Car(int id, String name, int kmDone, float kml, ArrayList weekHistory) {
+    Car(int id, String name, int kmDone, float kml, ArrayList weekHistory, int color) {
         this.id = id;
         this.name = name;
         this.lastSync = Calendar.getInstance().getTime();
         this.kmDone = kmDone;
         this.kml = kml;
         this.weekHistory = weekHistory;
+        this.color = color;
     }
 
     public int getId() {
@@ -70,5 +74,13 @@ public class Car {
 
     public void setWeekHistory(ArrayList weekHistory) {
         this.weekHistory = weekHistory;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }
