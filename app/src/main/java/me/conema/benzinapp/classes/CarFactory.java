@@ -44,7 +44,7 @@ public class CarFactory {
         return carList.remove(car);
     }
 
-    Car getAutoById(int id) {
+    Car getCarById(int id) {
         for (Car car : carList) {
             if (car.getId() == id) {
                 return car;
