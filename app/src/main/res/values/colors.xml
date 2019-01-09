@@ -7,4 +7,8 @@
     <color name="colorGray">#EEEEEE</color>
 
     <color name="colorButtonLabel">#47525E</color>
+
+    <color name="colorCarGray1">#1F2D3D</color>
+    <color name="colorCarGray2">#8492A6</color>
+    <color name="colorCarGray3">#E0E6ED</color>
 </resources>

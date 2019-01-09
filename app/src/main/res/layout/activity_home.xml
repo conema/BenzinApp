@@ -34,45 +34,29 @@
                     android:text="@string/stats_from"
                     android:gravity="center" />
 
+                <!-- List car -->
                 <LinearLayout
+                    android:id="@+id/stats_circles"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center">
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
 
-                    <ProgressBar
-                        android:layout_width="220dp"
-                        android:layout_height="wrap_content"
-                        style="@style/MyProgressBarTwo"
-                        android:progress="30"
-                        android:theme="@style/MyProgressBarTwo"
-                        android:visibility="visible" />
+                    <!-- Circle car -->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pandy" />
                 </LinearLayout>
 
-
+                <!-- Graph line -->
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:id="@+id/stats_list"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center">
+                    android:orientation="vertical">
 
-                    <ProgressBar
-                        android:layout_width="220dp"
-                        android:layout_height="wrap_content"
-                        style="@style/MyProgressBarTwo"
-                        android:secondaryProgress="50"
-                        android:theme="@style/MyProgressBarTwo"
-                        android:visibility="visible" />
+                    <!-- Fuel line car -->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Francy" />
                 </LinearLayout>
-
             </LinearLayout>
 
 
