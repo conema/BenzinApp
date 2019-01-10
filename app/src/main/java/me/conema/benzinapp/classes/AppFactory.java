@@ -21,7 +21,7 @@ public class AppFactory {
         lastStations.add(StationFactory.getInstance().getStationById(1));
         lastStations.add(StationFactory.getInstance().getStationById(2));
 
-        app = new App(CarFactory.getInstance().getAutoById(0), StationFactory.getInstance().getStationById(0), lastStations, new Date());
+        app = new App(CarFactory.getInstance().getCarById(0), StationFactory.getInstance().getStationById(0), lastStations, new Date());
     }
 
     public App getApp() {

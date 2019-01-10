@@ -16,9 +16,9 @@ public class CarFactory {
     }
 
     private CarFactory() {
-        Car car1 = new Car(0, "Pandy", 0, 0, null);
-        Car car2 = new Car(1, "Francy", 0, 0, null);
-        Car car3 = new Car(2, "Sfiesta", 0, 0, null);
+        Car car1 = new Car(0, "Pandy", 0, 20, 43, null);
+        Car car2 = new Car(1, "Francy", 0, 24, 69, null);
+        Car car3 = new Car(2, "Sfiesta", 0, 18, 54, null);
 
         carList.add(car1);
         carList.add(car2);
@@ -44,7 +44,7 @@ public class CarFactory {
         return carList.remove(car);
     }
 
-    Car getAutoById(int id) {
+    Car getCarById(int id) {
         for (Car car : carList) {
             if (car.getId() == id) {
                 return car;

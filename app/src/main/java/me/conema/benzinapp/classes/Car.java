@@ -13,14 +13,16 @@ public class Car {
     private Date lastSync;
     private int kmDone;
     private float kml;
+    private int percTank;
     private ArrayList weekHistory;
 
-    Car(int id, String name, int kmDone, float kml, ArrayList weekHistory) {
+    Car(int id, String name, int kmDone, float kml, int percTank, ArrayList weekHistory) {
         this.id = id;
         this.name = name;
         this.lastSync = Calendar.getInstance().getTime();
         this.kmDone = kmDone;
         this.kml = kml;
+        this.setPercTank(percTank);
         this.weekHistory = weekHistory;
     }
 
@@ -70,5 +72,14 @@ public class Car {
 
     public void setWeekHistory(ArrayList weekHistory) {
         this.weekHistory = weekHistory;
+    }
+
+
+    public int getPercTank() {
+        return percTank;
+    }
+
+    public void setPercTank(int percTank) {
+        this.percTank = percTank;
     }
 }

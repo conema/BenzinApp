@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".classes.CarList">
+
+    <LinearLayout
+        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/relLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/border">
+
+            <ImageView
+                android:layout_marginRight="16dp"
+                android:id="@+id/carImg"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@mipmap/carimg" />
+
+            <TextView
+                android:layout_marginBottom="16dp"
+                android:textSize="18sp"
+                android:id="@+id/carNome"
+                android:layout_toRightOf="@+id/carImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pandy" />
+
+            <ImageButton
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_refresh_black_24dp"
+                android:background="@android:color/transparent" />
+
+            <ImageView
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="16dp"
+                android:id="@+id/fuelIcon"
+                android:layout_toRightOf="@id/carImg"
+                android:layout_below="@id/carNome"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_fuel_station_pump" />
+
+            <ProgressBar
+                android:layout_toRightOf="@id/fuelIcon"
+                android:layout_below="@id/carNome"
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="18dp"
+                android:progress="20" />
+
+            <TextView
+                android:layout_toRightOf="@id/carImg"
+                android:layout_below="@id/fuelIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Km rimanenti: 10" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/border">
+
+            <ImageView
+                android:layout_marginRight="16dp"
+                android:id="@+id/carImg2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@mipmap/carimg2" />
+
+            <TextView
+                android:layout_marginBottom="16dp"
+                android:textSize="18sp"
+                android:id="@+id/carNome2"
+                android:layout_toRightOf="@+id/carImg2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Francy" />
+
+            <ImageButton
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_refresh_black_24dp"
+                android:background="@android:color/transparent" />
+
+            <ImageView
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="16dp"
+                android:id="@+id/fuelIcon2"
+                android:layout_toRightOf="@id/carImg2"
+                android:layout_below="@id/carNome2"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_fuel_station_pump" />
+
+            <ProgressBar
+                android:layout_toRightOf="@id/fuelIcon2"
+                android:layout_below="@id/carNome2"
+                android:id="@+id/progressBar2"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="18dp"
+                android:progress="90"
+                android:progressTint="@color/colorPrimaryDark" />
+
+            <TextView
+                android:layout_toRightOf="@id/carImg2"
+                android:layout_below="@id/fuelIcon2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Km rimanenti: 10" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
