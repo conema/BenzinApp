@@ -1,5 +1,6 @@
 package me.conema.benzinapp.classes;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -19,7 +20,7 @@ public class SyncedCar extends AppCompatActivity {
         fuelText = (EditText) findViewById(R.id.fuelEditText);
         roadText = (EditText) findViewById(R.id.roadEditText);
         final CarFactory factory = CarFactory.getInstance();
-        Car car = new Car(0, "Fiat punto", 55000, 17, 40, null);
+        Car car = new Car(0, "Fiat punto", 55000, 17, null, Color.parseColor("#121212"), 70);
         carText.setText(car.getName());
         fuelText.setText("5");
         roadText.setText(car.getKmDone());
