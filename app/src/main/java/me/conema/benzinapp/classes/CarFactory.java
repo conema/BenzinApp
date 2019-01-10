@@ -18,9 +18,9 @@ public class CarFactory {
     }
 
     private CarFactory() {
-        Car car1 = new Car(0, "Pandy", 0, 0, null, Color.parseColor("#1F2D3D"));
-        Car car2 = new Car(1, "Francy", 0, 0, null, Color.parseColor("#8492A6"));
-        Car car3 = new Car(2, "Sfiesta", 0, 0, null, Color.parseColor("#E0E6ED"));
+        Car car1 = new Car(0, "Pandy", 0, 0, null, Color.parseColor("#1F2D3D"), 80);
+        Car car2 = new Car(1, "Francy", 0, 0, null, Color.parseColor("#8492A6"), 40);
+        Car car3 = new Car(2, "Sfiesta", 0, 0, null, Color.parseColor("#E0E6ED"), 77);
 
         carList.add(car1);
         carList.add(car2);
