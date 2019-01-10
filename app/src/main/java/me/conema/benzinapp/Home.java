@@ -1,5 +1,6 @@
 package me.conema.benzinapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -18,7 +19,8 @@ public class Home extends AppCompatActivity {
                 case R.id.navigation_home:
                     return true;
                 case R.id.navigation_stations:
-                    //Open activity
+                    Intent intent = new Intent(getApplicationContext(), StationsActivity.class);
+                    startActivity(intent);
                     return true;
                 case R.id.navigation_car:
                     //open car
