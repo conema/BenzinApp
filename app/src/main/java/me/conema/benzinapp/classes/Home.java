@@ -1,4 +1,4 @@
-package me.conema.benzinapp;
+package me.conema.benzinapp.classes;
 
 import android.app.ActionBar;
 import android.content.Context;

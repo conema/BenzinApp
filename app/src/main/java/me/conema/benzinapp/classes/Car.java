@@ -15,6 +15,7 @@ public class Car {
     private Date lastSync;
     private int kmDone;
     private float kml;
+    private int percTank;
     private ArrayList weekHistory;
     private int color;
 
@@ -24,6 +25,7 @@ public class Car {
         this.lastSync = Calendar.getInstance().getTime();
         this.kmDone = kmDone;
         this.kml = kml;
+        this.setPercTank(percTank);
         this.weekHistory = weekHistory;
         this.color = color;
     }
@@ -74,6 +76,15 @@ public class Car {
 
     public void setWeekHistory(ArrayList weekHistory) {
         this.weekHistory = weekHistory;
+    }
+
+
+    public int getPercTank() {
+        return percTank;
+    }
+
+    public void setPercTank(int percTank) {
+        this.percTank = percTank;
     }
 
     public int getColor() {
