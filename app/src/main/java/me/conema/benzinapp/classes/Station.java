@@ -3,9 +3,6 @@ package me.conema.benzinapp.classes;
 import android.graphics.drawable.Drawable;
 
 public class Station {
-    /*
-    TODO: Station logo
-     */
     private int id;
     private String name;
     private String address;
