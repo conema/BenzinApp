@@ -70,6 +70,20 @@ public class StationsFragment extends Fragment implements LocationListener {
         return inflater.inflate(R.layout.fragment_stations, container, false);
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mapView = (MapView) getView().findViewById(R.id.mapquestMapView);
+
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(parMapboxMap -> {
+            mapboxMap = parMapboxMap;
+            mapView.setStreetMode();
+            mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 11));
+        });
+    }
+
     @SuppressLint("MissingPermission")
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,16 +95,6 @@ public class StationsFragment extends Fragment implements LocationListener {
         checkLocationPermission();
 
         initialize();
-
-        mapView = getActivity().findViewById(R.id.mapquestMapView);
-
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(parMapboxMap -> {
-            mapboxMap = parMapboxMap;
-            mapView.setStreetMode();
-            mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 11));
-        });
-
     }
 
     @Override
