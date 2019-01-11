@@ -1,4 +1,4 @@
-package me.conema.benzinapp.classes;
+package me.conema.benzinapp;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -13,7 +13,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import me.conema.benzinapp.R;
+import me.conema.benzinapp.classes.Car;
+import me.conema.benzinapp.classes.CarFactory;
 
 public class CarList extends AppCompatActivity {
 

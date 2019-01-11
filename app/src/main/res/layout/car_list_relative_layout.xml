@@ -13,7 +13,7 @@
         android:layout_height="100dp"
         android:layout_marginRight="16dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/carimg2" />
+        android:src="@drawable/carimg2back" />
 
     <TextView
         android:id="@+id/carNome"

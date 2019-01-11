@@ -18,9 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".classes.SyncedCar" />
-        <activity android:name=".classes.CarSync" />
-        <activity android:name=".classes.CarList"></activity>
+        <activity android:name=".SyncedCar" />
+        <activity android:name=".CarSync" />
+        <activity android:name=".CarList"></activity>
 
         <activity android:name=".StationsActivity"></activity>
     </application>
