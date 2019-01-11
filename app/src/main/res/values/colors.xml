@@ -3,4 +3,16 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="colorBlack">#000</color>
+
+    <color name="colorGray">#EEEEEE</color>
+
+    <color name="colorButtonLabel">#47525E</color>
+
+    <color name="colorCarGray1">#1F2D3D</color>
+    <color name="colorCarGray2">#8492A6</color>
+    <color name="colorCarGray3">#E0E6ED</color>
+
+    <color name="colorHomeTitle">#47525E</color>
 </resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp">
+
+    <ImageView
+        android:id="@+id/stats_circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/circle_car" />
+
+    <TextView
+        android:id="@+id/stats_circle_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pandy"
+        android:layout_marginLeft="4dp"
+        android:contentDescription="Color"
+        android:textColor="@color/colorHomeTitle"
+        android:fontFamily="@font/lato_regular" />
+</LinearLayout>

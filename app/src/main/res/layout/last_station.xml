@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/last_station"
+    android:layout_width="100dp"
+    android:layout_height="match_parent"
+    android:padding="4dp"
+
+    android:alignmentMode="alignBounds"
+    android:columnCount="2"
+    android:rowCount="2"
+    android:rowOrderPreserved="false"
+    android:useDefaultMargins="true"
+
+    android:layout_columnWeight="1"
+    android:layout_gravity="fill_horizontal"
+    android:gravity="center">
+
+
+    <ImageView
+        android:id="@+id/last_station_img"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:src="@drawable/ic_eni_logo" />
+
+    <TextView
+        android:id="@+id/last_station_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="ENI"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:textColor="@color/colorHomeTitle"
+        android:fontFamily="@font/lato_regular"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/last_stations_price"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:textColor="@color/colorHomeTitle"
+        android:fontFamily="@font/lato_regular"
+        android:textSize="15sp" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/last_station_price"
+            android:text="1.342"
+            android:textColor="@color/colorHomeTitle"
+            android:fontFamily="@font/lato_regular"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/euro"
+            android:textColor="@color/colorHomeTitle"
+            android:fontFamily="@font/lato_regular"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+</GridLayout>
