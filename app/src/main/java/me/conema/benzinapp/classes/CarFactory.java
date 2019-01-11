@@ -1,5 +1,7 @@
 package me.conema.benzinapp.classes;
 
+import android.graphics.Color;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -8,7 +10,7 @@ public class CarFactory {
     private static CarFactory singleton;
     private ArrayList<Car> carList = new ArrayList<>();
 
-    static CarFactory getInstance() {
+    public static CarFactory getInstance() {
         if (singleton == null) {
             singleton = new CarFactory();
         }
@@ -16,9 +18,9 @@ public class CarFactory {
     }
 
     private CarFactory() {
-        Car car1 = new Car(0, "Pandy", 0, 0, null);
-        Car car2 = new Car(1, "Francy", 0, 0, null);
-        Car car3 = new Car(2, "Sfiesta", 0, 0, null);
+        Car car1 = new Car(0, "Pandy", 37, 16, null, Color.parseColor("#4d7099"), 80);
+        Car car2 = new Car(1, "Francy", 108, 13, null, Color.parseColor("#8492A6"), 40);
+        Car car3 = new Car(2, "Sfiesta", 21, 18, null, Color.parseColor("#E0E6ED"), 77);
 
         carList.add(car1);
         carList.add(car2);
@@ -52,5 +54,15 @@ public class CarFactory {
         }
 
         return null;
+    }
+
+    public int getTotalL() {
+        int totL = 0;
+
+        for (Car car : carList) {
+            totL += car.getKmDone() * car.getKml();
+        }
+
+        return totL;
     }
 }
