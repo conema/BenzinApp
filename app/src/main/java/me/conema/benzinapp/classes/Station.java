@@ -1,5 +1,7 @@
 package me.conema.benzinapp.classes;
 
+import android.graphics.drawable.Drawable;
+
 public class Station {
     /*
     TODO: Station logo
@@ -8,12 +10,14 @@ public class Station {
     private String name;
     private String address;
     private double price;
+    private int img;
 
-    Station(int id, String name, String address, double price) {
+    Station(int id, String name, String address, double price, int img) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.price = price;
+        this.img = img;
     }
 
     public int getId() {
@@ -46,5 +50,13 @@ public class Station {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public int getImg() {
+        return img;
+    }
+
+    public void setImg(int img) {
+        this.img = img;
     }
 }

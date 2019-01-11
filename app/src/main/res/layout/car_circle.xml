@@ -16,5 +16,7 @@
         android:layout_height="wrap_content"
         android:text="Pandy"
         android:layout_marginLeft="4dp"
-        android:contentDescription="Color" />
+        android:contentDescription="Color"
+        android:textColor="@color/colorHomeTitle"
+        android:fontFamily="@font/lato_regular" />
 </LinearLayout>

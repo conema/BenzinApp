@@ -3,11 +3,15 @@ package me.conema.benzinapp;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -22,6 +26,8 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import me.conema.benzinapp.R;
@@ -33,6 +39,8 @@ import me.conema.benzinapp.classes.Station;
 
 public class Home extends AppCompatActivity {
 
+    private App app = AppFactory.getInstance().getApp();
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -42,7 +50,8 @@ public class Home extends AppCompatActivity {
                 case R.id.navigation_home:
                     return true;
                 case R.id.navigation_stations:
-                    //Open activity
+                    Intent stationList = new Intent(Home.this, StationsActivity.class);
+                    startActivity(stationList);
                     return true;
                 case R.id.navigation_car:
                     Intent carList = new Intent(Home.this, CarList.class);
@@ -60,6 +69,10 @@ public class Home extends AppCompatActivity {
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        TextView statsFromDate = findViewById(R.id.stats_from_date);
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        statsFromDate.setText(df.format(app.getLastSync()));
 
 
         Button addCar = findViewById(R.id.add_car);
@@ -113,6 +126,9 @@ public class Home extends AppCompatActivity {
         for (Station station : app.getLastStations()) {
             View view = getLayoutInflater().from(this).inflate(R.layout.last_station, lastStations, false);
 
+            ImageView stationImg = view.findViewById(R.id.last_station_img);
+            stationImg.setImageResource(station.getImg());
+
             TextView stationName = view.findViewById(R.id.last_station_name);
             stationName.setText(station.getName());
 
@@ -142,19 +158,20 @@ public class Home extends AppCompatActivity {
         circleName.setText("Totale");
 
         ImageView circle = view.findViewById(R.id.stats_circle);
-        circle.setColorFilter(getResources().getColor(R.color.colorCarGray1), PorterDuff.Mode.SRC_ATOP);
+        circle.setColorFilter(getResources().getColor(R.color.colorBlack), PorterDuff.Mode.SRC_ATOP);
 
         statsCircles.addView(view);
 
         //Line total
         view = getLayoutInflater().from(this).inflate(R.layout.car_stats, statsList, false);
         ProgressBar progressBar = view.findViewById(R.id.stats_progressbar);
-        progressBar.setProgress(80);
+        progressBar.setProgress(100);           //total is at 100%
+        progressBar.setProgressTintList(ColorStateList.valueOf(Color.BLACK));
 
-        //TODO: progress bar working
+        int totalL = CarFactory.getInstance().getTotalL();
 
         TextView statsL = view.findViewById(R.id.stats_l);
-        statsL.setText("x L");
+        statsL.setText(totalL + "L");
 
         statsList.addView(view);
 
@@ -174,12 +191,12 @@ public class Home extends AppCompatActivity {
             view = getLayoutInflater().from(this).inflate(R.layout.car_stats, statsList, false);
 
             progressBar = view.findViewById(R.id.stats_progressbar);
-            progressBar.setProgress(80);
+            progressBar.setProgress((int) (100 * car.getKmDone() * car.getKml() / totalL));
 
-            //TODO: progress bar working
+            progressBar.setProgressTintList(ColorStateList.valueOf(car.getColor()));
 
             statsL = view.findViewById(R.id.stats_l);
-            statsL.setText(car.getKmDone() + "L");
+            statsL.setText(car.getKmDone() * car.getKml() + "L");
 
             statsList.addView(view);
         }

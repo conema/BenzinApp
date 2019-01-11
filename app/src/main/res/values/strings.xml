@@ -15,4 +15,5 @@
 
     <string name="last_stations_title">Le tue ultime stazioni</string>
     <string name="last_stations_price">Prezzo</string>
+    <string name="euro">€</string>
 </resources>
