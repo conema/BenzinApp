@@ -82,6 +82,8 @@ public class StationsFragment extends Fragment implements LocationListener {
             mapView.setStreetMode();
             mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 11));
         });
+
+        initialize();
     }
 
     @SuppressLint("MissingPermission")
@@ -93,8 +95,6 @@ public class StationsFragment extends Fragment implements LocationListener {
 
         // innanzitutto si verificano i permessi
         checkLocationPermission();
-
-        initialize();
     }
 
     @Override
