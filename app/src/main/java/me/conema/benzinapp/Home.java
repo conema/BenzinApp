@@ -2,6 +2,7 @@ package me.conema.benzinapp;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+import me.conema.benzinapp.R;
 import me.conema.benzinapp.classes.App;
 import me.conema.benzinapp.classes.AppFactory;
 import me.conema.benzinapp.classes.Car;
@@ -43,7 +45,8 @@ public class Home extends AppCompatActivity {
                     //Open activity
                     return true;
                 case R.id.navigation_car:
-                    //open car
+                    Intent carList = new Intent(Home.this, CarList.class);
+                    startActivity(carList);
                     return true;
             }
             return false;

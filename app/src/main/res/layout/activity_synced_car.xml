@@ -96,6 +96,7 @@
             android:layout_marginBottom="16dp">
 
             <ImageButton
+                android:id="@+id/imgButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_image_black_24dp"
@@ -151,6 +152,7 @@
                 android:background="@android:color/transparent" />
 
             <Button
+                android:id="@+id/saveButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
