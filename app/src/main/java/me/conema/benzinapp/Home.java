@@ -35,7 +35,8 @@ public class Home extends AppCompatActivity implements HomeFragment.OnFragmentIn
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_stations:
-                    // va usato Fragment
+                    fragment = new StationsFragment();
+                    loadFragment(fragment);
                     return true;
                 case R.id.navigation_car:
                     Intent carList = new Intent(Home.this, CarList.class);
