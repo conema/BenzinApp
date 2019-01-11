@@ -47,6 +47,16 @@ public class StationsFragment extends Fragment implements LocationListener {
     private LatLng currentMapLocation;
 
     @SuppressLint("MissingPermission")
+    private void updateMapPosition() {
+        locationManager.getLastKnownLocation(locationProvider);
+        locationManager.requestLocationUpdates(locationProvider, 5000, (float) 2.0, this);
+
+        currentLocation = locationManager.getLastKnownLocation(locationProvider);
+        Timber.i("Location:" + String.valueOf(currentLocation.getLatitude()) + " " + String.valueOf(currentLocation.getLongitude()));
+        mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 14));
+    }
+
+    @SuppressLint("MissingPermission")
     private void initialize() {
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
@@ -55,13 +65,7 @@ public class StationsFragment extends Fragment implements LocationListener {
         criteria.setPowerRequirement(Criteria.POWER_LOW);
         locationProvider = locationManager.getBestProvider(criteria, true);
 
-        locationManager.getLastKnownLocation(locationProvider);
-
-        locationManager.requestLocationUpdates(locationProvider, 5000, (float) 2.0, this);
-
-        currentLocation = locationManager.getLastKnownLocation(locationProvider);
-
-        Timber.i("Location:" + String.valueOf(currentLocation.getLatitude()) + " " + String.valueOf(currentLocation.getLongitude()));
+        updateMapPosition();
     }
 
     @Nullable
@@ -73,14 +77,15 @@ public class StationsFragment extends Fragment implements LocationListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mapView = (MapView) getView().findViewById(R.id.mapquestMapView);
+        checkLocationPermission();
+        mapView = getView().findViewById(R.id.mapquestMapView);
 
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(parMapboxMap -> {
             mapboxMap = parMapboxMap;
             mapView.setStreetMode();
-            mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 11));
+            initialize();
+            //mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 11));
         });
     }
 
@@ -92,9 +97,8 @@ public class StationsFragment extends Fragment implements LocationListener {
         //setContentView(R.layout.fragment_stations);
 
         // innanzitutto si verificano i permessi
-        checkLocationPermission();
 
-        initialize();
+
     }
 
     @Override
@@ -174,11 +178,11 @@ public class StationsFragment extends Fragment implements LocationListener {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
+                    //initialize();
                     if (ContextCompat.checkSelfPermission(getActivity(),
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
-                        //Request location updates:
-                        locationManager.requestLocationUpdates(locationProvider, 400, 1, this);
+                        updateMapPosition();
                     }
 
                 } else {
