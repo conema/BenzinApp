@@ -12,6 +12,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.ProgressBar;
+import android.widget.LinearLayout;
+import android.widget.ImageView;
+import android.widget.GridLayout;
+import android.widget.Button;
+import android.view.View;
+
 
 
 public class Home extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener {
@@ -27,10 +35,7 @@ public class Home extends AppCompatActivity implements HomeFragment.OnFragmentIn
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_stations:
-
-                
-                    Intent stationList = new Intent(Home.this, StationsActivity.class);
-                    startActivity(stationList);
+                    // va usato Fragment
                     return true;
                 case R.id.navigation_car:
                     Intent carList = new Intent(Home.this, CarList.class);

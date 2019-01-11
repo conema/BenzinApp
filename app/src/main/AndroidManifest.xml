@@ -22,7 +22,7 @@
         <activity android:name=".CarSync" />
         <activity android:name=".CarList"></activity>
 
-        <activity android:name=".StationsActivity"></activity>
+        <activity android:name=".StationsFragment"></activity>
     </application>
 
 </manifest>
