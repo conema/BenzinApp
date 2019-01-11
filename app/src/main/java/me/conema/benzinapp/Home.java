@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 public class Home extends AppCompatActivity {
 
@@ -19,7 +18,7 @@ public class Home extends AppCompatActivity {
                 case R.id.navigation_home:
                     return true;
                 case R.id.navigation_stations:
-                    Intent intent = new Intent(getApplicationContext(), StationsActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), StationsFragment.class);
                     startActivity(intent);
                     return true;
                 case R.id.navigation_car:

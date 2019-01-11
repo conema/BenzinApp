@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".StationsActivity"></activity>
+        <activity android:name=".StationsFragment"></activity>
     </application>
 
 </manifest>
