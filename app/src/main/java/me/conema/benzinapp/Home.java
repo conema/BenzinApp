@@ -1,6 +1,9 @@
 package me.conema.benzinapp;
 
 import android.content.Intent;
+import android.app.ActionBar;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +27,8 @@ public class Home extends AppCompatActivity implements HomeFragment.OnFragmentIn
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_stations:
+
+                
                     Intent stationList = new Intent(Home.this, StationsActivity.class);
                     startActivity(stationList);
                     return true;
