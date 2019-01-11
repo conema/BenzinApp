@@ -73,7 +73,6 @@ public class StationsFragment extends Fragment implements LocationListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         mapView = (MapView) getView().findViewById(R.id.mapquestMapView);
 
         mapView.onCreate(savedInstanceState);
@@ -82,8 +81,6 @@ public class StationsFragment extends Fragment implements LocationListener {
             mapView.setStreetMode();
             mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 11));
         });
-
-        initialize();
     }
 
     @SuppressLint("MissingPermission")
@@ -95,6 +92,7 @@ public class StationsFragment extends Fragment implements LocationListener {
 
         // innanzitutto si verificano i permessi
         checkLocationPermission();
+
     }
 
     @Override
@@ -177,8 +175,7 @@ public class StationsFragment extends Fragment implements LocationListener {
                     if (ContextCompat.checkSelfPermission(getActivity(),
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
-                        //Request location updates:
-                        locationManager.requestLocationUpdates(locationProvider, 400, 1, this);
+                        initialize();
                     }
 
                 } else {
