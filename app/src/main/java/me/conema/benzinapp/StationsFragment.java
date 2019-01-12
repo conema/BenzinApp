@@ -98,6 +98,10 @@ public class StationsFragment extends Fragment implements LocationListener {
 
         // innanzitutto si verificano i permessi
 
+        //Serve per visualizzare il tasto indietro
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
     }
 

@@ -21,8 +21,6 @@
         <activity android:name=".SyncedCar" />
         <activity android:name=".CarSync" />
         <activity android:name=".CarList"></activity>
-
-        <activity android:name=".StationsFragment"></activity>
     </application>
 
 </manifest>
