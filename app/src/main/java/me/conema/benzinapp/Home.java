@@ -56,8 +56,6 @@ public class Home extends AppCompatActivity implements HomeFragment.OnFragmentIn
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         loadFragment(new HomeFragment());
-
-       /* */
     }
 
     private void loadFragment(Fragment fragment) {

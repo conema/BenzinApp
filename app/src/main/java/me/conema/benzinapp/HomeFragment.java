@@ -97,7 +97,8 @@ public class HomeFragment extends Fragment {
         addCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent addCar = new Intent(getActivity(), CarSync.class);
+                startActivity(addCar);
             }
         });
 
