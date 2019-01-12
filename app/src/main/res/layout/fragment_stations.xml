@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <com.mapquest.mapping.maps.MapView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,4 +11,16 @@
         android:id="@+id/mapquestMapView"
         app:mapquest_app_key="KNdbV0JM4VyInvJk5GotMufjA5Lez6vW"
         />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="66dp"
+        android:src="@android:drawable/ic_menu_mylocation"
+        android:tint="@color/mapbox_blue"
+        mapbox:backgroundTint="@android:color/white"
+        mapbox:layout_constraintBottom_toBottomOf="@id/mapquestMapView"
+        mapbox:layout_constraintEnd_toEndOf="@id/mapquestMapView" />
 </android.support.constraint.ConstraintLayout>
