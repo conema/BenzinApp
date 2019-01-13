@@ -1,13 +1,23 @@
 package me.conema.benzinapp;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import java.util.ArrayList;
+
+import me.conema.benzinapp.classes.Car;
+import me.conema.benzinapp.classes.CarFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,8 +73,10 @@ public class CarListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_car_list, container, false);
+        updateCarList(view);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_car_list, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -105,4 +117,51 @@ public class CarListFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    private void updateCarList(View viewParent) {
+        CarFactory carFactory = CarFactory.getInstance();
+        ArrayList<Car> carArrayList = carFactory.getCars();
+        LinearLayout container = viewParent.findViewById(R.id.linearLayoutCarList_fragment);
+
+        //Empty views (old cars)
+        container.removeAllViews();
+
+        //App app = AppFactory.getInstance().getApp();
+
+        for (Car car : carArrayList) {
+            //View view = getLayoutInflater().from(this).inflate(R.layout.car_list_relative_layout, container, false);
+            View view = getLayoutInflater().from(getActivity()).inflate(R.layout.car_list_relative_layout, container, false);
+
+            TextView carNome = view.findViewById(R.id.carNome);
+            carNome.setText(car.getName());
+            ProgressBar progressBar = view.findViewById(R.id.progressBar);
+            ImageView carImgView = view.findViewById(R.id.carImg);
+
+            /*int carImgId = getResources().getIdentifier("R.drawable.carimg"+ i + ".jpg", "id", getResources().getResourcePackageName());
+            carImgView.setImageDrawable(carImgId);
+            carImgView.setImageDrawable(R.drawable.carimg1); */
+
+            if (car.getPercTank() >= 60) {
+                Drawable progressDrawable = progressBar.getProgressDrawable().mutate();
+                progressDrawable.setColorFilter(Color.GREEN, android.graphics.PorterDuff.Mode.SRC_IN);
+                progressBar.setProgressDrawable(progressDrawable);
+                progressBar.setProgress(car.getPercTank(), true);
+            } else if (car.getPercTank() >= 30) {
+                Drawable progressDrawable = progressBar.getProgressDrawable().mutate();
+                progressDrawable.setColorFilter(Color.parseColor("#ffff99"), android.graphics.PorterDuff.Mode.SRC_IN);
+                progressBar.setProgressDrawable(progressDrawable);
+                progressBar.setProgress(car.getPercTank(), true);
+            } else {
+                Drawable progressDrawable = progressBar.getProgressDrawable().mutate();
+                progressDrawable.setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
+                progressBar.setProgressDrawable(progressDrawable);
+                progressBar.setProgress(car.getPercTank(), true);
+            }
+            TextView kmView = view.findViewById(R.id.kmTextView);
+            kmView.setText("Km residui " + car.getKmDone());
+            carImgView.setImageDrawable(car.getPhoto());
+            container.addView(view);
+        }
+    }
+
 }
