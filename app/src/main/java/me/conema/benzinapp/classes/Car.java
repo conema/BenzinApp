@@ -20,7 +20,7 @@ public class Car {
     private int color;
     private Drawable photo;
 
-    Car(int id, String name, int kmDone, float kml, ArrayList weekHistory, int color, int percTank, Drawable photo) {
+    public Car(int id, String name, int kmDone, float kml, ArrayList weekHistory, int color, int percTank, Drawable photo) {
         this.id = id;
         this.name = name;
         this.lastSync = Calendar.getInstance().getTime();

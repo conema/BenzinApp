@@ -28,15 +28,15 @@ public class CarFactory {
 
     private CarFactory() {
         Context context = ApplicationContextProvider.getContext();
-        Drawable img1 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.carimg1, null);
-        Car car1 = new Car(0, "Pandy", 37, 0, null, Color.parseColor("#4d7099"), 80, img1);
+        Drawable img1 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.carimg2back, null);
+        Car car1 = new Car(0, "Pandy", 37, 15, null, Color.parseColor("#4d7099"), 80, img1);
 
-        Drawable img2 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.carimg2, null);
-        Car car2 = new Car(1, "Francy", 108, 0, null, Color.parseColor("#8492A6"), 40, img2);
+        Drawable img2 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.carimg2back, null);
+        Car car2 = new Car(1, "Francy", 108, 18, null, Color.parseColor("#8492A6"), 40, img2);
 
 
-        Drawable img3 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.carimg3, null);
-        Car car3 = new Car(2, "Sfiesta", 21, 0, null, Color.parseColor("#E0E6ED"), 77, img3);
+        Drawable img3 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.carimg2back, null);
+        Car car3 = new Car(2, "Sfiesta", 21, 13, null, Color.parseColor("#E0E6ED"), 77, img3);
 
         carList.add(car1);
         carList.add(car2);
