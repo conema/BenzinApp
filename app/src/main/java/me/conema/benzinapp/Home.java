@@ -22,8 +22,7 @@ import android.widget.Button;
 import android.view.View;
 
 
-
-public class Home extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener {
+public class Home extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener, CarListFragment.OnFragmentInteractionListener {
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -40,8 +39,10 @@ public class Home extends AppCompatActivity implements HomeFragment.OnFragmentIn
                     loadFragment(fragment, false);
                     return true;
                 case R.id.navigation_car:
-                    Intent carList = new Intent(Home.this, CarList.class);
-                    startActivity(carList);
+                    /*Intent carList = new Intent(Home.this, CarList.class);
+                    startActivity(carList);*/
+                    fragment = new CarListFragment();
+                    loadFragment(fragment,false);
                     return true;
             }
             return false;
