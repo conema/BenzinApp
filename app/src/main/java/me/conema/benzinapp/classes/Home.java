@@ -42,11 +42,12 @@ public class Home extends AppCompatActivity {
                 case R.id.navigation_home:
                     return true;
                 case R.id.navigation_stations:
-                    //Open activity
-                    return true;
-                case R.id.navigation_car:
                     Intent carList = new Intent(Home.this, CarList.class);
                     startActivity(carList);
+                    return true;
+                case R.id.navigation_car:
+                    Intent carSync = new Intent(Home.this, CarSync.class);
+                    startActivity(carSync);
                     return true;
             }
             return false;
