@@ -22,8 +22,7 @@ import android.widget.Button;
 import android.view.View;
 
 
-
-public class Home extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener {
+public class Home extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener, CarListFragment.OnFragmentInteractionListener {
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 

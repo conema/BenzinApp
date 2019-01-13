@@ -50,7 +50,8 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="paddingPercent" value="5" />
+                                                <entry key="paddingPercent" value="10" />
+                                                <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -61,9 +62,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
+                                      <entry key="cropped" value="true" />
                                       <entry key="iconShape" value="NONE" />
-                                      <entry key="imageAsset" value="$USER_HOME$/Download/bottom_menu_car.png" />
-                                      <entry key="outputName" value="bottom_menu_car" />
+                                      <entry key="imageAsset" value="$USER_HOME$/Download/car3.png" />
+                                      <entry key="outputName" value="car_img_3" />
                                     </map>
                                   </option>
                                 </PersistentState>
