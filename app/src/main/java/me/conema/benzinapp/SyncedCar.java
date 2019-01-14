@@ -30,6 +30,7 @@ public class SyncedCar extends AppCompatActivity {
     EditText carText, roadText, fuelText;
     ImageButton imgPicker;
     Button saveButton;
+    Button deleteButton;
 
     Drawable carImg;
     //TODO non so se serve sta cosa
@@ -44,12 +45,13 @@ public class SyncedCar extends AppCompatActivity {
         roadText = (EditText) findViewById(R.id.roadEditText);
         imgPicker = findViewById(R.id.imgButton);
         saveButton = findViewById(R.id.saveButton);
+        deleteButton = findViewById(R.id.deleteButton);
 
         final CarFactory factory = CarFactory.getInstance();
 
 
         //TODO aggiungere foto
-        Car car = new Car(0, "Fiat punto", 55000, 17, null, Color.parseColor("#121212"), 70, null);
+        Car car = new Car("Fiat punto", 55000, 17, null, Color.parseColor("#121212"), 70, null);
         carText.setText(car.getName());
         fuelText.setText("5");
         roadText.setText(Integer.toString(car.getKmDone()));
@@ -104,11 +106,13 @@ public class SyncedCar extends AppCompatActivity {
             public void onClick(View v) {
                 String carName = carText.getText().toString();
                 int kmDone = Integer.parseInt(roadText.getText().toString());
-                Car car = new Car(0, carName, kmDone, 23, null, 123, 80, carImg);
+                Car car = new Car(carName, kmDone, 23, null, 123, 80, carImg);
                 if (carImg != null) {
                     factory.addCar(car);
-                    Intent carList = new Intent(SyncedCar.this, CarList.class);
-                    startActivity(carList);
+                    Intent home = new Intent(SyncedCar.this, Home.class);
+                    startActivity(home);
+
+
                 }
                 //If the user doesn't select an img for the car show an error msg
                 else {
@@ -119,6 +123,14 @@ public class SyncedCar extends AppCompatActivity {
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                 }
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent home = new Intent(SyncedCar.this, Home.class);
+                startActivity(home);
             }
         });
 
