@@ -4,15 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CarListFragment">
-
-    <LinearLayout
-        android:id="@+id/linearLayoutCarList_fragment"
-        android:layout_margin="16dp"
+    <ScrollView
+        android:isScrollContainer="false"
+        android:id="@+id/scrollViewCarList_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearLayoutCarList_fragment"
+            android:layout_margin="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </ScrollView>
 
     <include layout="@layout/bottom_navigation" />
 

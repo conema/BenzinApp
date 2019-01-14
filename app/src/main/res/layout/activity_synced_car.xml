@@ -22,7 +22,7 @@
                 android:layout_marginRight="32dp"
                 android:layout_marginLeft="32dp"
                 android:layout_marginBottom="16dp"
-                android:drawableLeft="@drawable/ic_check_circle_black_24dp"
+                android:drawableLeft="@drawable/ic_correct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -45,7 +45,7 @@
                 <ImageView
                     android:layout_margin="8dp"
                     android:id="@+id/carIcon"
-                    android:layout_width="50dp"
+                    android:layout_width="40dp"
                     android:layout_height="50dp"
                     android:src="@drawable/ic_directions_car_black_24dp" />
 
@@ -75,7 +75,7 @@
                 <ImageView
                     android:layout_margin="8dp"
                     android:id="@+id/roadIcon"
-                    android:layout_width="50dp"
+                    android:layout_width="40dp"
                     android:layout_height="50dp"
                     android:src="@drawable/ic_road_with_broken_line" />
 
@@ -105,8 +105,8 @@
 
                 <ImageButton
                     android:id="@+id/imgButton"
-                    android:layout_width="180dp"
-                    android:layout_height="180dp"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
                     android:src="@drawable/ic_image_black_24dp"
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
@@ -129,7 +129,7 @@
                 <ImageView
                     android:layout_margin="8dp"
                     android:id="@+id/fuelIcon"
-                    android:layout_width="50dp"
+                    android:layout_width="40dp"
                     android:layout_height="50dp"
                     android:src="@drawable/ic_fuel_station_pump" />
 
@@ -156,6 +156,7 @@
                 android:layout_height="wrap_content">
 
                 <Button
+                    android:id="@+id/deleteButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

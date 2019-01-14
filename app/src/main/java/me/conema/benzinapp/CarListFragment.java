@@ -1,21 +1,33 @@
 package me.conema.benzinapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import java.util.concurrent.ThreadLocalRandom;
+
+
+import com.mapquest.android.commoncore.model.Line;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 import me.conema.benzinapp.classes.Car;
 import me.conema.benzinapp.classes.CarFactory;
@@ -37,6 +49,7 @@ public class CarListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    ImageButton refreshButton;
 
     private OnFragmentInteractionListener mListener;
 
@@ -83,6 +96,13 @@ public class CarListFragment extends Fragment {
         updateCarList(view);
         // Inflate the layout for this fragment
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        refreshButton = getView().findViewById(R.id.refreshButton);
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -137,37 +157,69 @@ public class CarListFragment extends Fragment {
         for (Car car : carArrayList) {
             //View view = getLayoutInflater().from(this).inflate(R.layout.car_list_relative_layout, container, false);
             View view = getLayoutInflater().from(getActivity()).inflate(R.layout.car_list_relative_layout, container, false);
-
+            ImageButton refreshButton = view.findViewById(R.id.refreshButton);
             TextView carNome = view.findViewById(R.id.carNome);
             carNome.setText(car.getName());
             ProgressBar progressBar = view.findViewById(R.id.progressBar);
             ImageView carImgView = view.findViewById(R.id.carImg);
 
-            /*int carImgId = getResources().getIdentifier("R.drawable.carimg"+ i + ".jpg", "id", getResources().getResourcePackageName());
-            carImgView.setImageDrawable(carImgId);
-            carImgView.setImageDrawable(R.drawable.carimg1); */
+            updateProgressBarColor(progressBar, car);
 
-            if (car.getPercTank() >= 60) {
-                Drawable progressDrawable = progressBar.getProgressDrawable().mutate();
-                progressDrawable.setColorFilter(Color.GREEN, android.graphics.PorterDuff.Mode.SRC_IN);
-                progressBar.setProgressDrawable(progressDrawable);
-                progressBar.setProgress(car.getPercTank(), true);
-            } else if (car.getPercTank() >= 30) {
-                Drawable progressDrawable = progressBar.getProgressDrawable().mutate();
-                progressDrawable.setColorFilter(Color.parseColor("#ffff99"), android.graphics.PorterDuff.Mode.SRC_IN);
-                progressBar.setProgressDrawable(progressDrawable);
-                progressBar.setProgress(car.getPercTank(), true);
-            } else {
-                Drawable progressDrawable = progressBar.getProgressDrawable().mutate();
-                progressDrawable.setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
-                progressBar.setProgressDrawable(progressDrawable);
-                progressBar.setProgress(car.getPercTank(), true);
-            }
             TextView kmView = view.findViewById(R.id.kmTextView);
             kmView.setText("Km residui " + car.getKmDone());
             carImgView.setImageDrawable(car.getPhoto());
+            Log.i("controllo", " Questo è l'id della car " + car.getId());
+
+            /* Listener del refresh button */
+            refreshButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int min = 0;
+                    int max = 100;
+                    int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
+                    ProgressBar progressBar = view.findViewById(R.id.progressBar);
+                    progressBar.setProgress(randomNum, true);
+                    car.setPercTank(randomNum);
+                    updateProgressBarColor(progressBar, car);
+
+                }
+            });
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent singleCar = new Intent(getActivity(), Home.class);
+                    singleCar.putExtra("carId", car.getId());
+                    //TODO cambiare all'activity di Fra
+                    startActivity(singleCar);
+                }
+            });
             container.addView(view);
+
         }
     }
+
+    /* Questa funzione aggiorna il colore della progress bar dell'auto in base alla
+    percentuale del carburante rimanente
+     */
+    public void updateProgressBarColor(ProgressBar progressBar, Car car ){
+
+        if (car.getPercTank() >= 60) {
+            Drawable progressDrawable = progressBar.getProgressDrawable().mutate();
+            progressDrawable.setColorFilter(Color.GREEN, android.graphics.PorterDuff.Mode.SRC_IN);
+            progressBar.setProgressDrawable(progressDrawable);
+            progressBar.setProgress(car.getPercTank(), true);
+        } else if (car.getPercTank() >= 30) {
+            Drawable progressDrawable = progressBar.getProgressDrawable().mutate();
+            progressDrawable.setColorFilter(Color.parseColor("#ffff4c"), android.graphics.PorterDuff.Mode.SRC_IN);
+            progressBar.setProgressDrawable(progressDrawable);
+            progressBar.setProgress(car.getPercTank(), true);
+        } else {
+            Drawable progressDrawable = progressBar.getProgressDrawable().mutate();
+            progressDrawable.setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
+            progressBar.setProgressDrawable(progressDrawable);
+            progressBar.setProgress(car.getPercTank(), true);
+        }
+    }
+
 
 }

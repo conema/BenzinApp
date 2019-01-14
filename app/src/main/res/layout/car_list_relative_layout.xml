@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
-    android:background="@drawable/border">
+    android:background="@drawable/border"
+    android:clickable="true">
 
     <ImageView
         android:layout_marginBottom="16dp"
@@ -16,21 +17,24 @@
         android:src="@drawable/carimg2back" />
 
     <TextView
+        android:textStyle="bold"
         android:id="@+id/carNome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_toRightOf="@+id/carImg"
         android:text="Pandy"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:fontFamily="@font/montserrat_bold"/>
 
     <ImageButton
+        android:id="@+id/refreshButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_refresh_black_24dp" />
+        android:src="@drawable/ic_refresh_black_24dp"/>
 
     <ImageView
         android:id="@+id/fuelIcon"
@@ -57,5 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/fuelIcon"
         android:layout_toRightOf="@id/carImg"
-        android:text="Km rimanenti: 10" />
+        android:text="Km rimanenti: 10"
+        android:fontFamily="@font/montserrat"
+        android:textStyle="bold"/>
 </RelativeLayout>
