@@ -28,14 +28,14 @@ public class CarFactory {
 
     private CarFactory() {
         Context context = ApplicationContextProvider.getContext();
-        Drawable img1 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.car_img_1, null);
+        Drawable img1 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.car_img_hd, null);
         Car car1 = new Car("Pandy", 37, 15, null, Color.parseColor("#4d7099"), 80, img1);
 
-        Drawable img2 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.car_img_2, null);
+        Drawable img2 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.car_img_2_hd, null);
         Car car2 = new Car( "Francy", 108, 18, null, Color.parseColor("#8492A6"), 40, img2);
 
 
-        Drawable img3 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.car_img_3, null);
+        Drawable img3 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.car_img_3_hd, null);
         Car car3 = new Car("Sfiesta", 21, 13, null, Color.parseColor("#E0E6ED"), 77, img3);
 
         carList.add(car1);
