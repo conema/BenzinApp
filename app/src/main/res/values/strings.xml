@@ -3,7 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_stations">Stazioni</string>
     <string name="title_car">Auto</string>
-    
+
     <!-- richiesta permessi -->
     <string name="title_location_permission">Richiesta di permesso</string>
     <string name="text_location_permission">Concedi i permessi per la locazione?</string>
