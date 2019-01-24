@@ -33,7 +33,6 @@ public class SyncedCar extends AppCompatActivity {
     Button deleteButton;
 
     Drawable carImg;
-    //TODO non so se serve sta cosa
     private static final int PICK_FROM_GALLERY = 1;
     private static final int OPEN_DOCUMENT_CODE = 2;
     @Override
@@ -50,7 +49,6 @@ public class SyncedCar extends AppCompatActivity {
         final CarFactory factory = CarFactory.getInstance();
 
 
-        //TODO aggiungere foto
         Car car = new Car("Fiat punto", 55000, 17, null, Color.parseColor("#121212"), 70, null);
         carText.setText(car.getName());
         fuelText.setText("5");
@@ -117,7 +115,7 @@ public class SyncedCar extends AppCompatActivity {
                 //If the user doesn't select an img for the car show an error msg
                 else {
                     Context context = getApplicationContext();
-                    CharSequence text = "Seleziona un'immagine per la foto";
+                    CharSequence text = "Seleziona un'immagine per l'auto";
                     int duration = Toast.LENGTH_SHORT;
 
                     Toast toast = Toast.makeText(context, text, duration);
