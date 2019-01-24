@@ -22,6 +22,7 @@
                 />
 
             <TextView
+                
                 android:id="@+id/carName"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
