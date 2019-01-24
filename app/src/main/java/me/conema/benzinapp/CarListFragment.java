@@ -187,7 +187,7 @@ public class CarListFragment extends Fragment {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent singleCar = new Intent(getActivity(), Home.class);
+                    Intent singleCar = new Intent(getActivity(), SingleCar.class);
                     singleCar.putExtra("carId", car.getId());
                     //TODO cambiare all'activity di Fra
                     startActivity(singleCar);

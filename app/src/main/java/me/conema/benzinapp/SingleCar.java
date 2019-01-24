@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import me.conema.benzinapp.classes.Car;
 import me.conema.benzinapp.classes.CarFactory;
@@ -27,7 +29,7 @@ public class SingleCar extends AppCompatActivity {
     ImageButton singleCar;
     Button deleteButton;
 
-    int id;
+    int id = 2;
     Car car;
     CarFactory carFactory = CarFactory.getInstance();
 
@@ -50,17 +52,19 @@ public class SingleCar extends AppCompatActivity {
         Bundle obj = intent.getExtras();
 
         if(obj != null)
-            id = obj.describeContents();
+            id = obj.getInt("carId");
 
         car = carFactory.getCarById(id);
 
         if(car != null){
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            kmSingleCar.setText("Ultimo aggiornamento : " + df.format(car.getLastSync()));
+
             carName.setText(car.getName());
-            kmSingleCar.setText("Ultimo aggiornamento :" + car.getLastSync().toString());
-            kmFatti.setText(car.getKmDone());
-            consumo.setText("3.19");
-            kmRimanenti.setText(car.getPercTank());
-            lRimanenti.setText(car.getPercTank());
+            kmFatti.setText(String.valueOf(car.getKmDone()));
+            consumo.setText(String.valueOf(car.getKml()));
+            kmRimanenti.setText(String.valueOf(car.getPercTank()));
+            lRimanenti.setText(String.valueOf(car.getPercTank()));
             singleCar.setImageDrawable(car.getPhoto());
         }
 
@@ -68,12 +72,13 @@ public class SingleCar extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(SingleCar.this);
                 builder.setTitle("Sei sicuro di voler cancellare l' auto?")
                         .setPositiveButton("si", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 carFactory.removeCar(car);
+                                Intent lista = new Intent(SingleCar.this,Home.class);
+                                startActivity(lista);
                             }
                         })
                         .setNegativeButton("no", new DialogInterface.OnClickListener() {
@@ -81,12 +86,16 @@ public class SingleCar extends AppCompatActivity {
                             }
                         });
 
-
-
-                Intent back = new Intent(SingleCar.this, CarList.class);
-                startActivity(back);
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Intent lista = new Intent(SingleCar.this, Home.class);
+        startActivity(lista);
     }
 }
