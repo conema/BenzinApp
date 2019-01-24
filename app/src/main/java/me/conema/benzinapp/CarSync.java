@@ -20,4 +20,13 @@ public class CarSync extends AppCompatActivity {
         Intent syncedCar = new Intent(CarSync.this, SyncedCar.class);
         startActivity(syncedCar);
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.PBBluetooth);
+        progressBar.setVisibility(View.GONE);
+    }
 }
+
+
