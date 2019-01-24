@@ -10,132 +10,178 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <TextView
-        android:id="@+id/carName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text=""
-        android:textSize="24sp"
-        android:textStyle="bold" />
-    <ImageButton
-        android:id="@+id/singleCarImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/carimg2back"
-        android:layout_gravity="center"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/kmSingleCar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text=""/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Dati Auto"
-        android:textSize="32dp"
-        android:textStyle="bold"
-        android:textColor="@color/traffic_black"
-        android:layout_marginBottom="16dp"/>
+
+            <Button
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:id="@+id/carName"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:layout_gravity="center"
+                android:text=""
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"/>
+            <Button
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/singleCarImage"
+            android:layout_width="match_parent"
+            android:layout_height="256dp"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/car_img_1"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="8dp"
+            />
+
+
+        <TextView
+            android:id="@+id/kmSingleCar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text=""
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="16dp"
+            android:text="Dati Auto"
+            android:textColor="@color/traffic_black"
+            android:background="@color/singleCarBackground"
+            android:textSize="26dp"
+            android:textStyle="bold" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="56dp"
-            android:layout_marginBottom="4dp">
+            android:paddingBottom="4dp"
+            android:background="@color/singleCarBackground">
 
 
             <TextView
                 android:id="@+id/kmFattiTextView"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Km fatti:"
                 android:textSize="20sp"
-                android:layout_weight="1"/>
+                android:gravity="center"
+                />
 
             <TextView
                 android:id="@+id/kmFatti"
                 android:layout_width="0sp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text=""/>
+                android:text="1234"
+                android:gravity="center"
+                android:textSize="20sp"
+                />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="56dp"
-            android:layout_marginBottom="4dp">
+            android:paddingBottom="4dp"
+            android:background="@color/singleCarBackground">
 
 
             <TextView
                 android:id="@+id/consumoTextView"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Consumo Km/l:"
                 android:textSize="20sp"
-                android:layout_weight="1"/>
+                android:gravity="center"/>
 
             <TextView
                 android:id="@+id/consumo"
                 android:layout_width="0sp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="169649"
-                android:gravity=""/>
+                android:gravity="center"
+                android:text="1234"
+                android:textSize="20sp"
+                />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="56dp"
-            android:layout_marginBottom="4dp">
+            android:paddingBottom="4dp"
+            android:background="@color/singleCarBackground">
 
 
             <TextView
                 android:id="@+id/kmRimanentiTextView"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Km Rimanenti:"
                 android:textSize="20sp"
-                android:layout_weight="1"/>
+                android:gravity="center"/>
 
             <TextView
                 android:id="@+id/kmRimanenti"
                 android:layout_width="0sp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text=""/>
+                android:text="12345"
+                android:gravity="center"
+                android:textSize="20sp"
+                />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="56dp"
-            android:layout_marginBottom="32dp">
+            android:paddingBottom="16dp"
+            android:background="@color/singleCarBackground">
 
 
             <TextView
                 android:id="@+id/litriRimanentiTextView"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Litri Rimanenti:"
                 android:textSize="20sp"
-                android:layout_weight="1"/>
+                android:gravity="center"/>
 
             <TextView
                 android:id="@+id/lRimanenti"
                 android:layout_width="0sp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text=""/>
+                android:text="12345"
+                android:textSize="20sp"
+                android:gravity="center"/>
 
 
         </LinearLayout>
@@ -145,9 +191,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Elimina auto"
-            />
-
+            android:layout_marginTop="16dp"
+            android:text="Elimina auto"/>
 
     </LinearLayout>
 

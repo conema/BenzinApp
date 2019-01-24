@@ -17,4 +17,6 @@
     <color name="colorHomeTitle">#47525E</color>
 
     <color name="menuBottomBackground">#C0CCDA</color>
+
+    <color name="singleCarBackground">#efeeee</color>
 </resources>
