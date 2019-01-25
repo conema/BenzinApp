@@ -19,7 +19,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="$USER_HOME$/C:\Users\Davide\Downloads\carImg.jpg" />
+                                      <entry key="imageAsset" value="C:\Users\Davide\C:\Users\Davide\Downloads\carImg.jpg" />
                                       <entry key="outputName" value="carimgbis" />
                                     </map>
                                   </option>
@@ -32,7 +32,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundLayerName" value="carimgback2" />
-                                      <entry key="foregroundImage" value="$USER_HOME$/C:\Users\Davide\Downloads\carImg2.jpg" />
+                                      <entry key="foregroundImage" value="C:\Users\Davide\Downloads\Telegram Desktop\v_icon.png" />
                                       <entry key="foregroundLayerName" value="carimg2_l" />
                                       <entry key="outputName" value="carimg2" />
                                     </map>
@@ -45,12 +45,35 @@
                                 <PersistentState>
                                   <option name="children">
                                     <map>
+                                      <entry key="clipArt">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="trimmed" value="true" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
                                       <entry key="image">
                                         <value>
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="paddingPercent" value="35" />
+                                                <entry key="paddingPercent" value="10" />
+                                                <entry key="trimmed" value="true" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                      <entry key="text">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -61,9 +84,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="iconShape" value="CIRCLE" />
-                                      <entry key="imageAsset" value="$USER_HOME$/Download/station_love.png" />
-                                      <entry key="outputName" value="station_love" />
+                                      <entry key="cropped" value="true" />
+                                      <entry key="iconShape" value="NONE" />
+                                      <entry key="imageAsset" value="C:\Users\Davide\Downloads\Telegram Desktop\v_icon.png" />
+                                      <entry key="outputName" value="checkmark_green" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -113,6 +137,9 @@
                             <entry key="outputName" value="ic_navigation_black_24dp" />
                             <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="C:\Users\Sinhuè Rossi\Download\Total_logo.svg" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="ic_correct" />
+                            <entry key="sourceFile" value="C:\Users\Davide\Downloads\correct.svg" />
                           </map>
                         </option>
                       </PersistentState>

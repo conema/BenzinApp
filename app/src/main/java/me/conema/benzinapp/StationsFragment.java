@@ -145,6 +145,13 @@ public class StationsFragment extends Fragment implements LocationListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MapQuest.start(getActivity().getApplicationContext());
+        //setContentView(R.layout.fragment_stations);
+
+        // innanzitutto si verificano i permessi
+
+        //Serve per visualizzare il tasto indietro
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @Override

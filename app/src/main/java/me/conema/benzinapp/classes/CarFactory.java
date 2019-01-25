@@ -1,10 +1,19 @@
 package me.conema.benzinapp.classes;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+
+import me.conema.benzinapp.R;
+
+import static android.support.v4.content.res.ResourcesCompat.getDrawable;
 
 public class CarFactory {
     private static CarFactory singleton;
@@ -18,9 +27,16 @@ public class CarFactory {
     }
 
     private CarFactory() {
-        Car car1 = new Car(0, "Pandy", 37, 16, null, Color.parseColor("#4d7099"), 80);
-        Car car2 = new Car(1, "Francy", 108, 13, null, Color.parseColor("#8492A6"), 40);
-        Car car3 = new Car(2, "Sfiesta", 21, 18, null, Color.parseColor("#E0E6ED"), 77);
+        Context context = ApplicationContextProvider.getContext();
+        Drawable img1 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.car_img_hd, null);
+        Car car1 = new Car("Pandy", 37, 15, null, Color.parseColor("#4d7099"), 80, img1);
+
+        Drawable img2 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.car_img_2_hd, null);
+        Car car2 = new Car( "Francy", 108, 18, null, Color.parseColor("#8492A6"), 40, img2);
+
+
+        Drawable img3 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.car_img_3_hd, null);
+        Car car3 = new Car("Sfiesta", 21, 13, null, Color.parseColor("#E0E6ED"), 77, img3);
 
         carList.add(car1);
         carList.add(car2);
@@ -46,7 +62,7 @@ public class CarFactory {
         return carList.remove(car);
     }
 
-    Car getCarById(int id) {
+    public Car getCarById(int id) {
         for (Car car : carList) {
             if (car.getId() == id) {
                 return car;
