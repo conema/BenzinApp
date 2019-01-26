@@ -11,9 +11,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +26,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toolbar;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -50,6 +57,7 @@ public class CarListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     ImageButton refreshButton;
+    Toolbar toolbar;
 
     private OnFragmentInteractionListener mListener;
 
@@ -92,6 +100,7 @@ public class CarListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_car_list, container, false);
         updateCarList(view);
         // Inflate the layout for this fragment
@@ -102,7 +111,6 @@ public class CarListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         refreshButton = getView().findViewById(R.id.refreshButton);
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -127,6 +135,21 @@ public class CarListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateCarList(getView());
+        Log.i("controllo","OnStart ");
+    }
+
+    //Aggiunge il bottone "+" alla toolbar
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+        super.onCreateOptionsMenu(menu,inflater);
     }
 
     /**
@@ -154,47 +177,53 @@ public class CarListFragment extends Fragment {
 
         //App app = AppFactory.getInstance().getApp();
 
-        for (Car car : carArrayList) {
-            //View view = getLayoutInflater().from(this).inflate(R.layout.car_list_relative_layout, container, false);
-            View view = getLayoutInflater().from(getActivity()).inflate(R.layout.car_list_relative_layout, container, false);
-            ImageButton refreshButton = view.findViewById(R.id.refreshButton);
-            TextView carNome = view.findViewById(R.id.carNome);
-            carNome.setText(car.getName());
-            ProgressBar progressBar = view.findViewById(R.id.progressBar);
-            ImageView carImgView = view.findViewById(R.id.carImg);
-
-            updateProgressBarColor(progressBar, car);
-
-            TextView kmView = view.findViewById(R.id.kmTextView);
-            kmView.setText("Km residui " + car.getKmDone());
-            carImgView.setImageDrawable(car.getPhoto());
-            Log.i("controllo", " Questo è l'id della car " + car.getId());
-
-            /* Listener del refresh button */
-            refreshButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int min = 0;
-                    int max = 100;
-                    int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
-                    ProgressBar progressBar = view.findViewById(R.id.progressBar);
-                    progressBar.setProgress(randomNum, true);
-                    car.setPercTank(randomNum);
-                    updateProgressBarColor(progressBar, car);
-
-                }
-            });
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent singleCar = new Intent(getActivity(), SingleCar.class);
-                    singleCar.putExtra("carId", car.getId());
-                    //TODO cambiare all'activity di Fra
-                    startActivity(singleCar);
-                }
-            });
+        if(carArrayList.size() == 0){
+            View view = getLayoutInflater().from(getActivity()).inflate(R.layout.no_car_layout, container, false);
             container.addView(view);
+        }
+        else {
+            for (Car car : carArrayList) {
+                //View view = getLayoutInflater().from(this).inflate(R.layout.car_list_relative_layout, container, false);
+                View view = getLayoutInflater().from(getActivity()).inflate(R.layout.car_list_relative_layout, container, false);
+                ImageButton refreshButton = view.findViewById(R.id.refreshButton);
+                TextView carNome = view.findViewById(R.id.carNome);
+                carNome.setText(car.getName());
+                ProgressBar progressBar = view.findViewById(R.id.progressBar);
+                ImageView carImgView = view.findViewById(R.id.carImg);
 
+                updateProgressBarColor(progressBar, car);
+
+                TextView kmView = view.findViewById(R.id.kmTextView);
+                kmView.setText("Km residui " + car.getKmDone());
+                carImgView.setImageDrawable(car.getPhoto());
+                Log.i("controllo", " Questo è l'id della car " + car.getId());
+
+                /* Listener del refresh button */
+                refreshButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int min = 0;
+                        int max = 100;
+                        int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
+                        ProgressBar progressBar = view.findViewById(R.id.progressBar);
+                        progressBar.setProgress(randomNum, true);
+                        car.setPercTank(randomNum);
+                        updateProgressBarColor(progressBar, car);
+
+                    }
+                });
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent singleCar = new Intent(getActivity(), SingleCar.class);
+                        singleCar.putExtra("carId", car.getId());
+                        //TODO cambiare all'activity di Fra
+                        startActivity(singleCar);
+                    }
+                });
+                container.addView(view);
+
+            }
         }
     }
 
@@ -220,6 +249,21 @@ public class CarListFragment extends Fragment {
             progressBar.setProgress(car.getPercTank(), true);
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.addCar:
+                Intent syncedCar = new Intent(getActivity(), SyncedCar.class);
+                syncedCar.putExtra("sync", false);
+                startActivity(syncedCar);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
 
 }
