@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ScaleDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -27,9 +28,11 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
@@ -40,6 +43,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapquest.mapping.MapQuest;
 import com.mapquest.mapping.maps.MapView;
+import com.mapquest.mapping.utils.PoiOnMapData;
 
 import timber.log.Timber;
 
@@ -76,10 +80,12 @@ public class StationsFragment extends Fragment implements LocationListener {
 
         //currentPositionMarker.setPosition(currentLatLng);
         mapboxMap.removeAnnotations();
+
         //mapboxMap.removeMarker(currentPositionMarker.getMarker());
         mapboxMap.addMarker(currentPositionMarker
                 .icon(drawableToIcon(getActivity(), R.drawable.ic_navigation_black_24dp, ContextCompat.getColor(getActivity(), R.color.mapbox_blue)))
                 .setPosition(currentLatLng));
+
     }
 
 
@@ -89,7 +95,15 @@ public class StationsFragment extends Fragment implements LocationListener {
                 vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        DrawableCompat.setTint(vectorDrawable, colorRes);
+
+        if(colorRes != 0) {
+            DrawableCompat.setTint(vectorDrawable, colorRes);
+        }
+
+        if (canvas.getWidth() > 200 && canvas.getHeight() > 200) {
+            canvas.scale(0.1f, 0.1f, canvas.getHeight() / 2, canvas.getWidth() / 2);
+        }
+
         vectorDrawable.draw(canvas);
         return IconFactory.getInstance(context).fromBitmap(bitmap);
     }
@@ -107,8 +121,19 @@ public class StationsFragment extends Fragment implements LocationListener {
 
         updateMapPosition();
 
+
+        // si setta listener sui marker
+        mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(@NonNull Marker marker) {
+                Toast.makeText(getActivity(), "Il mio creatore deve ancora mettere le info sulla stazione di servizio, accontentati: " +
+                        marker.getPosition(), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
         // aggiunta stazioni di servizio
-        Icon pin = drawableToIcon(getActivity(), R.drawable.checkmark_green, ContextCompat.getColor(getActivity(), R.color.mapbox_blue));
+        Icon pin = drawableToIcon(getActivity(), R.drawable.ic_total_logo, ContextCompat.getColor(getActivity(), R.color.colorBlack));
 
         // TAMOIL
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2325218, 9.0953491)));
@@ -123,6 +148,7 @@ public class StationsFragment extends Fragment implements LocationListener {
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2798682, 9.1815180)));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.0088955, 8.9958697)));
 
+        pin = drawableToIcon(getActivity(), R.drawable.ic_eni_logo, ContextCompat.getColor(getActivity(), R.color.colorBlack));
         // AGIP
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.1720020, 8.5224240)));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2239334, 9.1155413)));
@@ -144,6 +170,7 @@ public class StationsFragment extends Fragment implements LocationListener {
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(38.9694533, 8.9705068)));
 
         // ESSO
+        pin = drawableToIcon(getActivity(), R.drawable.ic_q8_logo, ContextCompat.getColor(getActivity(), R.color.colorBlack));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2817382, 9.0319635)));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2516385, 9.1034724)));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2422696, 9.1714671)));
@@ -151,6 +178,9 @@ public class StationsFragment extends Fragment implements LocationListener {
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2421905, 9.1269659)));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2168302, 9.1254600)));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2370500, 9.1249250)));
+
+
+
     }
 
     @Nullable
