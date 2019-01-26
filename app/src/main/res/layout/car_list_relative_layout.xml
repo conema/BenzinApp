@@ -8,24 +8,23 @@
     android:clickable="true">
 
     <ImageView
-        android:layout_marginBottom="16dp"
         android:id="@+id/carImg"
-        android:layout_width="100dp"
+        android:layout_width="130dp"
         android:layout_height="100dp"
         android:layout_marginRight="16dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/carimg2back" />
+        android:layout_marginBottom="16dp"
+        android:scaleType="fitXY" />
 
     <TextView
-        android:textStyle="bold"
         android:id="@+id/carNome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_toRightOf="@+id/carImg"
+        android:fontFamily="@font/montserrat_bold"
         android:text="Pandy"
         android:textSize="18sp"
-        android:fontFamily="@font/montserrat_bold"/>
+        android:textStyle="bold" />
 
     <ImageButton
         android:id="@+id/refreshButton"
@@ -34,7 +33,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_refresh_black_24dp"/>
+        android:src="@drawable/ic_refresh_black_24dp" />
 
     <ImageView
         android:id="@+id/fuelIcon"
@@ -61,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/fuelIcon"
         android:layout_toRightOf="@id/carImg"
-        android:text="Km rimanenti: 10"
         android:fontFamily="@font/montserrat"
-        android:textStyle="bold"/>
+        android:text="Km rimanenti: 10"
+        android:textStyle="bold" />
 </RelativeLayout>

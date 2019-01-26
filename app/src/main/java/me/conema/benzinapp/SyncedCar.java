@@ -1,7 +1,9 @@
 package me.conema.benzinapp;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.FileNotFoundException;
@@ -27,14 +30,17 @@ import me.conema.benzinapp.classes.Car;
 import me.conema.benzinapp.classes.CarFactory;
 
 public class SyncedCar extends AppCompatActivity {
-    EditText carText, roadText, fuelText;
+    EditText carText, roadText, fuelText, fuelEditText;
     ImageButton imgPicker;
     Button saveButton;
     Button deleteButton;
+    TextView syncText, verText;
 
     Drawable carImg;
     private static final int PICK_FROM_GALLERY = 1;
     private static final int OPEN_DOCUMENT_CODE = 2;
+    private static final int REQUEST_IMAGE_CAPTURE = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,60 +48,71 @@ public class SyncedCar extends AppCompatActivity {
         carText = (EditText) findViewById(R.id.carEditText);
         fuelText = (EditText) findViewById(R.id.fuelEditText);
         roadText = (EditText) findViewById(R.id.roadEditText);
+        fuelEditText = (EditText) findViewById(R.id.fuelEditText);
         imgPicker = findViewById(R.id.imgButton);
         saveButton = findViewById(R.id.saveButton);
         deleteButton = findViewById(R.id.deleteButton);
+        syncText = findViewById(R.id.syncText);
+        verText = findViewById(R.id.verText);
+
+        boolean sync = true;
 
         final CarFactory factory = CarFactory.getInstance();
 
+        //Controllo il parametro passato (se false è un auto nuova se true è un auto sincronizzata)
+        Intent intent = getIntent();
+        Bundle obj = intent.getExtras();
 
-        Car car = new Car("Fiat punto", 55000, 17, null, Color.parseColor("#121212"), 70, null);
-        carText.setText(car.getName());
-        fuelText.setText("5");
-        roadText.setText(Integer.toString(car.getKmDone()));
+        if(obj != null)
+            sync = obj.getBoolean("sync");
+
+
+        if(sync) {
+            Car car = new Car("Fiat punto", 55000, 17, null, Color.parseColor("#121212"), 70, null, 56);
+            carText.setText(car.getName());
+            fuelText.setText("56");
+            roadText.setText(Integer.toString(car.getKmDone()));
+        }
+        else{
+            syncText.setText("Inserisci i dati della tua auto:");
+            syncText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            syncText.setTextSize(20);
+            verText.setVisibility(View.GONE);
+            carText.setText("");
+            fuelText.setText("");
+            roadText.setText("");
+        }
 
         imgPicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Here, thisActivity is the current activity
-                if (ContextCompat.checkSelfPermission(SyncedCar.this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
+                CharSequence options[] = new CharSequence[] {"Scatta foto", "Scegli dalla galleria"};
 
-                    // Permission is not granted
-                    // Should we show an explanation?
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(SyncedCar.this,
-                            Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                        // Show an explanation to the user *asynchronously* -- don't block
-                        // this thread waiting for the user's response! After the user
-                        // sees the explanation, try again to request the permission.
-                        Context context = getApplicationContext();
-                        CharSequence text = "L'app ha bisogno di questo permesso per poter funzionare";
-                        int duration = Toast.LENGTH_LONG;
+                AlertDialog.Builder builder = new AlertDialog.Builder(SyncedCar.this);
+                builder.setCancelable(false);
+                builder.setTitle("Seleziona un'opzione:");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0:
+                                takePhoto();
+                                break;
+                            case 1:
+                                chooseFromGallery();
+                                break;
 
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
-                        ActivityCompat.requestPermissions(SyncedCar.this,
-                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                PICK_FROM_GALLERY);
-                    } else {
-                        // No explanation needed; request the permission
-                        ActivityCompat.requestPermissions(SyncedCar.this,
-                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                PICK_FROM_GALLERY);
+                        }
 
-                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                        // app-defined int constant. The callback method gets the
-                        // result of the request.
                     }
-                } else {
-                    // Permission has already been granted
-                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("image/*");
-                    startActivityForResult(intent, OPEN_DOCUMENT_CODE);
-
-                }
+                });
+                builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //the user clicked on Cancel
+                    }
+                });
+                builder.show();
             }
         });
 
@@ -104,7 +121,8 @@ public class SyncedCar extends AppCompatActivity {
             public void onClick(View v) {
                 String carName = carText.getText().toString();
                 int kmDone = Integer.parseInt(roadText.getText().toString());
-                Car car = new Car(carName, kmDone, 23, null, 123, 80, carImg);
+                int tankCapacity = Integer.parseInt(fuelEditText.getText().toString());
+                Car car = new Car(carName, kmDone, 23, null, 123, 80, carImg, tankCapacity);
                 if (carImg != null) {
                     factory.addCar(car);
                     Intent home = new Intent(SyncedCar.this, Home.class);
@@ -161,6 +179,91 @@ public class SyncedCar extends AppCompatActivity {
                 }
 
             }
+        }
+    }
+
+    public void chooseFromGallery(){
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(SyncedCar.this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(SyncedCar.this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                Context context = getApplicationContext();
+                CharSequence text = "L'app ha bisogno di questo permesso per poter funzionare";
+                int duration = Toast.LENGTH_LONG;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                ActivityCompat.requestPermissions(SyncedCar.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        PICK_FROM_GALLERY);
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(SyncedCar.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        PICK_FROM_GALLERY);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            // Permission has already been granted
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            startActivityForResult(intent, OPEN_DOCUMENT_CODE);
+
+        }
+    }
+
+    public void takePhoto(){
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(SyncedCar.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(SyncedCar.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                Context context = getApplicationContext();
+                CharSequence text = "L'app ha bisogno di questo permesso per poter funzionare";
+                int duration = Toast.LENGTH_LONG;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                ActivityCompat.requestPermissions(SyncedCar.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_IMAGE_CAPTURE);
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(SyncedCar.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_IMAGE_CAPTURE);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            // Permission has already been granted
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+
+
         }
     }
 }
