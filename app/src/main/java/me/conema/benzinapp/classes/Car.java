@@ -21,8 +21,9 @@ public class Car {
     private ArrayList weekHistory;
     private int color;
     private Drawable photo;
+    private int tankCapacity;
 
-    public Car(String name, int kmDone, float kml, ArrayList weekHistory, int color, int percTank, Drawable photo) {
+    public Car(String name, int kmDone, float kml, ArrayList weekHistory, int color, int percTank, Drawable photo, int tankCapacity) {
         this.id = contId;
         this.name = name;
         this.lastSync = Calendar.getInstance().getTime();
@@ -33,6 +34,7 @@ public class Car {
         this.color = color;
         this.percTank = percTank;
         this.setPhoto(photo);
+        this.tankCapacity = tankCapacity;
         contId++;
     }
 
