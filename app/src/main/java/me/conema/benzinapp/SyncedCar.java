@@ -119,25 +119,34 @@ public class SyncedCar extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String carName = carText.getText().toString();
-                int kmDone = Integer.parseInt(roadText.getText().toString());
-                int tankCapacity = Integer.parseInt(fuelEditText.getText().toString());
-                Car car = new Car(carName, kmDone, 23, null, 123, 80, carImg, tankCapacity);
-                if (carImg != null) {
-                    factory.addCar(car);
-                    Intent home = new Intent(SyncedCar.this, Home.class);
-                    startActivity(home);
-
-
-                }
-                //If the user doesn't select an img for the car show an error msg
+                if (carText.getText().toString().equals(""))
+                    carText.setError("Il campo non può essere vuoto");
+                if (roadText.getText().toString().equals(""))
+                    roadText.setError("Il campo non può essere vuoto");
+                if (fuelEditText.getText().toString().equals(""))
+                    fuelEditText.setError("Il campo non può essere vuoto");
                 else {
-                    Context context = getApplicationContext();
-                    CharSequence text = "Seleziona un'immagine per l'auto";
-                    int duration = Toast.LENGTH_SHORT;
+                    String carName = carText.getText().toString();
+                    int kmDone = Integer.parseInt(roadText.getText().toString());
+                    int tankCapacity = Integer.parseInt(fuelEditText.getText().toString());
+                    Car car = new Car(carName, kmDone, 23, null, 123, 80, carImg, tankCapacity);
 
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
+                    if (carImg != null) {
+                        factory.addCar(car);
+                        Intent home = new Intent(SyncedCar.this, Home.class);
+                        startActivity(home);
+
+
+                    }
+                    //If the user doesn't select an img for the car show an error msg
+                    else {
+                        Context context = getApplicationContext();
+                        CharSequence text = "Seleziona un'immagine per l'auto";
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
                 }
             }
         });
@@ -156,6 +165,16 @@ public class SyncedCar extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            //New bitmapdrawable
+            carImg = new BitmapDrawable(getResources(), imageBitmap);
+
+            //Setting that bitmapdrawable as the icon in the xml
+            imgPicker.setImageDrawable(carImg);
+        }
+
         if (requestCode == OPEN_DOCUMENT_CODE) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {

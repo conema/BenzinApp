@@ -16,9 +16,9 @@ public class StationFactory {
     }
 
     private StationFactory() {
-        Station s1 = new Station(0, "ENI", "Via Roma 32 Cagliari", 1.437, R.drawable.ic_eni_logo);
-        Station s2 = new Station(1, "Q8", "Via Fiume 31 Cagliari", 1.543, R.drawable.ic_q8_logo);
-        Station s3 = new Station(2, "Total", "Via Genova 1 Cagliari", 1.520, R.drawable.ic_total_logo);
+        Station s1 = new Station(0, "ENI", "Via Roma 32 Cagliari", 1.437, R.drawable.ic_eni_logo, 4);
+        Station s2 = new Station(1, "Q8", "Via Fiume 31 Cagliari", 1.543, R.drawable.ic_q8_logo, 3.4);
+        Station s3 = new Station(2, "Total", "Via Genova 1 Cagliari", 1.520, R.drawable.ic_total_logo,5.0);
 
         stationList.add(s1);
         stationList.add(s2);
@@ -44,7 +44,7 @@ public class StationFactory {
         return stationList.remove(station);
     }
 
-    Station getStationById(int id) {
+    public Station getStationById(int id) {
         for (Station station : stationList) {
             if (station.getId() == id) {
                 return station;
