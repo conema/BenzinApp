@@ -31,7 +31,7 @@ import me.conema.benzinapp.classes.StationFactory;
 public class SingleStation extends AppCompatActivity {
     ImageView imgStazione;
     TextView viaStazione, prezzoStazione, votoStazione;
-    int id = 2000;
+    int id = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,10 +59,16 @@ public class SingleStation extends AppCompatActivity {
         viaStazione.setText(station.getAddress());
         prezzoStazione.setText(Double.toString(station.getPrice()));
         votoStazione.setText(Double.toString(station.getMark()));
+        getSupportActionBar().setTitle(station.getAddress());
         updateReviewList(id);
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateReviewList(id);
+    }
 
     private void updateReviewList(int idStazione){
         ReviewFactory reviewFactory = ReviewFactory.getInstance();
@@ -79,7 +85,7 @@ public class SingleStation extends AppCompatActivity {
             votoReview.setText(Double.toString(review.getVote()));
             TextView testoReview = view.findViewById(R.id.testoReview);
             testoReview.setText(review.getDescription());
-
+            reviewContainer.addView(view);
         }
     }
     @Override

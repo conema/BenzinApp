@@ -126,6 +126,9 @@
                 android:src="@drawable/car_img_3_hd" />
 
             <TextView
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_customer_review"
@@ -135,8 +138,8 @@
 
             <LinearLayout
                 android:id="@+id/container"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
             </LinearLayout>
