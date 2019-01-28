@@ -43,7 +43,7 @@ public class ReviewFactory {
         return reviewList.remove(review);
     }
 
-    public Review getAutoById(int id) {
+    public Review getReviewById(int id) {
         for (Review review : reviewList) {
             if (review.getId() == id) {
                 return review;
@@ -51,6 +51,15 @@ public class ReviewFactory {
         }
 
         return null;
+    }
+
+    public ArrayList<Review> getReviewByStation(int id){
+        ArrayList<Review> newReviewList = new ArrayList<>();
+        for(Review review : reviewList){
+            if (review.getStationId() == id)
+                newReviewList.add(review);
+        }
+        return newReviewList;
     }
 }
 

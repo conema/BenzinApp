@@ -32,15 +32,18 @@ public class Home extends AppCompatActivity implements HomeFragment.OnFragmentIn
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     fragment = new HomeFragment();
+                    getSupportActionBar().setTitle("Home");
                     loadFragment(fragment, false);
                     return true;
                 case R.id.navigation_stations:
                     fragment = new StationsFragment();
+                    getSupportActionBar().setTitle("Mappa stazioni");
                     loadFragment(fragment, false);
                     return true;
                 case R.id.navigation_car:
                     /*Intent carList = new Intent(Home.this, CarList.class);
                     startActivity(carList);*/
+                    getSupportActionBar().setTitle("Lista auto");
                     fragment = new CarListFragment();
                     loadFragment(fragment,false);
                     return true;

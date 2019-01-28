@@ -7,14 +7,16 @@ public class Station {
     private String name;
     private String address;
     private double price;
+    private double mark;
     private int img;
 
-    Station(int id, String name, String address, double price, int img) {
+    Station(int id, String name, String address, double price, int img, double mark) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.price = price;
         this.img = img;
+        this.mark = mark;
     }
 
     public int getId() {
@@ -55,5 +57,13 @@ public class Station {
 
     public void setImg(int img) {
         this.img = img;
+    }
+
+    public double getMark() {
+        return mark;
+    }
+
+    public void setMark(double mark) {
+        this.mark = mark;
     }
 }
