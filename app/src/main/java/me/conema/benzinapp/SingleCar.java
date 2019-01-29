@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -38,14 +39,21 @@ public class SingleCar extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_car);
 
-        carName = (TextView) findViewById(R.id.carName);
-        kmSingleCar = (TextView) findViewById(R.id.kmSingleCar);
-        kmFatti = (TextView) findViewById(R.id.kmFatti);
-        consumo = (TextView) findViewById(R.id.consumo);
-        kmRimanenti = (TextView) findViewById(R.id.kmRimanenti);
-        lRimanenti = (TextView) findViewById(R.id.lRimanenti);
-        singleCar = (ImageButton) findViewById(R.id.singleCarImage);
-        deleteButton = (Button) findViewById(R.id.deleteButton);
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        myToolbar.setTitle("");
+        setSupportActionBar(myToolbar);
+
+        //Serve per visualizzare il tasto indietro
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        this.getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        kmSingleCar = findViewById(R.id.kmSingleCar);
+        kmFatti = findViewById(R.id.kmFatti);
+        consumo = findViewById(R.id.consumo);
+        kmRimanenti = findViewById(R.id.kmRimanenti);
+        lRimanenti = findViewById(R.id.lRimanenti);
+        singleCar = findViewById(R.id.singleCarImage);
+        deleteButton = findViewById(R.id.deleteButton);
 
 
         Intent intent = getIntent();
@@ -60,7 +68,7 @@ public class SingleCar extends AppCompatActivity {
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             kmSingleCar.setText("Ultimo aggiornamento : " + df.format(car.getLastSync()));
 
-            carName.setText(car.getName());
+            myToolbar.setTitle(String.valueOf((car.getName())));
             kmFatti.setText(String.valueOf(car.getKmDone()));
             consumo.setText(String.valueOf(car.getKml()));
             kmRimanenti.setText(String.valueOf(car.getPercTank()));
