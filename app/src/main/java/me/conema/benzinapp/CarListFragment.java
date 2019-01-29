@@ -255,12 +255,12 @@ public class CarListFragment extends Fragment {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.addCar:
-                /*Intent syncedCar = new Intent(getActivity(), SyncedCar.class);
+                Intent syncedCar = new Intent(getActivity(), SyncedCar.class);
                 syncedCar.putExtra("sync", false);
-                startActivity(syncedCar);*/
-                Intent station = new Intent(getActivity(), SingleStation.class);
+                startActivity(syncedCar);
+                /*Intent station = new Intent(getActivity(), SingleStation.class);
                 station.putExtra("stationId", 0);
-                startActivity(station);
+                startActivity(station);*/
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -47,9 +47,13 @@ public class SyncedCar extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_synced_car);
 
-        Toolbar myToolbar = findViewById(R.id.single_car_toolbar);
-        myToolbar.setTitle("Aggiungi auto");
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        TextView mTitle = myToolbar.findViewById(R.id.toolbar_title);
         setSupportActionBar(myToolbar);
+        myToolbar.setTitle("Aggiungi auto");
+        mTitle.setText(myToolbar.getTitle());
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setElevation(0);
 
         //Serve per visualizzare il tasto indietro
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -79,7 +83,7 @@ public class SyncedCar extends AppCompatActivity {
 
 
         if(sync) {
-            Car car = new Car("Fiat punto", 55000, 17, null, Color.parseColor("#121212"), 70, null, 56);
+            Car car = new Car("Fiat punto", 45, 17, null, Color.parseColor("#121212"), 70, null, 56);
             carText.setText(car.getName());
             fuelText.setText("56");
             roadText.setText(Integer.toString(car.getKmDone()));
@@ -140,7 +144,7 @@ public class SyncedCar extends AppCompatActivity {
                     String carName = carText.getText().toString();
                     int kmDone = Integer.parseInt(roadText.getText().toString());
                     int tankCapacity = Integer.parseInt(fuelEditText.getText().toString());
-                    Car car = new Car(carName, kmDone, 23, null, 123, 80, carImg, tankCapacity);
+                    Car car = new Car(carName, kmDone, 23, null, Color.parseColor("#c6b6b6"), 80, carImg, tankCapacity);
 
                     if (carImg != null) {
                         factory.addCar(car);

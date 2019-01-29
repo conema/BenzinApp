@@ -2,6 +2,8 @@ package me.conema.benzinapp.classes;
 
 import android.graphics.drawable.Drawable;
 
+import java.util.ArrayList;
+
 public class Station {
     private int id;
     private String name;
@@ -60,7 +62,18 @@ public class Station {
     }
 
     public double getMark() {
-        return mark;
+        ArrayList<Review> reviews = ReviewFactory.getInstance().getReviewByStation(id);
+        double mark = 0;
+
+        for (Review review : reviews) {
+            mark += review.getVote();
+        }
+
+        if (reviews.size() > 0) {
+            return mark / reviews.size();
+        } else {
+            return 0;
+        }
     }
 
     public void setMark(double mark) {
