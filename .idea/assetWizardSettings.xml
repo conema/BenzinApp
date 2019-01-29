@@ -209,9 +209,11 @@
                           <map>
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="356891" />
-                            <entry key="outputName" value="ic_correct" />
+                            <entry key="height" value="1511" />
+                            <entry key="outputName" value="ic_tamoil_logo" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="C:\Users\Davide\Downloads\correct.svg" />
+                            <entry key="sourceFile" value="D:\Download\tamoil-1.svg" />
+                            <entry key="width" value="2500" />
                           </map>
                         </option>
                       </PersistentState>

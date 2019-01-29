@@ -7,15 +7,11 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ScaleDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.PersistableBundle;
-import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,15 +20,15 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import me.conema.benzinapp.classes.Station;
+import me.conema.benzinapp.classes.StationFactory;
 
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
@@ -43,7 +39,6 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapquest.mapping.MapQuest;
 import com.mapquest.mapping.maps.MapView;
-import com.mapquest.mapping.utils.PoiOnMapData;
 
 import timber.log.Timber;
 
@@ -56,6 +51,7 @@ public class StationsFragment extends Fragment implements LocationListener {
     private Location currentLocation;
     private String locationProvider;
     private Criteria criteria;
+    private StationFactory stationFactory;
 
 
     // gestione mappa
@@ -97,7 +93,7 @@ public class StationsFragment extends Fragment implements LocationListener {
         vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
 
         if (canvas.getWidth() > 200 && canvas.getHeight() > 200) {
-            canvas.scale(0.1f, 0.1f, canvas.getHeight() / 2, canvas.getWidth() / 2);
+            canvas.scale(0.3f, 0.3f, canvas.getHeight() / 2, canvas.getWidth() / 2);
         }
 
         vectorDrawable.draw(canvas);
@@ -106,6 +102,7 @@ public class StationsFragment extends Fragment implements LocationListener {
 
     @SuppressLint("MissingPermission")
     private void initialize() {
+        stationFactory = StationFactory.getInstance();
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         criteria = new Criteria();
@@ -129,8 +126,14 @@ public class StationsFragment extends Fragment implements LocationListener {
         });
 
         // aggiunta stazioni di servizio
-        Icon pin = drawableToIcon(getActivity(), R.drawable.ic_total_logo);
+        Icon pin;// = drawableToIcon(getActivity(), R.drawable.ic_tamoil_logo);
+        for(LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
+            pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
+            mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
+        }
 
+        //Icon pin = drawableToIcon(getActivity(), R.drawable.ic_tamoil_logo);
+        /*
         // TAMOIL
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2325218, 9.0953491)));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2329010, 9.1029220)));
@@ -142,10 +145,10 @@ public class StationsFragment extends Fragment implements LocationListener {
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2982480, 9.0936330)));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2863720, 9.1856290)));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2798682, 9.1815180)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.0088955, 8.9958697)));
 
         pin = drawableToIcon(getActivity(), R.drawable.ic_eni_logo);
         // AGIP
+        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.0088955, 8.9958697)));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.1720020, 8.5224240)));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2239334, 9.1155413)));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2513209, 9.1339677)));
@@ -166,7 +169,7 @@ public class StationsFragment extends Fragment implements LocationListener {
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(38.9694533, 8.9705068)));
 
         // ESSO
-        pin = drawableToIcon(getActivity(), R.drawable.ic_q8_logo);
+        pin = drawableToIcon(getActivity(), R.drawable.ic_esso_logo);
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2817382, 9.0319635)));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2516385, 9.1034724)));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2422696, 9.1714671)));
@@ -174,9 +177,7 @@ public class StationsFragment extends Fragment implements LocationListener {
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2421905, 9.1269659)));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2168302, 9.1254600)));
         mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2370500, 9.1249250)));
-
-
-
+        */
     }
 
     @Nullable
@@ -196,7 +197,6 @@ public class StationsFragment extends Fragment implements LocationListener {
             mapboxMap = parMapboxMap;
             mapView.setStreetMode();
             initialize();
-            //mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 11));
         });
 
         currentPositionButton = getView().findViewById(R.id.currentPositionButton);
@@ -206,9 +206,6 @@ public class StationsFragment extends Fragment implements LocationListener {
                 updateMapPosition();
             }
         });
-
-        // inizializzazione marker
-        //currentPositionMarker = mapboxMap.addMarker(new MarkerOptions());
     }
 
     @SuppressLint("MissingPermission")
