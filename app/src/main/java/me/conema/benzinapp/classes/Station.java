@@ -18,11 +18,11 @@ public class Station {
     private int id;
     private String name;
     private String address;
-    private double price;
+    private float price;
     private int img;
     private LatLng position;
 
-    public Station(int id, String name, String address, double price, int img, LatLng position) {
+    public Station(int id, String name, String address, float price, int img, LatLng position) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -55,11 +55,11 @@ public class Station {
         this.address = address;
     }
 
-    public double getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 

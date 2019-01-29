@@ -17,7 +17,7 @@ public class AppFactory {
 
     private AppFactory() {
         ArrayList<Station> lastStations = new ArrayList<>();
-        lastStations.add(StationFactory.getInstance().getStationById(1));
+        lastStations.add(StationFactory.getInstance().getStationById(0));
         lastStations.add(StationFactory.getInstance().getStationById(2));
 
         app = new App(CarFactory.getInstance().getCarById(0), StationFactory.getInstance().getStationById(0), lastStations, new Date());
