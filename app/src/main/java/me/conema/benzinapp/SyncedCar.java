@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -45,10 +46,20 @@ public class SyncedCar extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_synced_car);
-        carText = (EditText) findViewById(R.id.carEditText);
-        fuelText = (EditText) findViewById(R.id.fuelEditText);
-        roadText = (EditText) findViewById(R.id.roadEditText);
-        fuelEditText = (EditText) findViewById(R.id.fuelEditText);
+
+        Toolbar myToolbar = findViewById(R.id.single_car_toolbar);
+        myToolbar.setTitle("Aggiungi auto");
+        setSupportActionBar(myToolbar);
+
+        //Serve per visualizzare il tasto indietro
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        this.getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+
+        carText = findViewById(R.id.carEditText);
+        fuelText = findViewById(R.id.fuelEditText);
+        roadText = findViewById(R.id.roadEditText);
+        fuelEditText = findViewById(R.id.fuelEditText);
         imgPicker = findViewById(R.id.imgButton);
         saveButton = findViewById(R.id.saveButton);
         deleteButton = findViewById(R.id.deleteButton);
@@ -284,5 +295,11 @@ public class SyncedCar extends AppCompatActivity {
 
 
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

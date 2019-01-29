@@ -36,10 +36,10 @@ public class SingleStation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_station);
-        imgStazione = (ImageView) findViewById(R.id.imgStazione);
-        viaStazione = (TextView) findViewById(R.id.viaStatione);
-        prezzoStazione = (TextView) findViewById(R.id.prezzoStazione);
-        votoStazione = (TextView) findViewById(R.id.votoStazione);
+        imgStazione = findViewById(R.id.imgStazione);
+        viaStazione = findViewById(R.id.viaStatione);
+        prezzoStazione = findViewById(R.id.prezzoStazione);
+        votoStazione = findViewById(R.id.votoStazione);
         Toolbar myToolbar = findViewById(R.id.single_car_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -73,7 +73,7 @@ public class SingleStation extends AppCompatActivity {
     private void updateReviewList(int idStazione){
         ReviewFactory reviewFactory = ReviewFactory.getInstance();
         ArrayList<Review> reviewArrayList = reviewFactory.getReviewByStation(idStazione);
-        LinearLayout reviewContainer = (LinearLayout) findViewById(R.id.container);
+        LinearLayout reviewContainer = findViewById(R.id.container);
 
         reviewContainer.removeAllViews();
 
@@ -88,6 +88,7 @@ public class SingleStation extends AppCompatActivity {
             reviewContainer.addView(view);
         }
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -135,6 +136,8 @@ public class SingleStation extends AppCompatActivity {
                 StationFactory stationFactory = StationFactory.getInstance();
                 Station station = stationFactory.getStationById(id);
                 app.setFavStation(null);
+
+                Toast.makeText(this, "Stazione rimossa dalle preferite", Toast.LENGTH_SHORT).show();
                 item.setIcon(R.drawable.ic_favorite_border_black_24dp);
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(SingleStation.this);
