@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class CarSync extends AppCompatActivity {
     @Override
@@ -13,9 +14,14 @@ public class CarSync extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_sync);
 
-        Toolbar myToolbar = findViewById(R.id.single_car_toolbar);
-        myToolbar.setTitle("Aggiungi auto");
+
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        TextView mTitle = myToolbar.findViewById(R.id.toolbar_title);
         setSupportActionBar(myToolbar);
+        myToolbar.setTitle("Aggiungi auto");
+        mTitle.setText(myToolbar.getTitle());
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setElevation(0);
 
         //Serve per visualizzare il tasto indietro
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);

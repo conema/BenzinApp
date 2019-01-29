@@ -45,8 +45,11 @@ public class SingleCar extends AppCompatActivity {
         setContentView(R.layout.activity_single_car);
 
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
-        myToolbar.setTitle("");
+        TextView mTitle = myToolbar.findViewById(R.id.toolbar_title);
         setSupportActionBar(myToolbar);
+        mTitle.setText(myToolbar.getTitle());
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setElevation(0);
 
         //Serve per visualizzare il tasto indietro
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -73,7 +76,7 @@ public class SingleCar extends AppCompatActivity {
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             kmSingleCar.setText("Ultimo aggiornamento : " + df.format(car.getLastSync()));
 
-            myToolbar.setTitle(String.valueOf((car.getName())));
+            mTitle.setText(car.getName());
             kmFatti.setText(String.valueOf(car.getKmDone()));
             consumo.setText(String.valueOf(car.getKml()));
             kmRimanenti.setText(String.valueOf(car.getPercTank()));

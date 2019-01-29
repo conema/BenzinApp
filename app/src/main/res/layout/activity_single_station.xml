@@ -21,14 +21,25 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
             <android.support.v7.widget.Toolbar
-                android:id="@+id/single_car_toolbar"
+                android:id="@+id/my_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
+                android:background="?android:colorBackground"
                 android:elevation="4dp"
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                />
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/lato_bold"
+                    android:textSize="22sp"
+                    android:textColor="#47525E" />
+            </android.support.v7.widget.Toolbar>
+
 
             <LinearLayout
                 android:layout_marginLeft="24dp"
@@ -125,16 +136,21 @@
                 android:layout_marginBottom="32dp"
                 android:src="@drawable/car_img_3_hd" />
 
-            <TextView
-                android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_customer_review"
-                android:fontFamily="@font/montserrat"
-                android:text=" Recensioni da Google:"
-                android:textSize="20sp" />
+                android:gravity="center">
+
+                <TextView
+                    android:gravity="center"
+                    android:layout_marginRight="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_customer_review"
+                    android:fontFamily="@font/montserrat"
+                    android:text=" Recensioni da Google:"
+                    android:textSize="20sp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/container"

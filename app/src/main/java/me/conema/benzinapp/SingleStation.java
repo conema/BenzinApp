@@ -40,10 +40,17 @@ public class SingleStation extends AppCompatActivity {
         viaStazione = findViewById(R.id.viaStatione);
         prezzoStazione = findViewById(R.id.prezzoStazione);
         votoStazione = findViewById(R.id.votoStazione);
-        Toolbar myToolbar = findViewById(R.id.single_car_toolbar);
+
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        TextView mTitle = myToolbar.findViewById(R.id.toolbar_title);
         setSupportActionBar(myToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        mTitle.setText(myToolbar.getTitle());
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setElevation(0);
+
+        //Serve per visualizzare il tasto indietro
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        this.getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         StationFactory stationFactory = StationFactory.getInstance();
 
@@ -58,8 +65,9 @@ public class SingleStation extends AppCompatActivity {
         imgStazione.setImageResource(station.getImg());
         viaStazione.setText(station.getAddress());
         prezzoStazione.setText(Double.toString(station.getPrice()));
-        votoStazione.setText(Double.toString(station.getMark()));
+        votoStazione.setText(Double.toString(station.getMark()) + "/5");
         getSupportActionBar().setTitle(station.getAddress());
+        mTitle.setText(station.getAddress());
         updateReviewList(id);
 
     }
@@ -82,7 +90,7 @@ public class SingleStation extends AppCompatActivity {
             TextView nomeReview = view.findViewById(R.id.nomeReview);
             nomeReview.setText(review.getName());
             TextView votoReview = view.findViewById(R.id.votoReview);
-            votoReview.setText(Double.toString(review.getVote()));
+            votoReview.setText(Double.toString(review.getVote()) + "/5");
             TextView testoReview = view.findViewById(R.id.testoReview);
             testoReview.setText(review.getDescription());
             reviewContainer.addView(view);

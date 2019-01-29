@@ -228,7 +228,7 @@ public class HomeFragment extends Fragment {
         ArrayList<Car> cars = CarFactory.getInstance().getCars();
 
         LinearLayout statsList = viewParent.findViewById(R.id.stats_list);
-        LinearLayout statsCircles = viewParent.findViewById(R.id.stats_circles);
+        com.nex3z.flowlayout.FlowLayout statsCircles = viewParent.findViewById(R.id.stats_circles);
 
         //Delete child view (old line and circle stats)
         statsList.removeAllViews();
