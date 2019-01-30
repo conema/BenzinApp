@@ -70,10 +70,10 @@ public class SingleStation extends AppCompatActivity {
 
         imgStazione.setImageResource(station.getImg());
         viaStazione.setText(station.getAddress());
-        prezzoStazione.setText(Double.toString(station.getPrice()));
+        prezzoStazione.setText(Double.toString(station.getPrice()).substring(0, 5) + "€");
         votoStazione.setText(Double.toString(station.getMark()) + "/5");
-        getSupportActionBar().setTitle(station.getAddress());
-        mTitle.setText(station.getAddress());
+        getSupportActionBar().setTitle(station.getName());
+        mTitle.setText(station.getName());
         updateReviewList(idStation);
 
         buttonStazione.setOnClickListener(new View.OnClickListener() {
