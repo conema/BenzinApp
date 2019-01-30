@@ -23,7 +23,7 @@ public class Station {
     private int img;
     private LatLng position;
 
-    Station(int id, String name, String address, double price, int img, LatLng position, double mark) {
+    Station(int id, String name, String address, float price, int img, LatLng position, double mark) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -77,9 +77,8 @@ public class Station {
         double mark = 0;
 
         for (Review review : reviews) {
-        }
             mark += review.getVote();
-
+        }
         if (reviews.size() > 0) {
             return mark / reviews.size();
         } else {
