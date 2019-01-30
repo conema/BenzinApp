@@ -18,6 +18,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mapbox.mapboxsdk.geometry.LatLng;
+
 import java.util.ArrayList;
 
 import me.conema.benzinapp.classes.App;
@@ -77,8 +79,9 @@ public class SingleStation extends AppCompatActivity {
         buttonStazione.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                double lat = 37.7749;
-                double longit = -122.4194;
+                LatLng pos = station.getPosition();
+                double lat = pos.getLatitude();
+                double longit = pos.getLongitude();
                 Uri gmmIntentUri = Uri.parse("google.navigation:q="+lat + "," + longit);
 
                 // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
