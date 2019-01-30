@@ -86,6 +86,12 @@ public class StationsFragment extends Fragment implements LocationListener {
                 .icon(drawableToIcon(getActivity(), R.drawable.ic_navigation_black_24dp))
                 .setPosition(currentLatLng));
 
+        Icon pin;
+        for(LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
+            pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
+            mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
+        }
+
     }
 
 
@@ -131,11 +137,11 @@ public class StationsFragment extends Fragment implements LocationListener {
         });
 
         // aggiunta stazioni di servizio
-        Icon pin;
+        /*Icon pin;
         for(LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
             pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
             mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
-        }
+        }*/
     }
 
     @Nullable
@@ -257,7 +263,7 @@ public class StationsFragment extends Fragment implements LocationListener {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
-                    initialize();
+                    //initialize();
                     if (ContextCompat.checkSelfPermission(getActivity(),
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
