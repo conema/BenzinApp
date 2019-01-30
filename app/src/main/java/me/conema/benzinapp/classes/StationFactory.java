@@ -21,6 +21,7 @@ public class StationFactory {
     }
 
     private StationFactory() {
+
         stationHashMap.put(new LatLng(39.2325218, 9.0953491), new Station(0, Station.NAME_TAMOIL, "Via Adige, San Paolo, Sant'Avendrace, Cagliari", 1.437f, R.drawable.ic_tamoil_logo, new LatLng(39.2325218, 9.0953491)));
         stationHashMap.put(new LatLng(39.2329010, 9.1029220), new Station(1, Station.NAME_TAMOIL, "Via Is Maglias, San Paolo, Tuvixeddu-Tuvumannu, Cagliari", 1.437f, R.drawable.ic_tamoil_logo, new LatLng(39.2329010, 9.1029220)));
         stationHashMap.put(new LatLng(39.2216692, 9.1062200), new Station(2, Station.NAME_TAMOIL, "Piazza dell'Annunziata, San Paolo, Tuvixeddu-Tuvumannu, Cagliari", 1.437f, R.drawable.ic_tamoil_logo, new LatLng(39.2216692, 9.1062200)));
@@ -44,8 +45,8 @@ public class StationFactory {
         stationHashMap.put(new LatLng(39.2422696, 9.1714671), new Station(34, Station.NAME_ESSO, "Via Guglielmo Marconi, Quartu Sant'Elena, Cagliari", 1.437f, R.drawable.ic_esso_logo, new LatLng(39.2422696, 9.1714671)));
         stationHashMap.put(new LatLng(39.2370500, 9.1249250), new Station(38, Station.NAME_ESSO, "Via Riva Villasanta, Monteleone, Cagliari", 1.437f, R.drawable.ic_esso_logo, new LatLng(39.2370500, 9.1249250)));
         stationHashMap.put(new LatLng(39.2168302, 9.1254600), new Station(37, Station.NAME_ESSO, "Piazza della Repubblica, Monte Urpinu, Cagliari", 1.437f, R.drawable.ic_esso_logo, new LatLng(39.2168302, 9.1254600)));
-        stationHashMap.put(new LatLng(39.2329010, 9.1029220), new Station(36, Station.NAME_ESSO, "Via Riva Villasanta, Pirri, Cagliari", 1.437f, R.drawable.ic_esso_logo, new LatLng(39.2329010, 9.1029220)));
         stationHashMap.put(new LatLng(39.2335950, 9.1113870), new Station(35, Station.NAME_ESSO, "Via Capitanata, San Paolo, La Vega, Cagliari", 1.437f, R.drawable.ic_esso_logo, new LatLng(39.2335950, 9.1113870)));
+        stationHashMap.put(new LatLng(39.2329010, 9.1029220), new Station(36, Station.NAME_ESSO, "Via Riva Villasanta, Pirri, Cagliari", 1.437f, R.drawable.ic_esso_logo, new LatLng(39.2329010, 9.1029220)));
         stationHashMap.put(new LatLng(39.2982480, 9.0936330), new Station(10, Station.NAME_TAMOIL, "Via Monserrato, Sestu, Cagliari", 1.437f, R.drawable.ic_tamoil_logo, new LatLng(39.2982480, 9.0936330)));
         stationHashMap.put(new LatLng(39.2863720, 9.1856290), new Station(11, Station.NAME_TAMOIL, "Via Roma, Settimo San Pietro, Cagliari", 1.437f, R.drawable.ic_tamoil_logo, new LatLng(39.2863720, 9.1856290)));
         stationHashMap.put(new LatLng(39.0088955, 8.9958697), new Station(13, Station.NAME_ENI, "SS195, Pula, Cagliari", 1.437f, R.drawable.ic_eni_logo, new LatLng(39.0088955, 8.9958697)));

@@ -258,6 +258,9 @@ public class CarListFragment extends Fragment {
                 Intent syncedCar = new Intent(getActivity(), SyncedCar.class);
                 syncedCar.putExtra("sync", false);
                 startActivity(syncedCar);
+                /*Intent station = new Intent(getActivity(), SingleStation.class);
+                station.putExtra("stationId", 0);
+                startActivity(station);*/
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

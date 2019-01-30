@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,6 +30,9 @@ import me.conema.benzinapp.classes.AppFactory;
 import me.conema.benzinapp.classes.Car;
 import me.conema.benzinapp.classes.CarFactory;
 import me.conema.benzinapp.classes.Station;
+import me.conema.benzinapp.classes.StationFactory;
+
+import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 
 
 /**
@@ -116,14 +120,30 @@ public class HomeFragment extends Fragment {
         favCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: fav car
+                Car car = AppFactory.getInstance().getApp().getFavCar();
+
+                if (car == null) {
+                    Toast.makeText(getActivity(), "Non è presente un'auto preferita.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent carActivity = new Intent(getActivity(), SingleCar.class);
+                    carActivity.putExtra("carId", car.getId());
+                    startActivity(carActivity);
+                }
             }
         });
 
         favStation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: fav station
+                Station station = AppFactory.getInstance().getApp().getFavStation();
+
+                if (station == null) {
+                    Toast.makeText(getActivity(), "Non è presente una stazione preferita.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent stationActivity = new Intent(getActivity(), SingleStation.class);
+                    stationActivity.putExtra("stationId", station.getId());
+                    startActivity(stationActivity);
+                }
             }
         });
 
@@ -193,6 +213,15 @@ public class HomeFragment extends Fragment {
             TextView stationPrice = view.findViewById(R.id.last_station_price);
             stationPrice.setText(station.getPrice() + "");
 
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent singleStation = new Intent(getActivity(), SingleStation.class);
+                    singleStation.putExtra("stationId", station.getId());
+                    startActivity(singleStation);
+                }
+            });
+
             lastStations.addView(view);
         }
     }
@@ -201,7 +230,7 @@ public class HomeFragment extends Fragment {
         ArrayList<Car> cars = CarFactory.getInstance().getCars();
 
         LinearLayout statsList = viewParent.findViewById(R.id.stats_list);
-        LinearLayout statsCircles = viewParent.findViewById(R.id.stats_circles);
+        com.nex3z.flowlayout.FlowLayout statsCircles = viewParent.findViewById(R.id.stats_circles);
 
         //Delete child view (old line and circle stats)
         statsList.removeAllViews();

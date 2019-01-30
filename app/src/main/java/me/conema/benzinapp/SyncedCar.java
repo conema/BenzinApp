@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -45,10 +46,24 @@ public class SyncedCar extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_synced_car);
-        carText = (EditText) findViewById(R.id.carEditText);
-        fuelText = (EditText) findViewById(R.id.fuelEditText);
-        roadText = (EditText) findViewById(R.id.roadEditText);
-        fuelEditText = (EditText) findViewById(R.id.fuelEditText);
+
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        TextView mTitle = myToolbar.findViewById(R.id.toolbar_title);
+        setSupportActionBar(myToolbar);
+        myToolbar.setTitle("Aggiungi auto");
+        mTitle.setText(myToolbar.getTitle());
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setElevation(0);
+
+        //Serve per visualizzare il tasto indietro
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        this.getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+
+        carText = findViewById(R.id.carEditText);
+        fuelText = findViewById(R.id.fuelEditText);
+        roadText = findViewById(R.id.roadEditText);
+        fuelEditText = findViewById(R.id.fuelEditText);
         imgPicker = findViewById(R.id.imgButton);
         saveButton = findViewById(R.id.saveButton);
         deleteButton = findViewById(R.id.deleteButton);
@@ -68,7 +83,7 @@ public class SyncedCar extends AppCompatActivity {
 
 
         if(sync) {
-            Car car = new Car("Fiat punto", 55000, 17, null, Color.parseColor("#121212"), 70, null, 56);
+            Car car = new Car("Fiat punto", 45, 17, null, Color.parseColor("#121212"), 70, null, 56);
             carText.setText(car.getName());
             fuelText.setText("56");
             roadText.setText(Integer.toString(car.getKmDone()));
@@ -119,25 +134,34 @@ public class SyncedCar extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String carName = carText.getText().toString();
-                int kmDone = Integer.parseInt(roadText.getText().toString());
-                int tankCapacity = Integer.parseInt(fuelEditText.getText().toString());
-                Car car = new Car(carName, kmDone, 23, null, 123, 80, carImg, tankCapacity);
-                if (carImg != null) {
-                    factory.addCar(car);
-                    Intent home = new Intent(SyncedCar.this, Home.class);
-                    startActivity(home);
-
-
-                }
-                //If the user doesn't select an img for the car show an error msg
+                if (carText.getText().toString().equals(""))
+                    carText.setError("Il campo non può essere vuoto");
+                if (roadText.getText().toString().equals(""))
+                    roadText.setError("Il campo non può essere vuoto");
+                if (fuelEditText.getText().toString().equals(""))
+                    fuelEditText.setError("Il campo non può essere vuoto");
                 else {
-                    Context context = getApplicationContext();
-                    CharSequence text = "Seleziona un'immagine per l'auto";
-                    int duration = Toast.LENGTH_SHORT;
+                    String carName = carText.getText().toString();
+                    int kmDone = Integer.parseInt(roadText.getText().toString());
+                    int tankCapacity = Integer.parseInt(fuelEditText.getText().toString());
+                    Car car = new Car(carName, kmDone, 23, null, Color.parseColor("#c6b6b6"), 80, carImg, tankCapacity);
 
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
+                    if (carImg != null) {
+                        factory.addCar(car);
+                        Intent home = new Intent(SyncedCar.this, Home.class);
+                        startActivity(home);
+
+
+                    }
+                    //If the user doesn't select an img for the car show an error msg
+                    else {
+                        Context context = getApplicationContext();
+                        CharSequence text = "Seleziona un'immagine per l'auto";
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
                 }
             }
         });
@@ -156,6 +180,16 @@ public class SyncedCar extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            //New bitmapdrawable
+            carImg = new BitmapDrawable(getResources(), imageBitmap);
+
+            //Setting that bitmapdrawable as the icon in the xml
+            imgPicker.setImageDrawable(carImg);
+        }
+
         if (requestCode == OPEN_DOCUMENT_CODE) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
@@ -265,5 +299,11 @@ public class SyncedCar extends AppCompatActivity {
 
 
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

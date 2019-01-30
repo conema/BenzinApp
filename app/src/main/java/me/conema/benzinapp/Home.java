@@ -29,19 +29,30 @@ public class Home extends AppCompatActivity implements HomeFragment.OnFragmentIn
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment fragment;
+            Toolbar myToolbar = findViewById(R.id.my_toolbar);
+            TextView mTitle = myToolbar.findViewById(R.id.toolbar_title);
+            setSupportActionBar(myToolbar);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     fragment = new HomeFragment();
+                    getSupportActionBar().setTitle("Home");
+                    mTitle.setText("Home");
                     loadFragment(fragment, false);
                     return true;
                 case R.id.navigation_stations:
                     fragment = new StationsFragment();
+                    getSupportActionBar().setTitle("Mappa stazioni");
+                    mTitle.setText("Mappa stazioni");
                     loadFragment(fragment, false);
                     return true;
                 case R.id.navigation_car:
                     /*Intent carList = new Intent(Home.this, CarList.class);
                     startActivity(carList);*/
                     fragment = new CarListFragment();
+                    getSupportActionBar().setTitle("Lista auto");
+                    mTitle.setText("Lista auto");
                     loadFragment(fragment,false);
                     return true;
             }
@@ -58,7 +69,11 @@ public class Home extends AppCompatActivity implements HomeFragment.OnFragmentIn
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        TextView mTitle = myToolbar.findViewById(R.id.toolbar_title);
         setSupportActionBar(myToolbar);
+        mTitle.setText(myToolbar.getTitle());
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setElevation(0);
 
         loadFragment(new HomeFragment(), true);
     }

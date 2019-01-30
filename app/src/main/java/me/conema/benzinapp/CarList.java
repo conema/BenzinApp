@@ -27,6 +27,10 @@ public class CarList extends AppCompatActivity {
         setContentView(R.layout.activity_car_list);
         updateCarList();
 
+        //Serve per visualizzare il tasto indietro
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        this.getSupportActionBar().setDisplayShowHomeEnabled(true);
+
     }
 
 
@@ -40,7 +44,7 @@ public class CarList extends AppCompatActivity {
     private void updateCarList() {
         CarFactory carFactory = CarFactory.getInstance();
         ArrayList<Car> carArrayList = carFactory.getCars();
-        LinearLayout container = (LinearLayout) findViewById(R.id.linearLayoutCarList);
+        LinearLayout container = findViewById(R.id.linearLayoutCarList);
 
         //Empty views (old cars)
         container.removeAllViews();

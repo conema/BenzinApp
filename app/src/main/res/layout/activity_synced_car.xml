@@ -17,175 +17,192 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="16dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/syncText"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/my_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginBottom="16dp"
-                android:drawableLeft="@drawable/ic_correct"
-                android:fontFamily="@font/montserrat"
-                android:text="Sincronizzazione completata con successo"
-                android:textAlignment="center"
-                android:textSize="16sp" />
+                android:layout_height="?attr/actionBarSize"
+                android:background="?android:colorBackground"
+                android:elevation="4dp"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-            <TextView
-                android:id="@+id/verText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="16dp"
-                android:text="Verifica i tuoi dati:" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
-
-                <ImageView
-                    android:id="@+id/carIcon"
-                    android:layout_width="40dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="8dp"
-                    android:src="@drawable/ic_directions_car_black_24dp" />
 
                 <TextView
-                    android:id="@+id/carNome"
+                    android:id="@+id/toolbar_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:layout_toRightOf="@+id/carIcon"
-                    android:text="Nome"
-                    android:textSize="12sp" />
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/lato_bold"
+                    android:textSize="22sp"
+                    android:textColor="#47525E" />
+            </android.support.v7.widget.Toolbar>
 
-                <EditText
-                    android:id="@+id/carEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/carNome"
-                    android:layout_toRightOf="@id/carIcon"
-                    android:textSize="14sp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
-
-                <ImageView
-                    android:id="@+id/roadIcon"
-                    android:layout_width="40dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="8dp"
-                    android:src="@drawable/ic_road_with_broken_line" />
-
-                <TextView
-                    android:id="@+id/roadNome"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:layout_toRightOf="@+id/roadIcon"
-                    android:text="Distanza percorsa (in km)"
-                    android:textSize="12sp" />
-
-                <EditText
-                    android:inputType="number"
-                    android:id="@+id/roadEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/roadNome"
-                    android:layout_toRightOf="@id/roadIcon"
-                    android:textSize="14sp" />
-            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
                 android:orientation="vertical">
 
-                <ImageButton
-                    android:id="@+id/imgButton"
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:layout_gravity="center"
-                    android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_image_black_24dp" />
-
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="aggiungi immagine"
-                    android:textAllCaps="true" />
-
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
-
-                <ImageView
-                    android:id="@+id/fuelIcon"
-                    android:layout_width="40dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="8dp"
-                    android:src="@drawable/ic_fuel_station_pump" />
-
-                <TextView
-                    android:id="@+id/fuelNome"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:layout_toRightOf="@+id/fuelIcon"
-                    android:text="Grandezza serbatoio (in litri)"
-                    android:textSize="12sp" />
-
-                <EditText
-                    android:id="@+id/fuelEditText"
+                    android:id="@+id/syncText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/fuelNome"
-                    android:layout_toRightOf="@id/fuelIcon"
-                    android:inputType="number"
-                    android:textSize="14sp" />
-            </RelativeLayout>
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
+                    android:layout_marginBottom="16dp"
+                    android:drawableLeft="@drawable/ic_correct"
+                    android:fontFamily="@font/montserrat"
+                    android:text="Sincronizzazione completata con successo"
+                    android:textAlignment="center"
+                    android:textSize="16sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:id="@+id/deleteButton"
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/verText"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:text="annulla" />
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="16dp"
+                    android:text="Verifica i tuoi dati:" />
 
-                <Button
-                    android:id="@+id/saveButton"
-                    android:layout_width="0dp"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="salva" />
+                    android:layout_marginBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/carIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="8dp"
+                        android:src="@drawable/ic_directions_car_black_24dp" />
+
+                    <TextView
+                        android:id="@+id/carNome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_toRightOf="@+id/carIcon"
+                        android:text="Nome"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/carEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/carNome"
+                        android:layout_toRightOf="@id/carIcon"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/roadIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="8dp"
+                        android:src="@drawable/ic_road_with_broken_line" />
+
+                    <TextView
+                        android:id="@+id/roadNome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_toRightOf="@+id/roadIcon"
+                        android:text="Distanza percorsa (in km)"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:inputType="number"
+                        android:id="@+id/roadEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/roadNome"
+                        android:layout_toRightOf="@id/roadIcon"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/imgButton"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_image_black_24dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="aggiungi immagine"
+                        android:textAllCaps="true" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/fuelIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="8dp"
+                        android:src="@drawable/ic_fuel_station_pump" />
+
+                    <TextView
+                        android:id="@+id/fuelNome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_toRightOf="@+id/fuelIcon"
+                        android:text="Grandezza serbatoio (in litri)"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/fuelEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/fuelNome"
+                        android:layout_toRightOf="@id/fuelIcon"
+                        android:inputType="number"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/deleteButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:text="annulla" />
+
+                    <Button
+                        android:id="@+id/saveButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="salva" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/navigation" />
 </android.support.constraint.ConstraintLayout>
