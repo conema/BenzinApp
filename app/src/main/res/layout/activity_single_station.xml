@@ -131,11 +131,22 @@
             </LinearLayout>
 
             <ImageButton
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
                 android:id="@+id/buttonStazione"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginBottom="4dp"
                 android:src="@drawable/car_img_3_hd" />
+
+
+            <Button
+                android:layout_marginRight="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:drawableLeft="@drawable/ic_directions_black_24dp"
+                android:text="Ottieni le direzioni" />
 
             <LinearLayout
                 android:layout_width="match_parent"
