@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <com.mapquest.mapping.maps.MapView xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content">
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/mapquestMapView"
-        app:mapquest_app_key="KNdbV0JM4VyInvJk5GotMufjA5Lez6vW"
-        />
+        android:layout_height="match_parent">
+        <com.mapquest.mapping.maps.MapView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/mapquestMapView"
+            app:mapquest_app_key="KNdbV0JM4VyInvJk5GotMufjA5Lez6vW"
+            />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/currentPositionButton"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/currentPositionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="66dp"
+            android:src="@android:drawable/ic_menu_mylocation"
+            android:tint="@color/mapbox_blue"
+            mapbox:backgroundTint="@android:color/white"
+            mapbox:layout_constraintBottom_toBottomOf="@id/mapquestMapView"
+            mapbox:layout_constraintEnd_toEndOf="@id/mapquestMapView" />
+    </android.support.constraint.ConstraintLayout>
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="66dp"
-        android:src="@android:drawable/ic_menu_mylocation"
-        android:tint="@color/mapbox_blue"
-        mapbox:backgroundTint="@android:color/white"
-        mapbox:layout_constraintBottom_toBottomOf="@id/mapquestMapView"
-        mapbox:layout_constraintEnd_toEndOf="@id/mapquestMapView" />
-</android.support.constraint.ConstraintLayout>
+        android:text="fjdhfjkshkjfsdhkfhsj"/>
+</FrameLayout>
