@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import me.conema.benzinapp.classes.Station;
 import me.conema.benzinapp.classes.StationFactory;
@@ -59,6 +60,9 @@ public class StationsFragment extends Fragment implements LocationListener {
     private MapboxMap mapboxMap;
     private LatLng currentMapLocation;
     private MarkerOptions currentPositionMarker;
+
+    // interfaccia sopra la mappa
+    //private LinearLayout prova;
 
     // resto dell'interfaccia
     FloatingActionButton currentPositionButton;
@@ -121,63 +125,17 @@ public class StationsFragment extends Fragment implements LocationListener {
             public boolean onMarkerClick(@NonNull Marker marker) {
                 Toast.makeText(getActivity(), "Il mio creatore deve ancora mettere le info sulla stazione di servizio, accontentati: " +
                         marker.getPosition(), Toast.LENGTH_SHORT).show();
+
                 return true;
             }
         });
 
         // aggiunta stazioni di servizio
-        Icon pin;// = drawableToIcon(getActivity(), R.drawable.ic_tamoil_logo);
+        Icon pin;
         for(LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
             pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
             mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
         }
-
-        //Icon pin = drawableToIcon(getActivity(), R.drawable.ic_tamoil_logo);
-        /*
-        // TAMOIL
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2325218, 9.0953491)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2329010, 9.1029220)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2216692, 9.1062200)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2284012, 9.1320594)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(38.9797039, 8.9799854)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.1694859, 8.9862899)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2968868, 9.0009544)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2982480, 9.0936330)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2863720, 9.1856290)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2798682, 9.1815180)));
-
-        pin = drawableToIcon(getActivity(), R.drawable.ic_eni_logo);
-        // AGIP
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.0088955, 8.9958697)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.1720020, 8.5224240)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2239334, 9.1155413)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2513209, 9.1339677)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2141564, 9.1075633)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2415420, 9.1509550)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2332010, 9.1864990)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2474346, 9.1959459)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(38.9934133, 8.9925959)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2341300, 9.0974580)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2068343, 9.1331229)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2424670, 9.0908840)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2528680, 9.1136360)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2080880, 9.1337280)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2254425, 9.1298667)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2357140, 9.1126930)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2308900, 9.0949150)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2714910, 9.1372190)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(38.9694533, 8.9705068)));
-
-        // ESSO
-        pin = drawableToIcon(getActivity(), R.drawable.ic_esso_logo);
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2817382, 9.0319635)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2516385, 9.1034724)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2422696, 9.1714671)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2335950, 9.1113870)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2421905, 9.1269659)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2168302, 9.1254600)));
-        mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(new LatLng(39.2370500, 9.1249250)));
-        */
     }
 
     @Nullable
