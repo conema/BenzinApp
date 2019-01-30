@@ -3,6 +3,7 @@ package me.conema.benzinapp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -31,7 +32,9 @@ import me.conema.benzinapp.classes.StationFactory;
 public class SingleStation extends AppCompatActivity {
     ImageView imgStazione;
     TextView viaStazione, prezzoStazione, votoStazione;
-    int id = -1;
+    ImageButton buttonStazione;
+    int idStation = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,7 @@ public class SingleStation extends AppCompatActivity {
         viaStazione = findViewById(R.id.viaStatione);
         prezzoStazione = findViewById(R.id.prezzoStazione);
         votoStazione = findViewById(R.id.votoStazione);
+        buttonStazione = findViewById(R.id.buttonStazione);
         Toolbar myToolbar = findViewById(R.id.single_car_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -51,23 +55,41 @@ public class SingleStation extends AppCompatActivity {
         Bundle obj = intent.getExtras();
 
         if(obj != null)
-            id = obj.getInt("stationId");
+            idStation = obj.getInt("stationId");
 
-        Station station = stationFactory.getStationById(id);
+        Station station = stationFactory.getStationById(idStation);
 
         imgStazione.setImageResource(station.getImg());
         viaStazione.setText(station.getAddress());
         prezzoStazione.setText(Double.toString(station.getPrice()));
         votoStazione.setText(Double.toString(station.getMark()));
         getSupportActionBar().setTitle(station.getAddress());
-        updateReviewList(id);
+        updateReviewList(idStation);
+
+        buttonStazione.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                double lat = 37.7749;
+                double longit = -122.4194;
+                Uri gmmIntentUri = Uri.parse("google.navigation:q="+lat + "," + longit);
+
+                // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                // Make the Intent explicit by setting the Google Maps package
+                mapIntent.setPackage("com.google.android.apps.maps");
+
+                // Attempt to start an activity that can handle the Intent
+                startActivity(mapIntent);
+
+            }
+        });
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        updateReviewList(id);
+        updateReviewList(idStation);
     }
 
     private void updateReviewList(int idStazione){
@@ -102,7 +124,7 @@ public class SingleStation extends AppCompatActivity {
         MenuItem icon = menu.getItem(0);
         AppFactory appFactory = AppFactory.getInstance();
         App app = appFactory.getApp();
-        if(app.getFavStation() != null && app.getFavStation().getId() == id){
+        if(app.getFavStation() != null && app.getFavStation().getId() == idStation){
             icon.setIcon(R.drawable.ic_favorite_red_24dp);
         }
         return true;
@@ -125,16 +147,16 @@ public class SingleStation extends AppCompatActivity {
         App app = appFactory.getApp();
         if(app.getFavStation() == null) {
             StationFactory stationFactory = StationFactory.getInstance();
-            Station station = stationFactory.getStationById(id);
+            Station station = stationFactory.getStationById(idStation);
             app.setFavStation(station);
 
             Toast.makeText(this, "Stazione aggiunta alle preferite", Toast.LENGTH_SHORT).show();
             item.setIcon(R.drawable.ic_favorite_red_24dp);
         }
         else {
-            if (app.getFavStation().getId() == id) {
+            if (app.getFavStation().getId() == idStation) {
                 StationFactory stationFactory = StationFactory.getInstance();
-                Station station = stationFactory.getStationById(id);
+                Station station = stationFactory.getStationById(idStation);
                 app.setFavStation(null);
 
                 Toast.makeText(this, "Stazione rimossa dalle preferite", Toast.LENGTH_SHORT).show();
@@ -145,8 +167,9 @@ public class SingleStation extends AppCompatActivity {
                         .setPositiveButton("sì", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 StationFactory stationFactory = StationFactory.getInstance();
-                                Station station = stationFactory.getStationById(id);
+                                Station station = stationFactory.getStationById(idStation);
                                 app.setFavStation(station);
+                                item.setIcon(R.drawable.ic_favorite_red_24dp);
                             }
                         })
                         .setNegativeButton("no", new DialogInterface.OnClickListener() {
@@ -159,4 +182,5 @@ public class SingleStation extends AppCompatActivity {
             }
         }
     }
+
 }

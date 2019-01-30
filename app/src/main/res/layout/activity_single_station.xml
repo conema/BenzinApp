@@ -120,6 +120,7 @@
             </LinearLayout>
 
             <ImageButton
+                android:id="@+id/buttonStazione"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginBottom="32dp"
@@ -127,14 +128,14 @@
 
             <TextView
                 android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_customer_review"
+                android:drawableLeft="@drawable/ic_new_review_icon"
                 android:fontFamily="@font/montserrat"
                 android:text=" Recensioni da Google:"
-                android:textSize="20sp" />
+                android:textSize="24sp" />
 
             <LinearLayout
                 android:id="@+id/container"

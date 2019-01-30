@@ -35,7 +35,7 @@ public class SingleCar extends AppCompatActivity {
     ImageButton singleCar;
     Button deleteButton;
 
-    int id = 2;
+    int idCar = 2;
     Car car;
     CarFactory carFactory = CarFactory.getInstance();
 
@@ -65,9 +65,9 @@ public class SingleCar extends AppCompatActivity {
         Bundle obj = intent.getExtras();
 
         if(obj != null)
-            id = obj.getInt("carId");
+            idCar = obj.getInt("carId");
 
-        car = carFactory.getCarById(id);
+        car = carFactory.getCarById(idCar);
 
         if(car != null){
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -125,7 +125,7 @@ public class SingleCar extends AppCompatActivity {
         MenuItem icon = menu.getItem(0);
         AppFactory appFactory = AppFactory.getInstance();
         App app = appFactory.getApp();
-        if (app.getFavCar() != null && app.getFavCar().getId() == id) {
+        if (app.getFavCar() != null && app.getFavCar().getId() == idCar) {
             icon.setIcon(R.drawable.ic_favorite_red_24dp);
         }
         return true;
@@ -148,13 +148,13 @@ public class SingleCar extends AppCompatActivity {
         App app = appFactory.getApp();
         if (app.getFavCar() == null) {
             CarFactory carFactory = CarFactory.getInstance();
-            Car car = carFactory.getCarById(id);
+            Car car = carFactory.getCarById(idCar);
             app.setFavCar(car);
 
             Toast.makeText(this, "Auto aggiunta alle preferite", Toast.LENGTH_SHORT).show();
             item.setIcon(R.drawable.ic_favorite_red_24dp);
         } else {
-            if (app.getFavCar().getId() == id) {
+            if (app.getFavCar().getId() == idCar) {
                 CarFactory carFactory = CarFactory.getInstance();
                 app.setFavCar(null);
                 item.setIcon(R.drawable.ic_favorite_border_black_24dp);
@@ -164,7 +164,7 @@ public class SingleCar extends AppCompatActivity {
                         .setPositiveButton("sì", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 CarFactory carFactory = CarFactory.getInstance();
-                                Car car = carFactory.getCarById(id);
+                                Car car = carFactory.getCarById(idCar);
                                 app.setFavCar(car);
                                 item.setIcon(R.drawable.ic_favorite_red_24dp);
                             }
