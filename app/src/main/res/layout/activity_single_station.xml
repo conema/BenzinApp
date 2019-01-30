@@ -147,7 +147,7 @@
                     android:layout_marginRight="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_customer_review"
+                    android:drawableLeft="@drawable/ic_new_review_icon"
                     android:fontFamily="@font/montserrat"
                     android:text=" Recensioni da Google:"
                     android:textSize="20sp" />

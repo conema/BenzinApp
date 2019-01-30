@@ -43,6 +43,7 @@ public class SingleStation extends AppCompatActivity {
         viaStazione = findViewById(R.id.viaStatione);
         prezzoStazione = findViewById(R.id.prezzoStazione);
         votoStazione = findViewById(R.id.votoStazione);
+        buttonStazione = findViewById(R.id.buttonStazione);
 
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         TextView mTitle = myToolbar.findViewById(R.id.toolbar_title);
@@ -71,7 +72,7 @@ public class SingleStation extends AppCompatActivity {
         votoStazione.setText(Double.toString(station.getMark()) + "/5");
         getSupportActionBar().setTitle(station.getAddress());
         mTitle.setText(station.getAddress());
-        updateReviewList(id);
+        updateReviewList(idStation);
 
         buttonStazione.setOnClickListener(new View.OnClickListener() {
             @Override
