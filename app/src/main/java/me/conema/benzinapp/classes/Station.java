@@ -1,18 +1,22 @@
 package me.conema.benzinapp.classes;
 
 import android.graphics.drawable.Drawable;
+import android.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.style.light.Position;
 public class Station {
     /* toy data */
-    static public String NAME_ENI = "ENI";
-    static public String NAME_Q8 = "Q8";
-    static public String NAME_TOTAL = "Total";
-    static public String NAME_TAMOIL = "Tamoil";
-    static public String NAME_ESSO = "ESSO";
+    public static String NAME_ENI = "ENI";
+    public static String NAME_Q8 = "Q8";
+    public static String NAME_TOTAL = "Total";
+    public static String NAME_TAMOIL = "Tamoil";
+    public static String NAME_ESSO = "ESSO";
 
+    public static enum ComparationType {DISTANCE, PRICE, MARK};
 
 
     private int id;
@@ -22,6 +26,41 @@ public class Station {
     private double mark;
     private int img;
     private LatLng position;
+
+
+    private static class distanceComparator implements Comparator<Pair<Station, Double>> {
+        @Override
+        public int compare(Pair<Station, Double> stationDoublePair, Pair<Station, Double> t1) {
+            return (int) (stationDoublePair.second - t1.second);
+        }
+    }
+
+    private static class priceComparator implements Comparator<Pair<Station, Double>> {
+        @Override
+        public int compare(Pair<Station, Double> stationDoublePair, Pair<Station, Double> t1) {
+            return (int) (stationDoublePair.first.getPrice() - t1.first.getPrice());
+        }
+    }
+
+    private static class markComparator implements Comparator<Pair<Station, Double>> {
+        @Override
+        public int compare(Pair<Station, Double> stationDoublePair, Pair<Station, Double> t1) {
+            return (int) (stationDoublePair.first.getMark() - t1.first.getMark());
+        }
+    }
+
+    public static Comparator<Pair<Station, Double>> getComparator(ComparationType type) {
+        switch (type) {
+            case MARK:
+                return new markComparator();
+            case PRICE:
+                return new priceComparator();
+            case DISTANCE:
+                return new distanceComparator();
+        }
+
+        return null;
+    }
 
     Station(int id, String name, String address, float price, int img, LatLng position, double mark) {
         this.id = id;
