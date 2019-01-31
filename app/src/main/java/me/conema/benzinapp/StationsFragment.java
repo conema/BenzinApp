@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
@@ -23,16 +25,25 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v7.widget.GridLayout;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import me.conema.benzinapp.classes.App;
+import me.conema.benzinapp.classes.AppFactory;
 import me.conema.benzinapp.classes.Station;
 import me.conema.benzinapp.classes.StationFactory;
 
@@ -74,6 +85,9 @@ public class StationsFragment extends Fragment implements LocationListener {
 
     // resto dell'interfaccia
     FloatingActionButton currentPositionButton;
+
+    TextView toolbar_title;
+    EditText toolbar_searchbox;
 
     @SuppressLint("MissingPermission")
     private void updateMapPosition() {
@@ -182,7 +196,12 @@ public class StationsFragment extends Fragment implements LocationListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_stations, container, false);
+        View v = inflater.inflate(R.layout.fragment_stations, container, false);
+        setHasOptionsMenu(true);
+
+        toolbar_title = getActivity().findViewById(R.id.toolbar_title);
+        toolbar_searchbox = getActivity().findViewById(R.id.toolbar_searchbox);
+        return v;
     }
 
     @Override
@@ -235,6 +254,8 @@ public class StationsFragment extends Fragment implements LocationListener {
     public void onPause() {
         super.onPause();
         mapView.onPause();
+        toolbar_searchbox.setVisibility(View.GONE);
+        toolbar_title.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -314,5 +335,52 @@ public class StationsFragment extends Fragment implements LocationListener {
             }
 
         }
+    }
+
+
+    //Menu
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Drawable search = getResources().getDrawable(android.R.drawable.ic_menu_search).mutate();
+        search.setColorFilter(getResources().getColor(R.color.colorBlack), PorterDuff.Mode.SRC_ATOP);
+
+        inflater.inflate(R.menu.menu_favorite, menu);
+        MenuItem icon = menu.getItem(0);
+        icon.setIcon(search);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.favoriteStation:
+                checkKey(item);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void checkKey(MenuItem item) {
+        toolbar_searchbox.setVisibility(View.VISIBLE);
+        toolbar_title.setVisibility(View.GONE);
+
+        toolbar_searchbox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //Qua gestione ricerca
+                Toast.makeText(getActivity(), toolbar_searchbox.getText(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 }

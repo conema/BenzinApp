@@ -30,6 +30,13 @@
                 android:fontFamily="@font/lato_bold"
                 android:textSize="22sp"
                 android:textColor="#47525E" />
+
+            <EditText
+                android:id="@+id/toolbar_searchbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cerca città..."
+                android:visibility="gone" />
         </android.support.v7.widget.Toolbar>
 
 
