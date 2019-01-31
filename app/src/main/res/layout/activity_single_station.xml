@@ -65,7 +65,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1.8"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <TextView
@@ -80,7 +80,13 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Via qualcosa qualcosa" />
+                            android:singleLine="true"
+                            android:ellipsize="marquee"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:scrollHorizontally="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:freezesText="true" />
 
                     </LinearLayout>
                     <!-- Linear layout più interno per singola riga (es: indirizzo) -->
@@ -128,13 +134,75 @@
 
                     </LinearLayout>
                 </LinearLayout>
+
             </LinearLayout>
 
-            <ImageButton
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginBottom="32dp"
-                android:src="@drawable/car_img_3_hd" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="24dp">
+
+                <com.mapquest.mapping.maps.MapView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:id="@+id/mapquestMapView"
+                    app:mapquest_app_key="KNdbV0JM4VyInvJk5GotMufjA5Lez6vW" />
+
+                <android.support.design.widget.FloatingActionButton xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/currentPositionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="66dp"
+                    android:src="@android:drawable/ic_menu_directions"
+                    android:tint="@android:color/white"
+                    android:layout_gravity="right"
+                    mapbox:backgroundTint="#3b4859"
+                    mapbox:layout_constraintBottom_toBottomOf="@id/mapquestMapView"
+                    mapbox:layout_constraintEnd_toEndOf="@id/mapquestMapView"
+                    android:layout_marginTop="170dp"
+                    android:layout_alignParentRight="true" />
+
+                <RelativeLayout
+                    android:id="@+id/addressLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/mapquestMapView"
+                    android:paddingTop="30dp"
+                    android:background="@android:color/white"
+                    android:paddingBottom="20dp">
+
+                    <TextView
+                        android:id="@+id/addressView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="22dp"
+                        android:textColor="@color/colorHomeTitle"
+                        android:fontFamily="@font/roboto_regular"
+                        android:textSize="18sp"
+                        android:singleLine="true"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:freezesText="true" />
+
+                    <TextView
+                        android:id="@+id/gpsDistance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3.5km"
+                        android:layout_alignParentRight="true"
+                        android:fontFamily="@font/roboto_regular"
+                        android:textSize="18sp"
+                        android:layout_marginRight="18dp" />
+                </RelativeLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -146,9 +214,10 @@
                     android:layout_marginRight="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_customer_review"
-                    android:fontFamily="@font/montserrat"
+                    android:drawableLeft="@drawable/ic_new_review_icon"
+                    android:fontFamily="@font/roboto_bold"
                     android:text=" Recensioni da Google:"
+                    android:textColor="@color/colorHomeTitle"
                     android:textSize="20sp" />
             </LinearLayout>
 

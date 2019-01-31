@@ -82,7 +82,7 @@ public class StationsFragment extends Fragment implements LocationListener {
 
         currentLocation = locationManager.getLastKnownLocation(locationProvider);
         LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        Timber.i("Location:" + String.valueOf(currentLocation.getLatitude()) + " " + String.valueOf(currentLocation.getLongitude()));
+        //Timber.i("Location:" + String.valueOf(currentLocation.getLatitude()) + " " + String.valueOf(currentLocation.getLongitude()));
         mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 14));
 
         //currentPositionMarker.setPosition(currentLatLng);
@@ -98,7 +98,6 @@ public class StationsFragment extends Fragment implements LocationListener {
             pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
             mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
         }
-
     }
 
 
@@ -171,6 +170,13 @@ public class StationsFragment extends Fragment implements LocationListener {
                 return true;
             }
         });
+
+        //Aggiunta stazioni
+        Icon pin;
+        for(LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
+            pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
+            mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
+        }
     }
 
     @Nullable

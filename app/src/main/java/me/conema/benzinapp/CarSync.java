@@ -1,6 +1,7 @@
 package me.conema.benzinapp;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +33,10 @@ public class CarSync extends AppCompatActivity {
         ProgressBar progressBar = findViewById(R.id.PBBluetooth);
         progressBar.setVisibility(View.VISIBLE);
 
+        (new Handler()).postDelayed(this::changeActivity, 2000);
+    }
+
+    public void changeActivity() {
         Intent syncedCar = new Intent(CarSync.this, SyncedCar.class);
         startActivity(syncedCar);
     }

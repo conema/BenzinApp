@@ -33,7 +33,6 @@ public class StationFactory {
     }
 
     private StationFactory() {
-
         stationHashMap.put(new LatLng(39.2325218, 9.0953491), new Station(0, Station.NAME_TAMOIL, "Via Adige, San Paolo, Sant'Avendrace, Cagliari", generatePrice(), R.drawable.ic_tamoil_logo, new LatLng(39.2325218, 9.0953491), generateMark()));
         stationHashMap.put(new LatLng(39.2329010, 9.1029220), new Station(1, Station.NAME_TAMOIL, "Via Is Maglias, San Paolo, Tuvixeddu-Tuvumannu, Cagliari", generatePrice(), R.drawable.ic_tamoil_logo, new LatLng(39.2329010, 9.1029220), generateMark()));
         stationHashMap.put(new LatLng(39.2216692, 9.1062200), new Station(2, Station.NAME_TAMOIL, "Piazza dell'Annunziata, San Paolo, Tuvixeddu-Tuvumannu, Cagliari", generatePrice(), R.drawable.ic_tamoil_logo, new LatLng(39.2216692, 9.1062200), generateMark()));
