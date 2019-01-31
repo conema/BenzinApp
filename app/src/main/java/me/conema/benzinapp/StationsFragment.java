@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -14,6 +15,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,6 +26,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayout;
+import android.util.Pair;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,6 +39,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.support.v7.widget.GridLayout;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,7 +54,6 @@ import me.conema.benzinapp.classes.StationFactory;
 
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
-import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -59,15 +63,19 @@ import com.mapquest.mapping.maps.MapView;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
-import timber.log.Timber;
+import me.conema.benzinapp.classes.Station;
+import me.conema.benzinapp.classes.StationFactory;
 
 public class StationsFragment extends Fragment implements LocationListener {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     // gestione per trovare locazione corrente
     private LocationManager locationManager;
-    private LocationListener locationListener;
     private Location currentLocation;
     private String locationProvider;
     private Criteria criteria;
@@ -77,7 +85,6 @@ public class StationsFragment extends Fragment implements LocationListener {
     // gestione mappa
     private MapView mapView;
     private MapboxMap mapboxMap;
-    private LatLng currentMapLocation;
     private MarkerOptions currentPositionMarker;
 
     // interfaccia sopra la mappa
@@ -91,18 +98,22 @@ public class StationsFragment extends Fragment implements LocationListener {
 
     @SuppressLint("MissingPermission")
     private void updateMapPosition() {
+        LatLng currentLatLng;
         locationManager.getLastKnownLocation(locationProvider);
         locationManager.requestLocationUpdates(locationProvider, 5000, (float) 2.0, this);
 
         currentLocation = locationManager.getLastKnownLocation(locationProvider);
-        LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        //Timber.i("Location:" + String.valueOf(currentLocation.getLatitude()) + " " + String.valueOf(currentLocation.getLongitude()));
+
+        if (currentLocation != null) {
+            currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+        } else {
+            currentLatLng = new LatLng(39.222487, 9.114134);
+        }
+
         mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 14));
 
-        //currentPositionMarker.setPosition(currentLatLng);
         mapboxMap.removeAnnotations();
 
-        //mapboxMap.removeMarker(currentPositionMarker.getMarker());
         mapboxMap.addMarker(currentPositionMarker
                 .icon(drawableToIcon(getActivity(), R.drawable.ic_navigation_black_24dp))
                 .setPosition(currentLatLng));
@@ -112,6 +123,8 @@ public class StationsFragment extends Fragment implements LocationListener {
             pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
             mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
         }
+
+        showStationsInfo(currentLatLng, 5000);
     }
 
 
@@ -130,6 +143,60 @@ public class StationsFragment extends Fragment implements LocationListener {
         return IconFactory.getInstance(context).fromBitmap(bitmap);
     }
 
+    /**
+     * Mostra le stazioni
+     * @param maxDistance massima distanza in metri.
+     */
+    private void showStationsInfo(LatLng position, double maxDistance) {
+        HorizontalScrollView hsv = getView().findViewById(R.id.stationsScrollView);
+        stationsLinearLayout.removeAllViews();
+        LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        DecimalFormat df = new DecimalFormat("##.###");
+        df.setRoundingMode(RoundingMode.DOWN);
+
+        HashMap<LatLng, Station> stations = stationFactory.getStations();
+        List<Pair<Station, Double>> stationDistancePairs = new ArrayList<>(stations.values().size());
+
+        for(Station station : stations.values()) {
+            stationDistancePairs.add(Pair.create(station, station.getPosition().distanceTo(position)));
+        }
+        //Collections.sort(stationDistancePairs, (stationDoublePair, t1) -> (int) (stationDoublePair.second - t1.second));
+        Collections.sort(stationDistancePairs, Station.getComparator(Station.ComparationType.DISTANCE));
+
+        for(Pair<Station, Double> stationDoublePair : stationDistancePairs) {
+            if(stationDoublePair.second < maxDistance) {
+                GridLayout gridLayout = (GridLayout) inflater.inflate(R.layout.station_grid_layout, stationsLinearLayout, false);
+                ((ImageView)gridLayout.getChildAt(0)).setImageResource(stationDoublePair.first.getImg());
+
+                LinearLayout currentLinearLayout = (LinearLayout) ((LinearLayout)gridLayout.getChildAt(1)).getChildAt(0);
+                ((TextView)currentLinearLayout.getChildAt(1)).setText(stationDoublePair.first.getMark() + "/5");
+
+                currentLinearLayout = (LinearLayout) ((LinearLayout)gridLayout.getChildAt(1)).getChildAt(1);
+                if (stationDoublePair.second >= 1000) {
+                    ((TextView)currentLinearLayout.getChildAt(1)).setText(df.format(stationDoublePair.second / 1000.0) + " Km");
+                } else {
+                    ((TextView)currentLinearLayout.getChildAt(1)).setText(df.format(stationDoublePair.second) + " m");
+                }
+
+                ((TextView) gridLayout.getChildAt(2)).setText(stationDoublePair.first.getName());
+
+                ((TextView) gridLayout.getChildAt(3)).setText(df.format(stationDoublePair.first.getPrice()) + " €/L");
+
+                gridLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent stationActivity = new Intent(getActivity(), SingleStation.class);
+                        stationActivity.putExtra("stationId", stationDoublePair.first.getId());
+                        startActivity(stationActivity);
+                    }
+                });
+                stationsLinearLayout.addView(gridLayout);
+            }
+        }
+
+        hsv.scrollTo(0, hsv.getBottom());
+    }
+
     @SuppressLint("MissingPermission")
     private void initialize() {
         stationFactory = StationFactory.getInstance();
@@ -146,43 +213,10 @@ public class StationsFragment extends Fragment implements LocationListener {
 
 
         // si setta listener sui marker
-        mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(@NonNull Marker marker) {
-                Toast.makeText(getActivity(), "Il mio creatore deve ancora mettere le info sulla stazione di servizio, accontentati: " +
-                        marker.getPosition(), Toast.LENGTH_SHORT).show();
-                mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), mapboxMap.getCameraPosition().zoom));
-
-                /* WIP */
-                stationsLinearLayout.removeAllViews();
-                LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                DecimalFormat df = new DecimalFormat("##.###");
-                df.setRoundingMode(RoundingMode.DOWN);
-                LatLng currentCameraPosition = mapboxMap.getCameraPosition().target;
-                for(LatLng currentKey : stationFactory.getStations().keySet()) {
-                    Station station = stationFactory.getStations().get(currentKey);
-                    double distance = currentCameraPosition.distanceTo(station.getPosition());
-
-                    if(distance < 5000.0) {
-                        GridLayout view = (GridLayout) inflater.inflate(R.layout.station_grid_layout, stationsLinearLayout, false);
-                        ((ImageView)view.getChildAt(0)).setImageResource(station.getImg());
-
-                        LinearLayout currentLinearLayout = (LinearLayout) ((LinearLayout)view.getChildAt(1)).getChildAt(0);
-                        ((TextView)currentLinearLayout.getChildAt(1)).setText(station.getMark() + "/5");
-
-                        currentLinearLayout = (LinearLayout) ((LinearLayout)view.getChildAt(1)).getChildAt(1);
-                        ((TextView)currentLinearLayout.getChildAt(1)).setText(df.format(distance / 1000.0) + " Km");
-
-                        ((TextView) view.getChildAt(2)).setText(station.getName());
-
-                        ((TextView) view.getChildAt(3)).setText(df.format(station.getPrice()) + " €/L");
-
-                        stationsLinearLayout.addView(view);
-                    }
-                }
-                /* END WIP*/
-                return true;
-            }
+        mapboxMap.setOnMarkerClickListener(marker -> {
+            mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), mapboxMap.getCameraPosition().zoom));
+            showStationsInfo(marker.getPosition(), 5000);
+            return true;
         });
 
         //Aggiunta stazioni
@@ -235,9 +269,6 @@ public class StationsFragment extends Fragment implements LocationListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MapQuest.start(getActivity().getApplicationContext());
-        //setContentView(R.layout.fragment_stations);
-
-        // innanzitutto si verificano i permessi
 
         //Serve per visualizzare il tasto indietro
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
