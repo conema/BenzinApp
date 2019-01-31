@@ -8,7 +8,7 @@
 
     <color name="colorBlack">#000</color>
 
-    <color name="colorGray">#eeeeee</color>
+    <color name="colorGray">#00EEEEEE</color>
 
     <color name="colorButtonLabel">#47525E</color>
 
@@ -21,4 +21,5 @@
     <color name="menuBottomBackground">#C0CCDA</color>
 
     <color name="singleCarBackground">#efeeee</color>
+    <color name="TransparentGrey">#E7EEEEEE</color>
 </resources>
