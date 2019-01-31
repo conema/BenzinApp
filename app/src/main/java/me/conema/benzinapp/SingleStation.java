@@ -334,7 +334,7 @@ public class SingleStation extends AppCompatActivity implements LocationListener
             gpsDistance.setText(distance + " M");
         }
 
-        mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(StationFactory.getInstance().getStationById(idStation).getPosition()), 14));
+        mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(StationFactory.getInstance().getStationById(idStation).getPosition()), 15));
         Icon pin;
         for (LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
             pin = drawableToIcon(SingleStation.this, StationFactory.getInstance().getStations().get(currentKey).getImg());
