@@ -12,7 +12,7 @@ import me.conema.benzinapp.R;
 
 public class StationFactory {
     private static StationFactory singleton;
-    private HashMap<LatLng, Station> stationHashMap = new HashMap<>(100);
+    private HashMap<LatLng, Station> stationHashMap = new HashMap<>(70);
 
     public static StationFactory getInstance() {
         if (singleton == null) {
