@@ -31,21 +31,21 @@ public class Station {
     private static class distanceComparator implements Comparator<Pair<Station, Double>> {
         @Override
         public int compare(Pair<Station, Double> stationDoublePair, Pair<Station, Double> t1) {
-            return (int) (stationDoublePair.second - t1.second);
+            return stationDoublePair.second.compareTo(t1.second);
         }
     }
 
     private static class priceComparator implements Comparator<Pair<Station, Double>> {
         @Override
         public int compare(Pair<Station, Double> stationDoublePair, Pair<Station, Double> t1) {
-            return (int) (stationDoublePair.first.getPrice() - t1.first.getPrice());
+            return Float.compare(stationDoublePair.first.getPrice(), t1.first.getPrice());
         }
     }
 
     private static class markComparator implements Comparator<Pair<Station, Double>> {
         @Override
         public int compare(Pair<Station, Double> stationDoublePair, Pair<Station, Double> t1) {
-            return (int) (stationDoublePair.first.getMark() - t1.first.getMark());
+            return Double.compare(stationDoublePair.first.getMark(), t1.first.getMark());
         }
     }
 
