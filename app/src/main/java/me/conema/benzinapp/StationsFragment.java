@@ -39,11 +39,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
 import android.support.v7.widget.GridLayout;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,6 +76,7 @@ import me.conema.benzinapp.classes.StationFactory;
 
 public class StationsFragment extends Fragment implements LocationListener {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    public static final double MAX_DISTANCE = 5000.0;
 
     // gestione per trovare locazione corrente
     private LocationManager locationManager;
@@ -89,9 +93,11 @@ public class StationsFragment extends Fragment implements LocationListener {
 
     // interfaccia sopra la mappa
     private LinearLayout stationsLinearLayout;
+    private Station.ComparationType selectedType;
 
     // resto dell'interfaccia
     FloatingActionButton currentPositionButton;
+    Spinner orderBySpinner;
 
     TextView toolbar_title;
     EditText toolbar_searchbox;
@@ -124,7 +130,7 @@ public class StationsFragment extends Fragment implements LocationListener {
             mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
         }
 
-        showStationsInfo(currentLatLng, 5000);
+        showStationsInfo(currentLatLng);
     }
 
 
@@ -143,11 +149,8 @@ public class StationsFragment extends Fragment implements LocationListener {
         return IconFactory.getInstance(context).fromBitmap(bitmap);
     }
 
-    /**
-     * Mostra le stazioni
-     * @param maxDistance massima distanza in metri.
-     */
-    private void showStationsInfo(LatLng position, double maxDistance) {
+
+    private void showStationsInfo(LatLng position) {
         HorizontalScrollView hsv = getView().findViewById(R.id.stationsScrollView);
         stationsLinearLayout.removeAllViews();
         LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -161,10 +164,10 @@ public class StationsFragment extends Fragment implements LocationListener {
             stationDistancePairs.add(Pair.create(station, station.getPosition().distanceTo(position)));
         }
         //Collections.sort(stationDistancePairs, (stationDoublePair, t1) -> (int) (stationDoublePair.second - t1.second));
-        Collections.sort(stationDistancePairs, Station.getComparator(Station.ComparationType.DISTANCE));
+        Collections.sort(stationDistancePairs, Station.getComparator(selectedType));
 
         for(Pair<Station, Double> stationDoublePair : stationDistancePairs) {
-            if(stationDoublePair.second < maxDistance) {
+            if(stationDoublePair.second < MAX_DISTANCE) {
                 GridLayout gridLayout = (GridLayout) inflater.inflate(R.layout.station_grid_layout, stationsLinearLayout, false);
                 ((ImageView)gridLayout.getChildAt(0)).setImageResource(stationDoublePair.first.getImg());
 
@@ -215,7 +218,7 @@ public class StationsFragment extends Fragment implements LocationListener {
         // si setta listener sui marker
         mapboxMap.setOnMarkerClickListener(marker -> {
             mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), mapboxMap.getCameraPosition().zoom));
-            showStationsInfo(marker.getPosition(), 5000);
+            showStationsInfo(marker.getPosition());
             return true;
         });
 
@@ -259,9 +262,29 @@ public class StationsFragment extends Fragment implements LocationListener {
             }
         });
 
-
         // gestione linear layout delle stazioni
         stationsLinearLayout = getView().findViewById(R.id.stationsLinearLayout);
+
+        orderBySpinner = getView().findViewById(R.id.orderSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.spinner_order, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        orderBySpinner.setAdapter(adapter);
+        //selectedType = Station.ComparationType.values()[orderBySpinner.getSelectedItemPosition()];
+
+        orderBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedType = Station.ComparationType.values()[i];
+                if (mapboxMap != null) {
+                    showStationsInfo(mapboxMap.getCameraPosition().target);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     @SuppressLint("MissingPermission")
