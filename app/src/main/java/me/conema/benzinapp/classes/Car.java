@@ -2,7 +2,6 @@ package me.conema.benzinapp.classes;
 
 import android.graphics.drawable.Drawable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,7 +33,7 @@ public class Car {
         this.color = color;
         this.percTank = percTank;
         this.setPhoto(photo);
-        this.tankCapacity = tankCapacity;
+        this.setTankCapacity(tankCapacity);
         contId++;
     }
 
@@ -117,5 +116,13 @@ public class Car {
 
     public void setPhoto(Drawable photo) {
         this.photo = photo;
+    }
+
+    public int getTankCapacity() {
+        return tankCapacity;
+    }
+
+    public void setTankCapacity(int tankCapacity) {
+        this.tankCapacity = tankCapacity;
     }
 }

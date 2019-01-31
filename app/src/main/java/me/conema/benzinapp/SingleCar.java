@@ -37,6 +37,7 @@ public class SingleCar extends AppCompatActivity {
 
     int idCar = 2;
     Car car;
+    float benzinaRimanente;
     CarFactory carFactory = CarFactory.getInstance();
 
     @Override
@@ -73,14 +74,16 @@ public class SingleCar extends AppCompatActivity {
         car = carFactory.getCarById(idCar);
 
         if(car != null){
+
+            benzinaRimanente = car.getPercTank()*car.getTankCapacity()/100;
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             kmSingleCar.setText("Ultimo aggiornamento : " + df.format(car.getLastSync()));
 
             mTitle.setText(car.getName());
             kmFatti.setText(String.valueOf(car.getKmDone()));
             consumo.setText(String.valueOf(car.getKml()));
-            kmRimanenti.setText(String.valueOf(car.getPercTank()));
-            lRimanenti.setText(String.valueOf(car.getPercTank()));
+            kmRimanenti.setText(String.valueOf(car.getKml()*benzinaRimanente));
+            lRimanenti.setText(String.valueOf(benzinaRimanente));
             singleCar.setImageDrawable(car.getPhoto());
         }
 
