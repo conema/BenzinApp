@@ -23,11 +23,16 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.support.v7.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import me.conema.benzinapp.classes.Station;
 import me.conema.benzinapp.classes.StationFactory;
 
@@ -40,6 +45,9 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapquest.mapping.MapQuest;
 import com.mapquest.mapping.maps.MapView;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 import timber.log.Timber;
 
@@ -62,37 +70,34 @@ public class StationsFragment extends Fragment implements LocationListener {
     private MarkerOptions currentPositionMarker;
 
     // interfaccia sopra la mappa
-    //private LinearLayout prova;
+    private LinearLayout stationsLinearLayout;
 
     // resto dell'interfaccia
     FloatingActionButton currentPositionButton;
 
     @SuppressLint("MissingPermission")
     private void updateMapPosition() {
-        LatLng currentLatLng;
         locationManager.getLastKnownLocation(locationProvider);
         locationManager.requestLocationUpdates(locationProvider, 5000, (float) 2.0, this);
 
         currentLocation = locationManager.getLastKnownLocation(locationProvider);
-
-        if (currentLocation != null) {
-            currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        } else {
-            //Toast.makeText(getActivity().getApplicationContext(), "Problemi con la localizzazione", Toast.LENGTH_SHORT).show();
-            currentLatLng = new LatLng(39.222487, 9.114134);
-        }
-
-
+        LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         //Timber.i("Location:" + String.valueOf(currentLocation.getLatitude()) + " " + String.valueOf(currentLocation.getLongitude()));
         mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 14));
 
         //currentPositionMarker.setPosition(currentLatLng);
-        //mapboxMap.removeAnnotations();
+        mapboxMap.removeAnnotations();
 
         //mapboxMap.removeMarker(currentPositionMarker.getMarker());
         mapboxMap.addMarker(currentPositionMarker
                 .icon(drawableToIcon(getActivity(), R.drawable.ic_navigation_black_24dp))
                 .setPosition(currentLatLng));
+
+        Icon pin;
+        for(LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
+            pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
+            mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
+        }
     }
 
 
@@ -132,7 +137,36 @@ public class StationsFragment extends Fragment implements LocationListener {
             public boolean onMarkerClick(@NonNull Marker marker) {
                 Toast.makeText(getActivity(), "Il mio creatore deve ancora mettere le info sulla stazione di servizio, accontentati: " +
                         marker.getPosition(), Toast.LENGTH_SHORT).show();
+                mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), mapboxMap.getCameraPosition().zoom));
 
+                /* WIP */
+                stationsLinearLayout.removeAllViews();
+                LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                DecimalFormat df = new DecimalFormat("##.###");
+                df.setRoundingMode(RoundingMode.DOWN);
+                LatLng currentCameraPosition = mapboxMap.getCameraPosition().target;
+                for(LatLng currentKey : stationFactory.getStations().keySet()) {
+                    Station station = stationFactory.getStations().get(currentKey);
+                    double distance = currentCameraPosition.distanceTo(station.getPosition());
+
+                    if(distance < 5000.0) {
+                        GridLayout view = (GridLayout) inflater.inflate(R.layout.station_grid_layout, stationsLinearLayout, false);
+                        ((ImageView)view.getChildAt(0)).setImageResource(station.getImg());
+
+                        LinearLayout currentLinearLayout = (LinearLayout) ((LinearLayout)view.getChildAt(1)).getChildAt(0);
+                        ((TextView)currentLinearLayout.getChildAt(1)).setText(station.getMark() + "/5");
+
+                        currentLinearLayout = (LinearLayout) ((LinearLayout)view.getChildAt(1)).getChildAt(1);
+                        ((TextView)currentLinearLayout.getChildAt(1)).setText(df.format(distance / 1000.0) + " Km");
+
+                        ((TextView) view.getChildAt(2)).setText(station.getName());
+
+                        ((TextView) view.getChildAt(3)).setText(df.format(station.getPrice()) + " €/L");
+
+                        stationsLinearLayout.addView(view);
+                    }
+                }
+                /* END WIP*/
                 return true;
             }
         });
@@ -171,6 +205,10 @@ public class StationsFragment extends Fragment implements LocationListener {
                 updateMapPosition();
             }
         });
+
+
+        // gestione linear layout delle stazioni
+        stationsLinearLayout = getView().findViewById(R.id.stationsLinearLayout);
     }
 
     @SuppressLint("MissingPermission")
@@ -204,11 +242,6 @@ public class StationsFragment extends Fragment implements LocationListener {
         super.onDestroy();
         mapView.onDestroy();
     }
-
-    /*@Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        mapView.onSaveInstanceState(outState);
-    }*/
 
     @Override
     public void onLocationChanged(Location location) {
