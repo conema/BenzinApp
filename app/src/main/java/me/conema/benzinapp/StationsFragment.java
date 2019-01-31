@@ -69,29 +69,30 @@ public class StationsFragment extends Fragment implements LocationListener {
 
     @SuppressLint("MissingPermission")
     private void updateMapPosition() {
+        LatLng currentLatLng;
         locationManager.getLastKnownLocation(locationProvider);
         locationManager.requestLocationUpdates(locationProvider, 5000, (float) 2.0, this);
 
         currentLocation = locationManager.getLastKnownLocation(locationProvider);
-        LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        Timber.i("Location:" + String.valueOf(currentLocation.getLatitude()) + " " + String.valueOf(currentLocation.getLongitude()));
+
+        if (currentLocation != null) {
+            currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+        } else {
+            //Toast.makeText(getActivity().getApplicationContext(), "Problemi con la localizzazione", Toast.LENGTH_SHORT).show();
+            currentLatLng = new LatLng(39.222487, 9.114134);
+        }
+
+
+        //Timber.i("Location:" + String.valueOf(currentLocation.getLatitude()) + " " + String.valueOf(currentLocation.getLongitude()));
         mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 14));
 
-
         //currentPositionMarker.setPosition(currentLatLng);
-        mapboxMap.removeAnnotations();
+        //mapboxMap.removeAnnotations();
 
         //mapboxMap.removeMarker(currentPositionMarker.getMarker());
         mapboxMap.addMarker(currentPositionMarker
                 .icon(drawableToIcon(getActivity(), R.drawable.ic_navigation_black_24dp))
                 .setPosition(currentLatLng));
-
-        Icon pin;
-        for(LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
-            pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
-            mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
-        }
-
     }
 
 
@@ -136,12 +137,12 @@ public class StationsFragment extends Fragment implements LocationListener {
             }
         });
 
-        // aggiunta stazioni di servizio
-        /*Icon pin;
+        //Aggiunta stazioni
+        Icon pin;
         for(LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
             pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
             mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
-        }*/
+        }
     }
 
     @Nullable
