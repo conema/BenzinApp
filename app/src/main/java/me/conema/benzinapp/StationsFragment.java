@@ -71,7 +71,6 @@ public class StationsFragment extends Fragment implements LocationListener {
 
     // interfaccia sopra la mappa
     private LinearLayout stationsLinearLayout;
-    private GridLayout defaultStationGridLayout;
 
     // resto dell'interfaccia
     FloatingActionButton currentPositionButton;
@@ -204,11 +203,6 @@ public class StationsFragment extends Fragment implements LocationListener {
 
         // gestione linear layout delle stazioni
         stationsLinearLayout = getView().findViewById(R.id.stationsLinearLayout);
-        defaultStationGridLayout = getView().findViewById(R.id.stationGridLayout);
-        //defaultStationGridLayout.setVisibility(View.GONE);
-        stationsLinearLayout.removeAllViews();
-
-        Log.d("boh", "boh");
     }
 
     @SuppressLint("MissingPermission")
