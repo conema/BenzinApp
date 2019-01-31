@@ -28,7 +28,7 @@ public class StationFactory {
 
     private StationFactory() {
 
-        stationHashMap.put(new LatLng(39.2325218, 9.0953491), new Station(0, Station.NAME_TAMOIL, "Via Adige, Cagliari", 1.437f, R.drawable.ic_tamoil_logo, new LatLng(39.2325218, 9.0953491), generateMark()));
+        stationHashMap.put(new LatLng(39.2325218, 9.0953491), new Station(0, Station.NAME_TAMOIL, "Via Adige 24, Cagliari, Sardegna", 1.437f, R.drawable.ic_tamoil_logo, new LatLng(39.2325218, 9.0953491), generateMark()));
         stationHashMap.put(new LatLng(39.2329010, 9.1029220), new Station(1, Station.NAME_TAMOIL, "Via Is Maglias, Cagliari", 1.437f, R.drawable.ic_tamoil_logo, new LatLng(39.2329010, 9.1029220), generateMark()));
         stationHashMap.put(new LatLng(39.2216692, 9.1062200), new Station(2, Station.NAME_TAMOIL, "Piazza dell'Annunziata, Cagliari", 1.437f, R.drawable.ic_tamoil_logo, new LatLng(39.2216692, 9.1062200), generateMark()));
         stationHashMap.put(new LatLng(39.2284012, 9.1320594), new Station(3, Station.NAME_TAMOIL, "Viale Guglielmo Marconi, Cagliari", 1.437f, R.drawable.ic_tamoil_logo, new LatLng(39.2284012, 9.1320594), generateMark()));
@@ -38,7 +38,7 @@ public class StationFactory {
         stationHashMap.put(new LatLng(39.2141564, 9.1075633), new Station(17, Station.NAME_ENI, "Viale La Plaia, Cagliari", 1.437f, R.drawable.ic_eni_logo, new LatLng(39.2141564, 9.1075633), generateMark()));
         stationHashMap.put(new LatLng(39.2332010, 9.1864990), new Station(19, Station.NAME_ENI, "Viale Colombo, Quartu Sant'Elena, Cagliari", 1.437f, R.drawable.ic_eni_logo, new LatLng(39.2332010, 9.1864990), generateMark()));
         stationHashMap.put(new LatLng(39.2068343, 9.1331229), new Station(23, Station.NAME_ENI, "Piazza Firenze, Cagliari", 1.437f, R.drawable.ic_eni_logo, new LatLng(39.2068343, 9.1331229), generateMark()));
-        stationHashMap.put(new LatLng(39.2424670, 9.0908840), new Station(24, Station.NAME_ENI, "Viale Elmas, Cagliari", 1.437f, R.drawable.ic_eni_logo, new LatLng(39.2424670, 9.0908840), generateMark()));
+        stationHashMap.put(new LatLng(39.2424670, 9.0908840), new Station(24, Station.NAME_ENI, "Viale Elmas, Cagliari", 1.39f, R.drawable.ic_eni_logo, new LatLng(39.2424670, 9.0908840), generateMark()));
         stationHashMap.put(new LatLng(39.2528680, 9.1136360), new Station(25, Station.NAME_ENI, "Via del Timo, Cagliari", 1.437f, R.drawable.ic_eni_logo, new LatLng(39.2528680, 9.1136360), generateMark()));
         stationHashMap.put(new LatLng(39.2080880, 9.1337280), new Station(26, Station.NAME_ENI, "Via della Pineta,Cagliari", 1.437f, R.drawable.ic_eni_logo, new LatLng(39.2080880, 9.1337280), generateMark()));
         stationHashMap.put(new LatLng(39.2254425, 9.1298667), new Station(27, Station.NAME_ENI, "Viale Guglielmo Marconi, Cagliari", 1.437f, R.drawable.ic_eni_logo, new LatLng(39.2254425, 9.1298667), generateMark()));
