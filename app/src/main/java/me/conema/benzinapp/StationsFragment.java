@@ -150,7 +150,7 @@ public class StationsFragment extends Fragment implements LocationListener {
                     Station station = stationFactory.getStations().get(currentKey);
                     double distance = currentCameraPosition.distanceTo(station.getPosition());
 
-                    if(distance < 10000.0) {
+                    if(distance < 5000.0) {
                         GridLayout view = (GridLayout) inflater.inflate(R.layout.station_grid_layout, stationsLinearLayout, false);
                         ((ImageView)view.getChildAt(0)).setImageResource(station.getImg());
 
@@ -158,7 +158,7 @@ public class StationsFragment extends Fragment implements LocationListener {
                         ((TextView)currentLinearLayout.getChildAt(1)).setText(station.getMark() + "/5");
 
                         currentLinearLayout = (LinearLayout) ((LinearLayout)view.getChildAt(1)).getChildAt(1);
-                        ((TextView)currentLinearLayout.getChildAt(1)).setText(df.format(distance) + " Km");
+                        ((TextView)currentLinearLayout.getChildAt(1)).setText(df.format(distance / 1000.0) + " Km");
 
                         ((TextView) view.getChildAt(2)).setText(station.getName());
 
