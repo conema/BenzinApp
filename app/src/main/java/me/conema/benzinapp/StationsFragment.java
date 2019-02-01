@@ -330,14 +330,13 @@ public class StationsFragment extends Fragment implements LocationListener {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.spinner_order, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         orderBySpinner.setAdapter(adapter);
-        //selectedType = Station.ComparationType.values()[orderBySpinner.getSelectedItemPosition()];
 
         orderBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedType = Station.ComparationType.values()[i];
                 if (mapboxMap != null) {
-                    showStationsInfo(mapboxMap.getCameraPosition().target);
+                    showStationsInfo(currentSelectedPosition);
                 }
             }
 
