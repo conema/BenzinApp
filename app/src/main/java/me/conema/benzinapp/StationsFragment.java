@@ -154,8 +154,13 @@ public class StationsFragment extends Fragment implements LocationListener {
         HorizontalScrollView hsv = getView().findViewById(R.id.stationsScrollView);
         stationsLinearLayout.removeAllViews();
         LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         DecimalFormat df = new DecimalFormat("##.###");
+        DecimalFormat df_km = new DecimalFormat("##.#");
+        DecimalFormat df_m = new DecimalFormat("##");
         df.setRoundingMode(RoundingMode.DOWN);
+        df_km.setRoundingMode(RoundingMode.DOWN);
+        df_m.setRoundingMode(RoundingMode.DOWN);
 
         HashMap<LatLng, Station> stations = stationFactory.getStations();
         List<Pair<Station, Double>> stationDistancePairs = new ArrayList<>(stations.values().size());
@@ -176,9 +181,9 @@ public class StationsFragment extends Fragment implements LocationListener {
 
                 currentLinearLayout = (LinearLayout) ((LinearLayout)gridLayout.getChildAt(1)).getChildAt(1);
                 if (stationDoublePair.second >= 1000) {
-                    ((TextView)currentLinearLayout.getChildAt(1)).setText(df.format(stationDoublePair.second / 1000.0) + " Km");
+                    ((TextView) currentLinearLayout.getChildAt(1)).setText(df_km.format(stationDoublePair.second / 1000.0) + " Km");
                 } else {
-                    ((TextView)currentLinearLayout.getChildAt(1)).setText(df.format(stationDoublePair.second) + " m");
+                    ((TextView) currentLinearLayout.getChildAt(1)).setText(df_m.format(stationDoublePair.second) + " m");
                 }
 
                 ((TextView) gridLayout.getChildAt(2)).setText(stationDoublePair.first.getName());

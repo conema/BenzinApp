@@ -21,7 +21,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -195,6 +197,8 @@ public class HomeFragment extends Fragment {
     private void updateLastStations(View viewParent) {
         //Last stations
         GridLayout lastStations = viewParent.findViewById(R.id.last_stations_grid);
+        DecimalFormat df = new DecimalFormat("##.###");
+        df.setRoundingMode(RoundingMode.DOWN);
 
         //Delete child view (old station)
         lastStations.removeAllViews();
@@ -211,7 +215,7 @@ public class HomeFragment extends Fragment {
             stationName.setText(station.getName());
 
             TextView stationPrice = view.findViewById(R.id.last_station_price);
-            stationPrice.setText(station.getPrice() + "");
+            stationPrice.setText(df.format(station.getPrice()) + "");
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
