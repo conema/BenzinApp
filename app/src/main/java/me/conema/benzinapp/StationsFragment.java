@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
@@ -55,12 +56,20 @@ import me.conema.benzinapp.classes.AppFactory;
 import me.conema.benzinapp.classes.Station;
 import me.conema.benzinapp.classes.StationFactory;
 
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.annotations.PolygonOptions;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.style.layers.CircleLayer;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
+import com.mapbox.mapboxsdk.style.layers.PropertyValue;
+import com.mapbox.mapboxsdk.style.light.Position;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapquest.mapping.MapQuest;
 import com.mapquest.mapping.maps.MapView;
 
@@ -77,6 +86,7 @@ import me.conema.benzinapp.classes.StationFactory;
 public class StationsFragment extends Fragment implements LocationListener {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     public static final double MAX_DISTANCE = 5000.0;
+    private static final String CIRCLE_LAYER_ID = "circle_layer";
 
     // gestione per trovare locazione corrente
     private LocationManager locationManager;
@@ -90,6 +100,7 @@ public class StationsFragment extends Fragment implements LocationListener {
     private MapView mapView;
     private MapboxMap mapboxMap;
     private MarkerOptions currentPositionMarker;
+    private LatLng currentSelectedPosition;
 
     // interfaccia sopra la mappa
     private LinearLayout stationsLinearLayout;
@@ -123,6 +134,7 @@ public class StationsFragment extends Fragment implements LocationListener {
         mapboxMap.addMarker(currentPositionMarker
                 .icon(drawableToIcon(getActivity(), R.drawable.ic_navigation_black_24dp))
                 .setPosition(currentLatLng));
+        currentSelectedPosition = currentLatLng;
 
         Icon pin;
         for(LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
@@ -168,7 +180,7 @@ public class StationsFragment extends Fragment implements LocationListener {
         for(Station station : stations.values()) {
             stationDistancePairs.add(Pair.create(station, station.getPosition().distanceTo(position)));
         }
-        //Collections.sort(stationDistancePairs, (stationDoublePair, t1) -> (int) (stationDoublePair.second - t1.second));
+
         Collections.sort(stationDistancePairs, Station.getComparator(selectedType));
 
         for(Pair<Station, Double> stationDoublePair : stationDistancePairs) {
@@ -220,11 +232,41 @@ public class StationsFragment extends Fragment implements LocationListener {
         updateMapPosition();
 
 
+        // si aggiunge un livello per il disegno dei cerchi
+        mapboxMap.addSource(new GeoJsonSource("near_stations"));
+        CircleLayer layer = new CircleLayer(CIRCLE_LAYER_ID, "near_stations");
+        layer.withProperties(
+                PropertyFactory.circleRadius(10f),
+                PropertyFactory.circleOpacity(.4f),
+                PropertyFactory.circleColor(Color.CYAN)
+        );
+
+        mapboxMap.addLayer(layer);
+
+
         // si setta listener sui marker
         mapboxMap.setOnMarkerClickListener(marker -> {
             mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), mapboxMap.getCameraPosition().zoom));
             showStationsInfo(marker.getPosition());
             return true;
+        });
+
+        mapboxMap.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(@NonNull LatLng point) {
+                Log.d("PUNTO CLICCATO: ", point.toString());
+                Log.d("Posizione selezionata: ", currentSelectedPosition.toString());
+                currentSelectedPosition.setLatitude(point.getLatitude());
+                currentSelectedPosition.setLongitude(point.getLongitude());
+
+                /* hardcoded da far schifo */
+                mapboxMap.removeLayer(CIRCLE_LAYER_ID);
+                if (mapboxMap.getPolygons().size() != 0) {
+                    mapboxMap.removePolygon(mapboxMap.getPolygons().get(0));
+                }
+                //updateCircleLayer();
+                mapboxMap.addPolygon(generatePerimeter(currentSelectedPosition, 1, 64));
+            }
         });
 
         //Aggiunta stazioni
@@ -233,6 +275,40 @@ public class StationsFragment extends Fragment implements LocationListener {
             pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
             mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
         }
+    }
+
+
+    private void updateCircleLayer() {
+        Point center = Point.fromLngLat(currentSelectedPosition.getLongitude(), currentSelectedPosition.getLatitude());
+        Log.i("GEOJSONSOURCE: ", mapboxMap.getSourceAs(CIRCLE_LAYER_ID).toString());
+        ((GeoJsonSource)mapboxMap.getSourceAs(CIRCLE_LAYER_ID)).setGeoJson(center);
+        //mapboxMap.getSourceAs()
+    }
+
+    private PolygonOptions generatePerimeter(LatLng centerCoordinates, double radiusInKilometers, int numberOfSides) {
+        List<LatLng> positions = new ArrayList<>();
+        double distanceX = radiusInKilometers / (111.319 * Math.cos(centerCoordinates.getLatitude() * Math.PI / 180));
+        double distanceY = radiusInKilometers / 110.574;
+
+        double slice = (2 * Math.PI) / numberOfSides;
+
+        double theta;
+        double x;
+        double y;
+        LatLng position;
+        for (int i = 0; i < numberOfSides; ++i) {
+            theta = i * slice;
+            x = distanceX * Math.cos(theta);
+            y = distanceY * Math.sin(theta);
+
+            position = new LatLng(centerCoordinates.getLatitude() + y,
+                    centerCoordinates.getLongitude() + x);
+            positions.add(position);
+        }
+        return new PolygonOptions()
+                .addAll(positions)
+                .fillColor(Color.BLUE)
+                .alpha(0.4f);
     }
 
     @Nullable
