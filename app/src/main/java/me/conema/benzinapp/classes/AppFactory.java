@@ -1,8 +1,8 @@
 package me.conema.benzinapp.classes;
 
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.Stack;
 
 public class AppFactory {
     private static AppFactory singleton;
@@ -16,9 +16,9 @@ public class AppFactory {
     }
 
     private AppFactory() {
-        ArrayList<Station> lastStations = new ArrayList<>();
-        lastStations.add(StationFactory.getInstance().getStationById(0));
-        lastStations.add(StationFactory.getInstance().getStationById(24));
+        Stack<Station> lastStations = new Stack<>();
+        lastStations.push(StationFactory.getInstance().getStationById(24));
+        lastStations.push(StationFactory.getInstance().getStationById(0));
 
         app = new App(null, null, lastStations, new Date());
     }

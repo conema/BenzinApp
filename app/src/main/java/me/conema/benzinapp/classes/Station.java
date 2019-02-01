@@ -5,6 +5,7 @@ import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Objects;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.style.light.Position;
@@ -16,7 +17,7 @@ public class Station {
     public static String NAME_TAMOIL = "Tamoil";
     public static String NAME_ESSO = "ESSO";
 
-    public static enum ComparationType {DISTANCE, PRICE, MARK};
+    public enum ComparationType {DISTANCE, PRICE, MARK}
 
 
     private int id;
@@ -130,4 +131,23 @@ public class Station {
     }
     public LatLng getPosition() { return position; }
     public void setPosition(LatLng position) { this.position = position; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Station station = (Station) o;
+        return getId() == station.getId() &&
+                Float.compare(station.getPrice(), getPrice()) == 0 &&
+                Double.compare(station.getMark(), getMark()) == 0 &&
+                getImg() == station.getImg() &&
+                Objects.equals(getName(), station.getName()) &&
+                Objects.equals(getAddress(), station.getAddress()) &&
+                Objects.equals(getPosition(), station.getPosition());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getAddress(), getPrice(), getMark(), getImg(), getPosition());
+    }
 }

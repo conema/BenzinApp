@@ -2,15 +2,18 @@ package me.conema.benzinapp;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -24,9 +27,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
+import android.support.v7.widget.SearchView;
 import android.util.Pair;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -71,7 +76,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class StationsFragment extends Fragment implements LocationListener {
+import me.conema.benzinapp.classes.Station;
+import me.conema.benzinapp.classes.StationFactory;
+
+public class StationsFragment extends Fragment implements LocationListener, SearchView.OnQueryTextListener {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     public static final double MAX_DISTANCE = 1000.0;
     private static final String CIRCLE_LAYER_ID = "circle_layer";
@@ -100,7 +108,8 @@ public class StationsFragment extends Fragment implements LocationListener {
     Spinner orderBySpinner;
 
     TextView toolbar_title;
-    EditText toolbar_searchbox;
+    SearchView searchView;
+    MenuItem searchMenuItem;
 
     @SuppressLint("MissingPermission")
     private void updateMapPosition() {
@@ -195,6 +204,7 @@ public class StationsFragment extends Fragment implements LocationListener {
                     public void onClick(View view) {
                         Intent stationActivity = new Intent(getActivity(), SingleStation.class);
                         stationActivity.putExtra("stationId", stationDoublePair.first.getId());
+                        AppFactory.getInstance().getApp().pushLastStation(StationFactory.getInstance().getStationById(stationDoublePair.first.getId()));
                         startActivity(stationActivity);
                     }
                 });
@@ -298,7 +308,7 @@ public class StationsFragment extends Fragment implements LocationListener {
         setHasOptionsMenu(true);
 
         toolbar_title = getActivity().findViewById(R.id.toolbar_title);
-        toolbar_searchbox = getActivity().findViewById(R.id.toolbar_searchbox);
+        //toolbar_searchbox = getActivity().findViewById(R.id.toolbar_searchbox);
         return v;
     }
 
@@ -369,8 +379,6 @@ public class StationsFragment extends Fragment implements LocationListener {
     public void onPause() {
         super.onPause();
         mapView.onPause();
-        toolbar_searchbox.setVisibility(View.GONE);
-        toolbar_title.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -459,43 +467,69 @@ public class StationsFragment extends Fragment implements LocationListener {
         Drawable search = getResources().getDrawable(android.R.drawable.ic_menu_search).mutate();
         search.setColorFilter(getResources().getColor(R.color.colorBlack), PorterDuff.Mode.SRC_ATOP);
 
-        inflater.inflate(R.menu.menu_favorite, menu);
+
+        inflater.inflate(R.menu.options_menu, menu);
+
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchMenuItem = menu.findItem(R.id.search);
+        searchView = (SearchView) searchMenuItem.getActionView();
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setSubmitButtonEnabled(false);
+        searchView.setOnQueryTextListener(this);
+
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean queryTextFocused) {
+                if (!queryTextFocused) {
+                    searchMenuItem.collapseActionView();
+                    searchView.setQuery("", false);
+                }
+            }
+        });
+
+        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+            @Override
+            public boolean onSuggestionSelect(int i) {
+                return false;
+            }
+
+            @Override
+            public boolean onSuggestionClick(int i) {
+                Cursor cursor = searchView.getSuggestionsAdapter().getCursor();
+                cursor.moveToPosition(i);
+
+                Address address = CitySearchProvider.getLoc((cursor.getString(1)), getContext());
+
+                mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(address.getLatitude(), address.getLongitude()), 12));
+                searchMenuItem.collapseActionView();
+                searchView.setQuery("", false);
+                return false;
+            }
+        });
+
         MenuItem icon = menu.getItem(0);
         icon.setIcon(search);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        searchMenuItem.collapseActionView();
+        searchView.setQuery("", false);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.favoriteStation:
-                checkKey(item);
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void checkKey(MenuItem item) {
-        toolbar_searchbox.setVisibility(View.VISIBLE);
-        toolbar_title.setVisibility(View.GONE);
-
-        toolbar_searchbox.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //Qua gestione ricerca
-                Toast.makeText(getActivity(), toolbar_searchbox.getText(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
     }
 }
