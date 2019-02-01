@@ -45,7 +45,7 @@ public class Station {
     private static class markComparator implements Comparator<Pair<Station, Double>> {
         @Override
         public int compare(Pair<Station, Double> stationDoublePair, Pair<Station, Double> t1) {
-            return Double.compare(stationDoublePair.first.getMark(), t1.first.getMark());
+            return Double.compare(t1.first.getMark(), stationDoublePair.first.getMark());
         }
     }
 

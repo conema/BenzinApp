@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
@@ -29,11 +28,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
 import android.util.Pair;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,7 +40,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
-import android.support.v7.widget.GridLayout;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -51,8 +47,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import me.conema.benzinapp.classes.App;
-import me.conema.benzinapp.classes.AppFactory;
 import me.conema.benzinapp.classes.Station;
 import me.conema.benzinapp.classes.StationFactory;
 
@@ -64,11 +58,8 @@ import com.mapbox.mapboxsdk.annotations.PolygonOptions;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.style.layers.CircleLayer;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
-import com.mapbox.mapboxsdk.style.layers.PropertyValue;
-import com.mapbox.mapboxsdk.style.light.Position;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapquest.mapping.MapQuest;
 import com.mapquest.mapping.maps.MapView;
@@ -80,12 +71,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import me.conema.benzinapp.classes.Station;
-import me.conema.benzinapp.classes.StationFactory;
-
 public class StationsFragment extends Fragment implements LocationListener {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    public static final double MAX_DISTANCE = 5000.0;
+    public static final double MAX_DISTANCE = 1000.0;
     private static final String CIRCLE_LAYER_ID = "circle_layer";
 
     // gestione per trovare locazione corrente
@@ -101,6 +89,7 @@ public class StationsFragment extends Fragment implements LocationListener {
     private MapboxMap mapboxMap;
     private MarkerOptions currentPositionMarker;
     private LatLng currentSelectedPosition;
+    private LatLng currentUserLatLng;
 
     // interfaccia sopra la mappa
     private LinearLayout stationsLinearLayout;
@@ -115,26 +104,25 @@ public class StationsFragment extends Fragment implements LocationListener {
 
     @SuppressLint("MissingPermission")
     private void updateMapPosition() {
-        LatLng currentLatLng;
         locationManager.getLastKnownLocation(locationProvider);
         locationManager.requestLocationUpdates(locationProvider, 5000, (float) 2.0, this);
 
         currentLocation = locationManager.getLastKnownLocation(locationProvider);
 
         if (currentLocation != null) {
-            currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            currentUserLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         } else {
-            currentLatLng = new LatLng(39.222487, 9.114134);
+            currentUserLatLng = new LatLng(39.222487, 9.114134);
         }
 
-        mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 14));
+        mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentUserLatLng, 14));
 
         mapboxMap.removeAnnotations();
 
         mapboxMap.addMarker(currentPositionMarker
                 .icon(drawableToIcon(getActivity(), R.drawable.ic_navigation_black_24dp))
-                .setPosition(currentLatLng));
-        currentSelectedPosition = currentLatLng;
+                .setPosition(currentUserLatLng));
+        currentSelectedPosition = currentUserLatLng;
 
         Icon pin;
         for(LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
@@ -142,7 +130,7 @@ public class StationsFragment extends Fragment implements LocationListener {
             mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
         }
 
-        showStationsInfo(currentLatLng);
+        showStationsInfo(currentSelectedPosition);
     }
 
 
@@ -264,8 +252,8 @@ public class StationsFragment extends Fragment implements LocationListener {
                 if (mapboxMap.getPolygons().size() != 0) {
                     mapboxMap.removePolygon(mapboxMap.getPolygons().get(0));
                 }
-                //updateCircleLayer();
                 mapboxMap.addPolygon(generatePerimeter(currentSelectedPosition, 1, 64));
+                showStationsInfo(currentSelectedPosition);
             }
         });
 
@@ -275,14 +263,6 @@ public class StationsFragment extends Fragment implements LocationListener {
             pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
             mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
         }
-    }
-
-
-    private void updateCircleLayer() {
-        Point center = Point.fromLngLat(currentSelectedPosition.getLongitude(), currentSelectedPosition.getLatitude());
-        Log.i("GEOJSONSOURCE: ", mapboxMap.getSourceAs(CIRCLE_LAYER_ID).toString());
-        ((GeoJsonSource)mapboxMap.getSourceAs(CIRCLE_LAYER_ID)).setGeoJson(center);
-        //mapboxMap.getSourceAs()
     }
 
     private PolygonOptions generatePerimeter(LatLng centerCoordinates, double radiusInKilometers, int numberOfSides) {
