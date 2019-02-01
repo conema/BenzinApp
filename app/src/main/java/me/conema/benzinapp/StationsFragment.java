@@ -94,10 +94,12 @@ public class StationsFragment extends Fragment implements LocationListener {
     // interfaccia sopra la mappa
     private LinearLayout stationsLinearLayout;
     private Station.ComparationType selectedType;
+    private double gridLayoutWidth;
 
     // resto dell'interfaccia
     FloatingActionButton currentPositionButton;
     Spinner orderBySpinner;
+    HorizontalScrollView hsv;
 
     TextView toolbar_title;
     EditText toolbar_searchbox;
@@ -151,7 +153,7 @@ public class StationsFragment extends Fragment implements LocationListener {
 
 
     private void showStationsInfo(LatLng position) {
-        HorizontalScrollView hsv = getView().findViewById(R.id.stationsScrollView);
+        hsv = getView().findViewById(R.id.stationsScrollView);
         stationsLinearLayout.removeAllViews();
         LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -199,10 +201,11 @@ public class StationsFragment extends Fragment implements LocationListener {
                     }
                 });
                 stationsLinearLayout.addView(gridLayout);
+                gridLayoutWidth = gridLayout.getWidth();
             }
         }
 
-        hsv.scrollTo(0, hsv.getBottom());
+        hsv.smoothScrollTo(0, hsv.getBottom());
     }
 
     @SuppressLint("MissingPermission")
@@ -234,8 +237,20 @@ public class StationsFragment extends Fragment implements LocationListener {
 
         // si setta listener sui marker
         mapboxMap.setOnMarkerClickListener(marker -> {
-            mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), mapboxMap.getCameraPosition().zoom));
-            showStationsInfo(marker.getPosition());
+            // TODO: lavorare qua per scrollare alla stazione voluta
+            //mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), mapboxMap.getCameraPosition().zoom));
+            //showStationsInfo(marker.getPosition());
+            showStationsInfo(currentSelectedPosition);
+
+            int x = 0;
+            for(Station station : stationFactory.getStations().values()) {
+                if(station.getPosition() == marker.getPosition()) {
+                    break;
+                }
+                x += gridLayoutWidth;
+            }
+
+            hsv.smoothScrollTo(x, hsv.getScrollY());
             return true;
         });
 
