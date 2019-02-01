@@ -7,11 +7,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -414,7 +416,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         searchView = (SearchView) searchMenuItem.getActionView();
 
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        searchView.setSubmitButtonEnabled(true);
+        searchView.setSubmitButtonEnabled(false);
         searchView.setOnQueryTextListener(this);
 
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
@@ -427,19 +429,39 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
             }
         });
 
+        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+            @Override
+            public boolean onSuggestionSelect(int i) {
+                return false;
+            }
+
+            @Override
+            public boolean onSuggestionClick(int i) {
+                Cursor cursor = searchView.getSuggestionsAdapter().getCursor();
+                cursor.moveToPosition(i);
+
+                Address address = CitySearchProvider.getLoc((cursor.getString(1)), getContext());
+
+                mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(address.getLatitude(), address.getLongitude()), 12));
+                searchMenuItem.collapseActionView();
+                searchView.setQuery("", false);
+                return false;
+            }
+        });
+
         MenuItem icon = menu.getItem(0);
         icon.setIcon(search);
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        searchMenuItem.collapseActionView();
+        searchView.setQuery("", false);
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        //friendListAdapter.getFilter().filter(newText);
-
         return true;
     }
 
@@ -450,26 +472,5 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void checkKey(MenuItem item) {
-
-        /*toolbar_searchbox.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //Qua gestione ricerca
-                Toast.makeText(getActivity(), toolbar_searchbox.getText(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });*/
     }
 }
