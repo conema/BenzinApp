@@ -77,7 +77,7 @@ import java.util.List;
 import me.conema.benzinapp.classes.Station;
 import me.conema.benzinapp.classes.StationFactory;
 
-public class StationsFragment extends Fragment implements LocationListener {
+public class StationsFragment extends Fragment implements LocationListener, SearchView.OnQueryTextListener {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     public static final double MAX_DISTANCE = 5000.0;
 
@@ -318,7 +318,8 @@ public class StationsFragment extends Fragment implements LocationListener {
     public void onPause() {
         super.onPause();
         mapView.onPause();
-        MenuItemCompat.collapseActionView(searchMenuItem);
+        searchView.setIconified(true);
+        searchView.setIconified(true);
         toolbar_title.setVisibility(View.VISIBLE);
     }
 
@@ -417,12 +418,24 @@ public class StationsFragment extends Fragment implements LocationListener {
 
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchView.setSubmitButtonEnabled(true);
-        //searchView.setOnQueryTextListener(getActivity().getBaseContext());
+        searchView.setOnQueryTextListener(this);
 
 
         //inflater.inflate(R.menu.menu_favorite, menu);
         //MenuItem icon = menu.getItem(0);
         //icon.setIcon(search);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        //friendListAdapter.getFilter().filter(newText);
+
+        return true;
     }
 
     @Override
