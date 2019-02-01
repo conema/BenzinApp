@@ -153,9 +153,9 @@ public class StationsFragment extends Fragment implements LocationListener {
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        if (canvas.getWidth() > 200 && canvas.getHeight() > 200) {
-            canvas.scale(0.3f, 0.3f, canvas.getHeight() / 2, canvas.getWidth() / 2);
-        }
+        /*if (canvas.getWidth() > 200 && canvas.getHeight() > 200) {
+            canvas.scale(1f, 1f, canvas.getHeight() / 2, canvas.getWidth() / 2);
+        }*/
 
         vectorDrawable.draw(canvas);
         return IconFactory.getInstance(context).fromBitmap(bitmap);
