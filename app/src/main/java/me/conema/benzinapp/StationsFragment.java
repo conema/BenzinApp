@@ -2,6 +2,7 @@ package me.conema.benzinapp;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,9 +25,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
+import android.support.v7.widget.SearchView;
 import android.util.Pair;
 import android.os.Bundle;
 import android.text.Editable;
@@ -100,7 +103,8 @@ public class StationsFragment extends Fragment implements LocationListener {
     Spinner orderBySpinner;
 
     TextView toolbar_title;
-    EditText toolbar_searchbox;
+    SearchView searchView;
+    MenuItem searchMenuItem;
 
     @SuppressLint("MissingPermission")
     private void updateMapPosition() {
@@ -195,6 +199,7 @@ public class StationsFragment extends Fragment implements LocationListener {
                     public void onClick(View view) {
                         Intent stationActivity = new Intent(getActivity(), SingleStation.class);
                         stationActivity.putExtra("stationId", stationDoublePair.first.getId());
+                        AppFactory.getInstance().getApp().pushLastStation(StationFactory.getInstance().getStationById(stationDoublePair.first.getId()));
                         startActivity(stationActivity);
                     }
                 });
@@ -242,7 +247,7 @@ public class StationsFragment extends Fragment implements LocationListener {
         setHasOptionsMenu(true);
 
         toolbar_title = getActivity().findViewById(R.id.toolbar_title);
-        toolbar_searchbox = getActivity().findViewById(R.id.toolbar_searchbox);
+        //toolbar_searchbox = getActivity().findViewById(R.id.toolbar_searchbox);
         return v;
     }
 
@@ -313,7 +318,7 @@ public class StationsFragment extends Fragment implements LocationListener {
     public void onPause() {
         super.onPause();
         mapView.onPause();
-        toolbar_searchbox.setVisibility(View.GONE);
+        MenuItemCompat.collapseActionView(searchMenuItem);
         toolbar_title.setVisibility(View.VISIBLE);
     }
 
@@ -403,9 +408,21 @@ public class StationsFragment extends Fragment implements LocationListener {
         Drawable search = getResources().getDrawable(android.R.drawable.ic_menu_search).mutate();
         search.setColorFilter(getResources().getColor(R.color.colorBlack), PorterDuff.Mode.SRC_ATOP);
 
-        inflater.inflate(R.menu.menu_favorite, menu);
-        MenuItem icon = menu.getItem(0);
-        icon.setIcon(search);
+
+        inflater.inflate(R.menu.options_menu, menu);
+
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchMenuItem = menu.findItem(R.id.search);
+        searchView = (SearchView) searchMenuItem.getActionView();
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+        //searchView.setOnQueryTextListener(getActivity().getBaseContext());
+
+
+        //inflater.inflate(R.menu.menu_favorite, menu);
+        //MenuItem icon = menu.getItem(0);
+        //icon.setIcon(search);
     }
 
     @Override
@@ -421,10 +438,9 @@ public class StationsFragment extends Fragment implements LocationListener {
     }
 
     private void checkKey(MenuItem item) {
-        toolbar_searchbox.setVisibility(View.VISIBLE);
         toolbar_title.setVisibility(View.GONE);
 
-        toolbar_searchbox.addTextChangedListener(new TextWatcher() {
+        /*toolbar_searchbox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -440,6 +456,6 @@ public class StationsFragment extends Fragment implements LocationListener {
             public void afterTextChanged(Editable s) {
 
             }
-        });
+        });*/
     }
 }

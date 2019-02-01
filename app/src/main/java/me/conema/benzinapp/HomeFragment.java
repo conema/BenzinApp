@@ -26,6 +26,9 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Stack;
 
 import me.conema.benzinapp.classes.App;
 import me.conema.benzinapp.classes.AppFactory;
@@ -205,8 +208,13 @@ public class HomeFragment extends Fragment {
 
         App app = AppFactory.getInstance().getApp();
 
-        for (Station station : app.getLastStations()) {
+        Stack<Station> stations = new Stack<>();
+        stations.addAll(app.getLastStations());
+
+        while (!stations.empty()) {
             View view = getLayoutInflater().from(getActivity()).inflate(R.layout.last_station, lastStations, false);
+
+            Station station = stations.pop();
 
             ImageView stationImg = view.findViewById(R.id.last_station_img);
             stationImg.setImageResource(station.getImg());
