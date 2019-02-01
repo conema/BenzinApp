@@ -318,9 +318,6 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
     public void onPause() {
         super.onPause();
         mapView.onPause();
-        searchView.setIconified(true);
-        searchView.setIconified(true);
-        toolbar_title.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -420,10 +417,18 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(this);
 
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean queryTextFocused) {
+                if (!queryTextFocused) {
+                    searchMenuItem.collapseActionView();
+                    searchView.setQuery("", false);
+                }
+            }
+        });
 
-        //inflater.inflate(R.menu.menu_favorite, menu);
-        //MenuItem icon = menu.getItem(0);
-        //icon.setIcon(search);
+        MenuItem icon = menu.getItem(0);
+        icon.setIcon(search);
     }
 
     @Override
@@ -442,16 +447,12 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.favoriteStation:
-                checkKey(item);
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     private void checkKey(MenuItem item) {
-        toolbar_title.setVisibility(View.GONE);
 
         /*toolbar_searchbox.addTextChangedListener(new TextWatcher() {
             @Override
