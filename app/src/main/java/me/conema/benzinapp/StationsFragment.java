@@ -52,6 +52,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import me.conema.benzinapp.classes.AppFactory;
 import me.conema.benzinapp.classes.Station;
 import me.conema.benzinapp.classes.StationFactory;
 
