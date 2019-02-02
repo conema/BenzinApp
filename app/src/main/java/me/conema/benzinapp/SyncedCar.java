@@ -148,9 +148,8 @@ public class SyncedCar extends AppCompatActivity {
 
                     if (carImg != null) {
                         factory.addCar(car);
-                        Intent home = new Intent(SyncedCar.this, Home.class);
-                        startActivity(home);
-
+                        onBackPressed();
+                        Toast.makeText(getApplicationContext(), "Auto aggiunta con successo!", Toast.LENGTH_SHORT).show();
 
                     }
                     //If the user doesn't select an img for the car show an error msg

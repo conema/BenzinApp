@@ -39,6 +39,7 @@ public class CarSync extends AppCompatActivity {
     public void changeActivity() {
         Intent syncedCar = new Intent(CarSync.this, SyncedCar.class);
         startActivity(syncedCar);
+        finish();
     }
 
     @Override

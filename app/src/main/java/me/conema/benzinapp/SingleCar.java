@@ -92,18 +92,14 @@ public class SingleCar extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(SingleCar.this);
-                builder.setTitle("Sei sicuro di voler cancellare l' auto?")
+                builder.setTitle("Sei sicuro di voler cancellare l'auto?")
                         .setPositiveButton("si", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 carFactory.removeCar(car);
-                                Intent lista = new Intent(SingleCar.this,Home.class);
-                                startActivity(lista);
+                                onBackPressed();
                             }
                         })
-                        .setNegativeButton("no", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                            }
-                        });
+                        .setNegativeButton("no", null);
 
                 AlertDialog dialog = builder.create();
                 dialog.show();

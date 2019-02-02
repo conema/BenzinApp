@@ -23,6 +23,7 @@ import android.view.View;
 
 
 public class Home extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener, CarListFragment.OnFragmentInteractionListener {
+    private BottomNavigationView navigationView;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -65,8 +66,8 @@ public class Home extends AppCompatActivity implements HomeFragment.OnFragmentIn
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigationView = findViewById(R.id.navigation);
+        navigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         TextView mTitle = myToolbar.findViewById(R.id.toolbar_title);
@@ -105,11 +106,8 @@ public class Home extends AppCompatActivity implements HomeFragment.OnFragmentIn
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             //getSupportFragmentManager().popBackStack();
-
+            navigationView.setSelectedItemId(R.id.navigation_home);
             loadFragment(new HomeFragment(), true);
-            BottomNavigationView bottomNavigationView;
-            bottomNavigationView = findViewById(R.id.navigation);
-            bottomNavigationView.setSelectedItemId(R.id.navigation_home);
         } else {
             super.onBackPressed();
         }

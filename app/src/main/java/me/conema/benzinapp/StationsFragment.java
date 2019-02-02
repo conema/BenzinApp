@@ -242,20 +242,11 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
 
         // si setta listener sui marker
         mapboxMap.setOnMarkerClickListener(marker -> {
-            // TODO: lavorare qua per scrollare alla stazione voluta
-            //mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), mapboxMap.getCameraPosition().zoom));
-            //showStationsInfo(marker.getPosition());
-            showStationsInfo(currentSelectedPosition);
-
-            int x = 0;
-            for(Station station : stationFactory.getStations().values()) {
-                if(station.getPosition() == marker.getPosition()) {
-                    break;
-                }
-                x += gridLayoutWidth;
-            }
-
-            hsv.smoothScrollTo(x, hsv.getScrollY());
+            // TODO: aprire activity SingleStation con la stazione sulla quale si è cliccato
+            Intent stationActivity = new Intent(getActivity(), SingleStation.class);
+            stationActivity.putExtra("stationId", stationFactory.getStations().get(marker.getPosition()).getId());
+            AppFactory.getInstance().getApp().pushLastStation(StationFactory.getInstance().getStationById(stationFactory.getStations().get(marker.getPosition()).getId()));
+            startActivity(stationActivity);
             return true;
         });
 
