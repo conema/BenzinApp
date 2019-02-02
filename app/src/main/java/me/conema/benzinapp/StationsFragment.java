@@ -27,15 +27,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.SearchView;
-import android.util.Pair;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,18 +42,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import me.conema.benzinapp.classes.AppFactory;
-import me.conema.benzinapp.classes.Station;
-import me.conema.benzinapp.classes.StationFactory;
-
-import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
@@ -77,6 +67,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import me.conema.benzinapp.classes.AppFactory;
 import me.conema.benzinapp.classes.Station;
 import me.conema.benzinapp.classes.StationFactory;
 
@@ -107,12 +98,15 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
 
     // resto dell'interfaccia
     FloatingActionButton currentPositionButton;
+    FloatingActionButton closeInfoButton;
     Spinner orderBySpinner;
     HorizontalScrollView hsv;
 
     TextView toolbar_title;
     SearchView searchView;
     MenuItem searchMenuItem;
+
+    LinearLayout infoMaps;
 
     @SuppressLint("MissingPermission")
     private void updateMapPosition() {
@@ -200,7 +194,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
 
                 ((TextView) gridLayout.getChildAt(2)).setText(stationDoublePair.first.getName());
 
-                ((TextView) gridLayout.getChildAt(3)).setText(df.format(stationDoublePair.first.getPrice()) + " €/L");
+                ((TextView) gridLayout.getChildAt(4)).setText(df.format(stationDoublePair.first.getPrice()) + " €/L");
 
                 gridLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -355,6 +349,8 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         orderBySpinner = getView().findViewById(R.id.orderSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.spinner_order, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        orderBySpinner.setPrompt("Ordina per");
         orderBySpinner.setAdapter(adapter);
 
         orderBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -369,6 +365,27 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
+            }
+        });
+
+
+        //Close info maps button
+        hsv = getView().findViewById(R.id.stationsScrollView);
+        infoMaps = getView().findViewById(R.id.infoMaps);
+
+        closeInfoButton = getView().findViewById(R.id.closeInfoButton);
+        closeInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (infoMaps.getVisibility() == View.GONE) {
+                    infoMaps.setVisibility(View.VISIBLE);
+                    hsv.setVisibility(View.VISIBLE);
+                    closeInfoButton.setImageResource(android.R.drawable.arrow_down_float);
+                } else {
+                    infoMaps.setVisibility(View.GONE);
+                    hsv.setVisibility(View.GONE);
+                    closeInfoButton.setImageResource(android.R.drawable.arrow_up_float);
+                }
             }
         });
     }
