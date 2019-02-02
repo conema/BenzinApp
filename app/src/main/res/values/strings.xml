@@ -28,8 +28,8 @@
     <string name="title_activity_single_station">Map</string>
 
     <string-array name="spinner_order">
-        <item value="0">Distanza</item>
-        <item value="1">Prezzo</item>
-        <item value="2">Voto</item>
+        <item value="0">I più vicini</item>
+        <item value="1">Prezzo minore</item>
+        <item value="2">Voto recensioni</item>
     </string-array>
 </resources>
