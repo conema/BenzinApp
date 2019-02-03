@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="10pt"
+    android:layout_height="10pt">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="1pt"
+        android:src="@drawable/map_pin"
+        android:tint="@color/traffic_red" />
+
+    <ImageView
+        android:layout_width="5.4pt"
+        android:layout_height="5.4pt"
+        android:layout_marginLeft="2.3pt"
+        android:src="@drawable/ic_eni_logo" />
+
+    <TextView
+        android:id="@+id/station_number"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5.3pt"
+        android:text="1"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="3pt" />
+</FrameLayout>
