@@ -44,6 +44,7 @@ import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -75,6 +76,8 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     public static final double MAX_DISTANCE = 1000.0;
     private static final String CIRCLE_LAYER_ID = "circle_layer";
+    private static int CIRCLE_MUL = 500;
+    private static double METERS_CONV = 1000.00;
 
     // gestione per trovare locazione corrente
     private LocationManager locationManager;
@@ -107,6 +110,11 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
     MenuItem searchMenuItem;
 
     LinearLayout infoMaps;
+    SeekBar circleDim;
+    TextView seekKm;
+
+    //Variabile statica per memorizzare LatLong ultimo click
+    private static LatLng lastClick;
 
     @SuppressLint("MissingPermission")
     private void updateMapPosition() {
@@ -136,7 +144,11 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
             mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
         }
 
-        showStationsInfo(currentSelectedPosition);
+        if (lastClick == null) {
+            generateCircle(currentSelectedPosition, currentUserLatLng);
+        }
+
+        showStationsInfo(currentSelectedPosition, getPerimeterSeekBar());
     }
 
 
@@ -156,7 +168,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
     }
 
 
-    private void showStationsInfo(LatLng position) {
+    private void showStationsInfo(LatLng position, Double kmDistance) {
         hsv = getView().findViewById(R.id.stationsScrollView);
         stationsLinearLayout.removeAllViews();
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -177,8 +189,8 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
 
         Collections.sort(stationDistancePairs, Station.getComparator(selectedType));
 
-        for (Pair<Station, Double> stationDoublePair : stationDistancePairs) {
-            if (stationDoublePair.second < MAX_DISTANCE) {
+        for(Pair<Station, Double> stationDoublePair : stationDistancePairs) {
+            if (stationDoublePair.second < (kmDistance * METERS_CONV)) {
                 GridLayout gridLayout = (GridLayout) inflater.inflate(R.layout.station_grid_layout, stationsLinearLayout, false);
                 ((ImageView) gridLayout.getChildAt(0)).setImageResource(stationDoublePair.first.getImg());
 
@@ -255,16 +267,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
             public void onMapClick(@NonNull LatLng point) {
                 Log.d("PUNTO CLICCATO: ", point.toString());
                 Log.d("Posizione selezionata: ", currentSelectedPosition.toString());
-                currentSelectedPosition.setLatitude(point.getLatitude());
-                currentSelectedPosition.setLongitude(point.getLongitude());
-
-                /* hardcoded da far schifo */
-                mapboxMap.removeLayer(CIRCLE_LAYER_ID);
-                if (mapboxMap.getPolygons().size() != 0) {
-                    mapboxMap.removePolygon(mapboxMap.getPolygons().get(0));
-                }
-                mapboxMap.addPolygon(generatePerimeter(currentSelectedPosition, 1, 64));
-                showStationsInfo(currentSelectedPosition);
+                generateCircle(currentSelectedPosition, point);
             }
         });
 
@@ -274,6 +277,26 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
             pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
             mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
         }
+    }
+
+    private void generateCircle(LatLng currentSelectedPosition, LatLng point) {
+        currentSelectedPosition.setLatitude(point.getLatitude());
+        currentSelectedPosition.setLongitude(point.getLongitude());
+
+        lastClick = new LatLng(point.getLatitude(), point.getLongitude());
+
+        /* hardcoded da far schifo */
+        mapboxMap.removeLayer(CIRCLE_LAYER_ID);
+        if (mapboxMap.getPolygons().size() != 0) {
+            mapboxMap.removePolygon(mapboxMap.getPolygons().get(0));
+        }
+        mapboxMap.addPolygon(generatePerimeter(currentSelectedPosition, getPerimeterSeekBar(), 64));
+        showStationsInfo(currentSelectedPosition, getPerimeterSeekBar());
+    }
+
+    private double getPerimeterSeekBar() {
+        //(1*500) 500 min distance
+        return ((circleDim.getProgress() + 1) * CIRCLE_MUL) / METERS_CONV;
     }
 
     private PolygonOptions generatePerimeter(LatLng centerCoordinates, double radiusInKilometers, int numberOfSides) {
@@ -309,7 +332,6 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         setHasOptionsMenu(true);
 
         toolbar_title = getActivity().findViewById(R.id.toolbar_title);
-        //toolbar_searchbox = getActivity().findViewById(R.id.toolbar_searchbox);
         return v;
     }
 
@@ -317,6 +339,8 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         checkLocationPermission();
+        circleDim = getView().findViewById(R.id.circleDim);
+
         mapView = getView().findViewById(R.id.mapquestMapView);
 
         mapView.onCreate(savedInstanceState);
@@ -331,6 +355,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
             @Override
             public void onClick(View view) {
                 updateMapPosition();
+                generateCircle(currentSelectedPosition, currentUserLatLng);
             }
         });
 
@@ -349,7 +374,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedType = Station.ComparationType.values()[i];
                 if (mapboxMap != null) {
-                    showStationsInfo(currentSelectedPosition);
+                    showStationsInfo(currentSelectedPosition, getPerimeterSeekBar());
                 }
             }
 
@@ -377,6 +402,35 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
                     hsv.setVisibility(View.GONE);
                     closeInfoButton.setImageResource(android.R.drawable.arrow_up_float);
                 }
+            }
+        });
+
+        seekKm = view.findViewById(R.id.seekKm);
+        circleDim.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                try {
+                    generateCircle(currentSelectedPosition, lastClick);
+
+                    if (getPerimeterSeekBar() <= METERS_CONV) {
+                        seekKm.setText(getPerimeterSeekBar() * METERS_CONV + "M");
+                    } else {
+                        seekKm.setText(getPerimeterSeekBar() + "KM");
+                    }
+
+                } catch (NullPointerException ex) {
+                    //lastClick non dovrebbe mai essere null
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
     }
