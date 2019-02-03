@@ -48,12 +48,9 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.mapbox.mapboxsdk.annotations.Annotation;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
-import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.annotations.MarkerView;
 import com.mapbox.mapboxsdk.annotations.PolygonOptions;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -120,12 +117,10 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
     //Variabile statica per memorizzare LatLong ultimo click
     private static LatLng lastClick;
 
-    private HashMap<LatLng, Pair<Long, Boolean>> positionMarkerHashMap;
-
     @SuppressLint("MissingPermission")
     private void updateMapPosition() {
         locationManager.getLastKnownLocation(locationProvider);
-        locationManager.requestLocationUpdates(locationProvider, 5000, 2.0f, this);
+        locationManager.requestLocationUpdates(locationProvider, 5000, (float) 2.0, this);
 
         currentLocation = locationManager.getLastKnownLocation(locationProvider);
 
@@ -137,8 +132,6 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
 
         mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentUserLatLng, 14));
 
-        mapboxMap.removeAnnotations();
-        positionMarkerHashMap.clear();
         printStations();
 
         mapboxMap.addMarker(currentPositionMarker
@@ -155,22 +148,13 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         Icon pin;
         Boolean thereAreStations = false;
         LinearLayout notFoundStations = getView().findViewById(R.id.notFoundStations);
-        Marker tmp;
+
         for (LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
-            // fatto da Emanuele
             if (StationFactory.getInstance().getStations().get(currentKey).getPosition().distanceTo(currentUserLatLng) <= getPerimeterSeekBar() * METERS_CONV) {
                 pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
                 mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
                 thereAreStations = true;
             }
-            // fatto da Sinhuè
-            Station station = StationFactory.getInstance().getStations().get(currentKey);
-            pin = drawableToIcon(getActivity(), station.getImg());
-            currentPositionMarker = currentPositionMarker.icon(pin).setPosition(station.getPosition());
-            tmp = mapboxMap.addMarker(currentPositionMarker);
-            positionMarkerHashMap.put(currentKey, Pair.create(tmp.getId(), false));
-            
-            // fare massimo comune denominatore tra i due pezzi di codice
         }
 
         if (!thereAreStations) {
@@ -220,11 +204,8 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
 
         Collections.sort(stationDistancePairs, Station.getComparator(selectedType));
 
-        LatLng currentPosition;
         for(Pair<Station, Double> stationDoublePair : stationDistancePairs) {
-            currentPosition = stationDoublePair.first.getPosition();
-            boolean isInsideCircle = stationDoublePair.second < (kmDistance * METERS_CONV);
-            if (isInsideCircle) {
+            if (stationDoublePair.second < (kmDistance * METERS_CONV)) {
                 GridLayout gridLayout = (GridLayout) inflater.inflate(R.layout.station_grid_layout, stationsLinearLayout, false);
                 ((ImageView) gridLayout.getChildAt(0)).setImageResource(stationDoublePair.first.getImg());
 
@@ -242,59 +223,25 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
 
                 ((TextView) gridLayout.getChildAt(4)).setText(df.format(stationDoublePair.first.getPrice()) + " €/L");
 
-                gridLayout.setOnClickListener(view -> {
-                    Intent stationActivity = new Intent(getActivity(), SingleStation.class);
-                    stationActivity.putExtra("stationId", stationDoublePair.first.getId());
-                    AppFactory.getInstance().getApp().pushLastStation(StationFactory.getInstance().getStationById(stationDoublePair.first.getId()));
-                    startActivity(stationActivity);
+                gridLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent stationActivity = new Intent(getActivity(), SingleStation.class);
+                        stationActivity.putExtra("stationId", stationDoublePair.first.getId());
+                        AppFactory.getInstance().getApp().pushLastStation(StationFactory.getInstance().getStationById(stationDoublePair.first.getId()));
+                        startActivity(stationActivity);
+                    }
                 });
                 stationsLinearLayout.addView(gridLayout);
                 gridLayoutWidth = gridLayout.getWidth();
-
-                // TODO capire cosa porco dio non funziona
-                positionMarkerHashMap.replace(stationDoublePair.first.getPosition(),
-                        Pair.create(positionMarkerHashMap.get(currentPosition).first, true));
-                mapboxMap.removeAnnotation(positionMarkerHashMap.get(currentPosition).first);
-                View v = inflater.inflate(R.layout.station_pin, mapView, false);
-                mapboxMap.addMarker(new MarkerOptions().setPosition(currentPosition).icon(IconFactory.getInstance(getContext()).fromBitmap(loadBitmapFromView(v))));
-            } else {
-                positionMarkerHashMap.replace(stationDoublePair.first.getPosition(),
-                        Pair.create(positionMarkerHashMap.get(currentPosition).first, false));
             }
-
-
-
-            List<Annotation> annotations = mapboxMap.getAnnotations();
-
-            /*for(Annotation a : annotations) {
-                if (a instanceof Marker) {
-                    Marker m = (Marker) a;
-                    if (m.getPosition() == stationDoublePair.first.getPosition() && isInsideCircle) {
-                        // conversione da "logo" a pin
-                    } else if(changedIcon) {
-                        // conversione da pin a "logo"
-                        mapboxMap.removeAnnotation(m.getId());
-                        mapboxMap.addMarker(new MarkerOptions().setPosition(m.getPosition()).icon(drawableToIcon(getContext(), stationDoublePair.first.getImg())));
-                    }
-                }
-            }*/
         }
 
         hsv.smoothScrollTo(0, hsv.getBottom());
     }
 
-
-    public static Bitmap loadBitmapFromView(View v) {
-        Bitmap b = Bitmap.createBitmap( v.getLayoutParams().width, v.getLayoutParams().height, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(b);
-        v.layout(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
-        v.draw(c);
-        return b;
-    }
-
     @SuppressLint("MissingPermission")
     private void initialize() {
-        positionMarkerHashMap = new HashMap<>();
         stationFactory = StationFactory.getInstance();
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
@@ -329,11 +276,13 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
             return true;
         });
 
-        mapboxMap.addOnMapClickListener(point -> {
-            Log.d("PUNTO CLICCATO: ", point.toString());
-            Log.d("Posizione selezionata: ", currentSelectedPosition.toString());
-            generateCircle(currentSelectedPosition, point);
-            // TODO fare corrispondenza 1 a 1 tra stazioni in lista e icone
+        mapboxMap.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(@NonNull LatLng point) {
+                Log.d("PUNTO CLICCATO: ", point.toString());
+                Log.d("Posizione selezionata: ", currentSelectedPosition.toString());
+                generateCircle(currentSelectedPosition, point);
+            }
         });
 
         //Aggiunta stazioni
