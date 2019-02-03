@@ -29,7 +29,7 @@ public class App {
     }
 
     public void setFavStation(Station favStation) {
-            this.favStation = favStation;
+        this.favStation = favStation;
     }
 
     public Stack<Station> getLastStations() {

@@ -6,7 +6,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -26,8 +25,6 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Stack;
 
 import me.conema.benzinapp.classes.App;
@@ -35,9 +32,6 @@ import me.conema.benzinapp.classes.AppFactory;
 import me.conema.benzinapp.classes.Car;
 import me.conema.benzinapp.classes.CarFactory;
 import me.conema.benzinapp.classes.Station;
-import me.conema.benzinapp.classes.StationFactory;
-
-import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 
 
 /**
@@ -110,45 +104,36 @@ public class HomeFragment extends Fragment {
 
 
         Button addCar = view.findViewById(R.id.add_car);
-        addCar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent addCar = new Intent(getActivity(), CarSync.class);
-                startActivity(addCar);
-            }
+        addCar.setOnClickListener(v -> {
+            Intent addCar1 = new Intent(getActivity(), CarSync.class);
+            startActivity(addCar1);
         });
 
         Button favCar = view.findViewById(R.id.fav_car);
         Button favStation = view.findViewById(R.id.fav_station);
 
         //Favourites
-        favCar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Car car = AppFactory.getInstance().getApp().getFavCar();
+        favCar.setOnClickListener(v -> {
+            Car car = AppFactory.getInstance().getApp().getFavCar();
 
-                if (car == null) {
-                    Toast.makeText(getActivity(), "Non è presente un'auto preferita.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent carActivity = new Intent(getActivity(), SingleCar.class);
-                    carActivity.putExtra("carId", car.getId());
-                    startActivity(carActivity);
-                }
+            if (car == null) {
+                Toast.makeText(getActivity(), "Non è presente un'auto preferita.", Toast.LENGTH_SHORT).show();
+            } else {
+                Intent carActivity = new Intent(getActivity(), SingleCar.class);
+                carActivity.putExtra("carId", car.getId());
+                startActivity(carActivity);
             }
         });
 
-        favStation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Station station = AppFactory.getInstance().getApp().getFavStation();
+        favStation.setOnClickListener(v -> {
+            Station station = AppFactory.getInstance().getApp().getFavStation();
 
-                if (station == null) {
-                    Toast.makeText(getActivity(), "Non è presente una stazione preferita.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent stationActivity = new Intent(getActivity(), SingleStation.class);
-                    stationActivity.putExtra("stationId", station.getId());
-                    startActivity(stationActivity);
-                }
+            if (station == null) {
+                Toast.makeText(getActivity(), "Non è presente una stazione preferita.", Toast.LENGTH_SHORT).show();
+            } else {
+                Intent stationActivity = new Intent(getActivity(), SingleStation.class);
+                stationActivity.putExtra("stationId", station.getId());
+                startActivity(stationActivity);
             }
         });
 

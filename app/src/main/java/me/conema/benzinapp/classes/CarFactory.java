@@ -1,19 +1,13 @@
 package me.conema.benzinapp.classes;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 import me.conema.benzinapp.R;
-
-import static android.support.v4.content.res.ResourcesCompat.getDrawable;
 
 public class CarFactory {
     private static CarFactory singleton;
@@ -32,7 +26,7 @@ public class CarFactory {
         Car car1 = new Car("Pandy", 37, 15, null, Color.parseColor("#4d7099"), 80, img1, 50);
 
         Drawable img2 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.car_img_2_hd, null);
-        Car car2 = new Car( "Francy", 108, 18, null, Color.parseColor("#8492A6"), 40, img2, 59);
+        Car car2 = new Car("Francy", 108, 18, null, Color.parseColor("#8492A6"), 40, img2, 59);
 
 
         Drawable img3 = ResourcesCompat.getDrawable(context.getResources(), R.drawable.car_img_3_hd, null);

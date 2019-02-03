@@ -131,7 +131,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         currentSelectedPosition = currentUserLatLng;
 
         Icon pin;
-        for(LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
+        for (LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
             pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
             mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
         }
@@ -159,7 +159,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
     private void showStationsInfo(LatLng position) {
         hsv = getView().findViewById(R.id.stationsScrollView);
         stationsLinearLayout.removeAllViews();
-        LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         DecimalFormat df = new DecimalFormat("##.###");
         DecimalFormat df_km = new DecimalFormat("##.#");
@@ -171,21 +171,21 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         HashMap<LatLng, Station> stations = stationFactory.getStations();
         List<Pair<Station, Double>> stationDistancePairs = new ArrayList<>(stations.values().size());
 
-        for(Station station : stations.values()) {
+        for (Station station : stations.values()) {
             stationDistancePairs.add(Pair.create(station, station.getPosition().distanceTo(position)));
         }
 
         Collections.sort(stationDistancePairs, Station.getComparator(selectedType));
 
-        for(Pair<Station, Double> stationDoublePair : stationDistancePairs) {
-            if(stationDoublePair.second < MAX_DISTANCE) {
+        for (Pair<Station, Double> stationDoublePair : stationDistancePairs) {
+            if (stationDoublePair.second < MAX_DISTANCE) {
                 GridLayout gridLayout = (GridLayout) inflater.inflate(R.layout.station_grid_layout, stationsLinearLayout, false);
-                ((ImageView)gridLayout.getChildAt(0)).setImageResource(stationDoublePair.first.getImg());
+                ((ImageView) gridLayout.getChildAt(0)).setImageResource(stationDoublePair.first.getImg());
 
-                LinearLayout currentLinearLayout = (LinearLayout) ((LinearLayout)gridLayout.getChildAt(1)).getChildAt(0);
-                ((TextView)currentLinearLayout.getChildAt(1)).setText(stationDoublePair.first.getMark() + "/5");
+                LinearLayout currentLinearLayout = (LinearLayout) ((LinearLayout) gridLayout.getChildAt(1)).getChildAt(0);
+                ((TextView) currentLinearLayout.getChildAt(1)).setText(stationDoublePair.first.getMark() + "/5");
 
-                currentLinearLayout = (LinearLayout) ((LinearLayout)gridLayout.getChildAt(1)).getChildAt(1);
+                currentLinearLayout = (LinearLayout) ((LinearLayout) gridLayout.getChildAt(1)).getChildAt(1);
                 if (stationDoublePair.second >= 1000) {
                     ((TextView) currentLinearLayout.getChildAt(1)).setText(df_km.format(stationDoublePair.second / 1000.0) + " Km");
                 } else {
@@ -270,7 +270,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
 
         //Aggiunta stazioni
         Icon pin;
-        for(LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
+        for (LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
             pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
             mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
         }
@@ -433,8 +433,8 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
 
     // gestione permessi
     public boolean checkLocationPermission() {
-        if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if(ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.title_location_permission)
                         .setMessage(R.string.text_location_permission)

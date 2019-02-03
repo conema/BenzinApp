@@ -3,19 +3,17 @@ package me.conema.benzinapp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -68,21 +66,21 @@ public class SingleCar extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle obj = intent.getExtras();
 
-        if(obj != null)
+        if (obj != null)
             idCar = obj.getInt("carId");
 
         car = carFactory.getCarById(idCar);
 
-        if(car != null){
+        if (car != null) {
 
-            benzinaRimanente = car.getPercTank()*car.getTankCapacity()/100;
+            benzinaRimanente = car.getPercTank() * car.getTankCapacity() / 100;
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             kmSingleCar.setText("Ultimo aggiornamento : " + df.format(car.getLastSync()));
 
             mTitle.setText(car.getName());
             kmFatti.setText(String.valueOf(car.getKmDone()));
             consumo.setText(String.valueOf(car.getKml()));
-            kmRimanenti.setText(String.valueOf(car.getKml()*benzinaRimanente));
+            kmRimanenti.setText(String.valueOf(car.getKml() * benzinaRimanente));
             lRimanenti.setText(String.valueOf(benzinaRimanente));
             singleCar.setImageDrawable(car.getPhoto());
         }
@@ -93,11 +91,9 @@ public class SingleCar extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(SingleCar.this);
                 builder.setTitle("Sei sicuro di voler cancellare l'auto?")
-                        .setPositiveButton("si", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                carFactory.removeCar(car);
-                                onBackPressed();
-                            }
+                        .setPositiveButton("si", (dialog, id) -> {
+                            carFactory.removeCar(car);
+                            onBackPressed();
                         })
                         .setNegativeButton("no", null);
 
@@ -107,6 +103,7 @@ public class SingleCar extends AppCompatActivity {
         });
 
     }
+
     @Override
     protected void onRestart() {
         super.onRestart();
@@ -163,17 +160,13 @@ public class SingleCar extends AppCompatActivity {
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(SingleCar.this);
                 builder.setTitle("Hai già un'auto preferita, vuoi sostituirla con questa?")
-                        .setPositiveButton("sì", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                CarFactory carFactory = CarFactory.getInstance();
-                                Car car = carFactory.getCarById(idCar);
-                                app.setFavCar(car);
-                                item.setIcon(R.drawable.ic_favorite_red_24dp);
-                            }
+                        .setPositiveButton("sì", (dialog, id) -> {
+                            CarFactory carFactory = CarFactory.getInstance();
+                            Car car = carFactory.getCarById(idCar);
+                            app.setFavCar(car);
+                            item.setIcon(R.drawable.ic_favorite_red_24dp);
                         })
-                        .setNegativeButton("no", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                            }
+                        .setNegativeButton("no", (dialog, id) -> {
                         });
 
                 AlertDialog dialog = builder.create();

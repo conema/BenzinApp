@@ -11,11 +11,11 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -24,8 +24,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.FileNotFoundException;
 
 import me.conema.benzinapp.classes.Car;
 import me.conema.benzinapp.classes.CarFactory;
@@ -78,17 +76,16 @@ public class SyncedCar extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle obj = intent.getExtras();
 
-        if(obj != null)
+        if (obj != null)
             sync = obj.getBoolean("sync");
 
 
-        if(sync) {
+        if (sync) {
             Car car = new Car("Fiat punto", 45, 17, null, Color.parseColor("#121212"), 70, null, 56);
             carText.setText(car.getName());
             fuelText.setText("56");
             roadText.setText(Integer.toString(car.getKmDone()));
-        }
-        else{
+        } else {
             syncText.setText("Inserisci i dati della tua auto:");
             syncText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             syncText.setTextSize(20);
@@ -98,79 +95,64 @@ public class SyncedCar extends AppCompatActivity {
             roadText.setText("");
         }
 
-        imgPicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CharSequence options[] = new CharSequence[] {"Scatta foto", "Scegli dalla galleria"};
+        imgPicker.setOnClickListener(v -> {
+            CharSequence options[] = new CharSequence[]{"Scatta foto", "Scegli dalla galleria"};
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(SyncedCar.this);
-                builder.setCancelable(false);
-                builder.setTitle("Seleziona un'opzione:");
-                builder.setItems(options, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case 0:
-                                takePhoto();
-                                break;
-                            case 1:
-                                chooseFromGallery();
-                                break;
+            AlertDialog.Builder builder = new AlertDialog.Builder(SyncedCar.this);
+            builder.setCancelable(false);
+            builder.setTitle("Seleziona un'opzione:");
+            builder.setItems(options, (dialog, which) -> {
+                switch (which) {
+                    case 0:
+                        takePhoto();
+                        break;
+                    case 1:
+                        chooseFromGallery();
+                        break;
 
-                        }
+                }
 
-                    }
-                });
-                builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //the user clicked on Cancel
-                    }
-                });
-                builder.show();
-            }
+            });
+            builder.setNegativeButton(getString(R.string.cancel), (dialog, which) -> {
+                //the user clicked on Cancel
+            });
+            builder.show();
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (carText.getText().toString().equals(""))
-                    carText.setError("Il campo non può essere vuoto");
-                if (roadText.getText().toString().equals(""))
-                    roadText.setError("Il campo non può essere vuoto");
-                if (fuelEditText.getText().toString().equals(""))
-                    fuelEditText.setError("Il campo non può essere vuoto");
+        saveButton.setOnClickListener(v -> {
+            if (carText.getText().toString().equals(""))
+                carText.setError("Il campo non può essere vuoto");
+            if (roadText.getText().toString().equals(""))
+                roadText.setError("Il campo non può essere vuoto");
+            if (fuelEditText.getText().toString().equals(""))
+                fuelEditText.setError("Il campo non può essere vuoto");
+            else {
+                String carName = carText.getText().toString();
+                int kmDone = Integer.parseInt(roadText.getText().toString());
+                int tankCapacity = Integer.parseInt(fuelEditText.getText().toString());
+                Car car = new Car(carName, kmDone, 23, null, Color.parseColor("#c6b6b6"), 80, carImg, tankCapacity);
+
+                if (carImg != null) {
+                    factory.addCar(car);
+                    onBackPressed();
+                    Toast.makeText(getApplicationContext(), "Auto aggiunta con successo!", Toast.LENGTH_SHORT).show();
+
+                }
+                //If the user doesn't select an img for the car show an error msg
                 else {
-                    String carName = carText.getText().toString();
-                    int kmDone = Integer.parseInt(roadText.getText().toString());
-                    int tankCapacity = Integer.parseInt(fuelEditText.getText().toString());
-                    Car car = new Car(carName, kmDone, 23, null, Color.parseColor("#c6b6b6"), 80, carImg, tankCapacity);
+                    Context context = getApplicationContext();
+                    CharSequence text = "Seleziona un'immagine per l'auto";
+                    int duration = Toast.LENGTH_SHORT;
 
-                    if (carImg != null) {
-                        factory.addCar(car);
-                        onBackPressed();
-                        Toast.makeText(getApplicationContext(), "Auto aggiunta con successo!", Toast.LENGTH_SHORT).show();
-
-                    }
-                    //If the user doesn't select an img for the car show an error msg
-                    else {
-                        Context context = getApplicationContext();
-                        CharSequence text = "Seleziona un'immagine per l'auto";
-                        int duration = Toast.LENGTH_SHORT;
-
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
-                    }
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
             }
         });
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent home = new Intent(SyncedCar.this, Home.class);
-                startActivity(home);
-            }
+        deleteButton.setOnClickListener(v -> {
+            Intent home = new Intent(SyncedCar.this, Home.class);
+            startActivity(home);
         });
 
 
@@ -215,7 +197,7 @@ public class SyncedCar extends AppCompatActivity {
         }
     }
 
-    public void chooseFromGallery(){
+    public void chooseFromGallery() {
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(SyncedCar.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -257,7 +239,7 @@ public class SyncedCar extends AppCompatActivity {
         }
     }
 
-    public void takePhoto(){
+    public void takePhoto() {
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(SyncedCar.this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)

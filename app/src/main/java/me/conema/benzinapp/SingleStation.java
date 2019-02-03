@@ -15,26 +15,20 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +40,6 @@ import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.style.light.Position;
 import com.mapquest.mapping.MapQuest;
 import com.mapquest.mapping.maps.MapView;
 
@@ -59,8 +52,6 @@ import me.conema.benzinapp.classes.ReviewFactory;
 import me.conema.benzinapp.classes.Station;
 import me.conema.benzinapp.classes.StationFactory;
 import timber.log.Timber;
-
-import static me.conema.benzinapp.StationsFragment.MY_PERMISSIONS_REQUEST_LOCATION;
 
 public class SingleStation extends AppCompatActivity implements LocationListener {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
@@ -118,7 +109,7 @@ public class SingleStation extends AppCompatActivity implements LocationListener
         Intent intent = getIntent();
         Bundle obj = intent.getExtras();
 
-        if(obj != null)
+        if (obj != null)
             idStation = obj.getInt("stationId");
 
         Station station = stationFactory.getStationById(idStation);
@@ -203,14 +194,14 @@ public class SingleStation extends AppCompatActivity implements LocationListener
         mapView.onResume();
     }
 
-    private void updateReviewList(int idStazione){
+    private void updateReviewList(int idStazione) {
         ReviewFactory reviewFactory = ReviewFactory.getInstance();
         ArrayList<Review> reviewArrayList = reviewFactory.getReviewByStation(idStazione);
         LinearLayout reviewContainer = findViewById(R.id.container);
 
         reviewContainer.removeAllViews();
 
-        for(Review review : reviewArrayList){
+        for (Review review : reviewArrayList) {
             View view = getLayoutInflater().from(this).inflate(R.layout.review_linear_layout, reviewContainer, false);
             TextView nomeReview = view.findViewById(R.id.nomeReview);
             nomeReview.setText(review.getName());
@@ -235,7 +226,7 @@ public class SingleStation extends AppCompatActivity implements LocationListener
         MenuItem icon = menu.getItem(0);
         AppFactory appFactory = AppFactory.getInstance();
         App app = appFactory.getApp();
-        if(app.getFavStation() != null && app.getFavStation().getId() == idStation){
+        if (app.getFavStation() != null && app.getFavStation().getId() == idStation) {
             icon.setIcon(R.drawable.ic_favorite_red_24dp);
         }
         return true;
@@ -253,10 +244,10 @@ public class SingleStation extends AppCompatActivity implements LocationListener
         }
     }
 
-    private void checkFavStation(MenuItem item){
+    private void checkFavStation(MenuItem item) {
         AppFactory appFactory = AppFactory.getInstance();
         App app = appFactory.getApp();
-        if(app.getFavStation() == null) {
+        if (app.getFavStation() == null) {
             StationFactory stationFactory = StationFactory.getInstance();
             Station station = stationFactory.getStationById(idStation);
             app.setFavStation(station);

@@ -1,7 +1,5 @@
 package me.conema.benzinapp.classes;
 
-import android.location.Geocoder;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -53,9 +53,9 @@ public class ReviewFactory {
         return null;
     }
 
-    public ArrayList<Review> getReviewByStation(int id){
+    public ArrayList<Review> getReviewByStation(int id) {
         ArrayList<Review> newReviewList = new ArrayList<>();
-        for(Review review : reviewList){
+        for (Review review : reviewList) {
             if (review.getStationId() == id)
                 newReviewList.add(review);
         }

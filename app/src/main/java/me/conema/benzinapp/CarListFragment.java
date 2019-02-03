@@ -11,27 +11,18 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toolbar;
-
-import java.util.concurrent.ThreadLocalRandom;
-
-
-import com.mapquest.android.commoncore.model.Line;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -142,14 +133,14 @@ public class CarListFragment extends Fragment {
     public void onStart() {
         super.onStart();
         updateCarList(getView());
-        Log.i("controllo","OnStart ");
+        Log.i("controllo", "OnStart ");
     }
 
     //Aggiunge il bottone "+" alla toolbar
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_main, menu);
-        super.onCreateOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     /**
@@ -177,11 +168,10 @@ public class CarListFragment extends Fragment {
 
         //App app = AppFactory.getInstance().getApp();
 
-        if(carArrayList.size() == 0){
+        if (carArrayList.size() == 0) {
             View view = getLayoutInflater().from(getActivity()).inflate(R.layout.no_car_layout, container, false);
             container.addView(view);
-        }
-        else {
+        } else {
             for (Car car : carArrayList) {
                 //View view = getLayoutInflater().from(this).inflate(R.layout.car_list_relative_layout, container, false);
                 View view = getLayoutInflater().from(getActivity()).inflate(R.layout.car_list_relative_layout, container, false);
@@ -230,7 +220,7 @@ public class CarListFragment extends Fragment {
     /* Questa funzione aggiorna il colore della progress bar dell'auto in base alla
     percentuale del carburante rimanente
      */
-    public void updateProgressBarColor(ProgressBar progressBar, Car car ){
+    public void updateProgressBarColor(ProgressBar progressBar, Car car) {
 
         if (car.getPercTank() >= 60) {
             Drawable progressDrawable = progressBar.getProgressDrawable().mutate();
@@ -266,7 +256,6 @@ public class CarListFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
 
 }

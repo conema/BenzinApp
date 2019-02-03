@@ -1,14 +1,13 @@
 package me.conema.benzinapp.classes;
 
-import android.graphics.drawable.Drawable;
 import android.util.Pair;
+
+import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
 
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.style.light.Position;
 public class Station {
     /* toy data */
     public static String NAME_ENI = "ENI";
@@ -112,6 +111,7 @@ public class Station {
     public void setImg(int img) {
         this.img = img;
     }
+
     public double getMark() {
         ArrayList<Review> reviews = ReviewFactory.getInstance().getReviewByStation(id);
         double mark = 0;
@@ -129,8 +129,14 @@ public class Station {
     public void setMark(double mark) {
         this.mark = mark;
     }
-    public LatLng getPosition() { return position; }
-    public void setPosition(LatLng position) { this.position = position; }
+
+    public LatLng getPosition() {
+        return position;
+    }
+
+    public void setPosition(LatLng position) {
+        this.position = position;
+    }
 
     @Override
     public boolean equals(Object o) {

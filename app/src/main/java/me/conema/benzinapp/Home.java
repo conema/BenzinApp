@@ -1,9 +1,5 @@
 package me.conema.benzinapp;
 
-import android.content.Intent;
-import android.app.ActionBar;
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,12 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.ProgressBar;
-import android.widget.LinearLayout;
-import android.widget.ImageView;
-import android.widget.GridLayout;
-import android.widget.Button;
-import android.view.View;
 
 
 public class Home extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener, CarListFragment.OnFragmentInteractionListener {
@@ -54,7 +44,7 @@ public class Home extends AppCompatActivity implements HomeFragment.OnFragmentIn
                     fragment = new CarListFragment();
                     getSupportActionBar().setTitle("Lista auto");
                     mTitle.setText("Lista auto");
-                    loadFragment(fragment,false);
+                    loadFragment(fragment, false);
                     return true;
             }
             return false;
@@ -89,7 +79,7 @@ public class Home extends AppCompatActivity implements HomeFragment.OnFragmentIn
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri){
+    public void onFragmentInteraction(Uri uri) {
 //you can leave it empty
     }
 

@@ -1,11 +1,8 @@
 package me.conema.benzinapp.classes;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.style.light.Position;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import me.conema.benzinapp.R;
@@ -74,7 +71,7 @@ public class StationFactory {
     public HashMap<LatLng, Station> getStations() {
         HashMap<LatLng, Station> stations = new HashMap<>();
 
-        for(LatLng currentKey : stationHashMap.keySet()) {
+        for (LatLng currentKey : stationHashMap.keySet()) {
             stations.put(currentKey, stationHashMap.get(currentKey));
         }
 
@@ -87,11 +84,13 @@ public class StationFactory {
         return station.getId();
     }
 
-    public Station removeStation(LatLng position) { return stationHashMap.remove(position); }
+    public Station removeStation(LatLng position) {
+        return stationHashMap.remove(position);
+    }
 
     public Station getStationById(int id) {
-        for(LatLng currentKey : stationHashMap.keySet()) {
-            if(stationHashMap.get(currentKey).getId() == id) {
+        for (LatLng currentKey : stationHashMap.keySet()) {
+            if (stationHashMap.get(currentKey).getId() == id) {
                 return stationHashMap.get(currentKey);
             }
         }
