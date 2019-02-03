@@ -83,19 +83,21 @@
                 android:background="@drawable/left_broder_seekbar">
 
                 <TextView
+                    android:id="@+id/seekKm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10km"
                     android:paddingRight="10dp"
                     android:gravity="center"
+                    android:text="500M"
                     android:layout_gravity="center"
                     android:fontFamily="@font/lato_regular"
                     android:textSize="16sp" />
 
                 <SeekBar
+                    android:id="@+id/circleDim"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:max="50"
+                    android:max="20"
                     android:layout_gravity="center"
                     android:thumb="@drawable/bigger_seek" />
             </LinearLayout>
