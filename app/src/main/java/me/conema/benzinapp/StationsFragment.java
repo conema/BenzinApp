@@ -112,6 +112,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
     LinearLayout infoMaps;
     SeekBar circleDim;
     TextView seekKm;
+    LinearLayout notFoundStations;
 
     //Variabile statica per memorizzare LatLong ultimo click
     private static LatLng lastClick;
@@ -131,17 +132,35 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
 
         mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentUserLatLng, 14));
 
-        mapboxMap.removeAnnotations();
+        printStations();
 
         mapboxMap.addMarker(currentPositionMarker
                 .icon(drawableToIcon(getActivity(), R.drawable.ic_navigation_black_24dp))
                 .setPosition(currentUserLatLng));
+
+    }
+
+    public void printStations() {
+        mapboxMap.removeAnnotations();
+
         currentSelectedPosition = currentUserLatLng;
 
         Icon pin;
+        Boolean thereAreStations = false;
+        LinearLayout notFoundStations = getView().findViewById(R.id.notFoundStations);
+
         for (LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
-            pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
-            mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
+            if (StationFactory.getInstance().getStations().get(currentKey).getPosition().distanceTo(currentUserLatLng) <= getPerimeterSeekBar() * METERS_CONV) {
+                pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
+                mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
+                thereAreStations = true;
+            }
+        }
+
+        if (!thereAreStations) {
+            notFoundStations.setVisibility(View.VISIBLE);
+        } else if (notFoundStations.getVisibility() == View.VISIBLE) {
+            notFoundStations.setVisibility(View.GONE);
         }
 
         if (lastClick == null) {
@@ -274,8 +293,10 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         //Aggiunta stazioni
         Icon pin;
         for (LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
-            pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
-            mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
+            if (StationFactory.getInstance().getStations().get(currentKey).getPosition().distanceTo(currentUserLatLng) <= getPerimeterSeekBar() * METERS_CONV) {
+                pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
+                mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
+            }
         }
     }
 
@@ -290,12 +311,13 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         if (mapboxMap.getPolygons().size() != 0) {
             mapboxMap.removePolygon(mapboxMap.getPolygons().get(0));
         }
+        printStations();
         mapboxMap.addPolygon(generatePerimeter(currentSelectedPosition, getPerimeterSeekBar(), 64));
         showStationsInfo(currentSelectedPosition, getPerimeterSeekBar());
     }
 
     private double getPerimeterSeekBar() {
-        //(1*500) 500 min distance
+        //(0+1*400) 400 min distance
         return ((circleDim.getProgress() + 1) * CIRCLE_MUL) / METERS_CONV;
     }
 
@@ -412,7 +434,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
                 try {
                     generateCircle(currentSelectedPosition, lastClick);
 
-                    if (getPerimeterSeekBar() <= METERS_CONV) {
+                    if (getPerimeterSeekBar() * METERS_CONV <= METERS_CONV) {
                         seekKm.setText(getPerimeterSeekBar() * METERS_CONV + "M");
                     } else {
                         seekKm.setText(getPerimeterSeekBar() + "KM");
