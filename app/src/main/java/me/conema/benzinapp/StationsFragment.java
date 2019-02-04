@@ -41,9 +41,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -74,7 +76,6 @@ import me.conema.benzinapp.classes.StationFactory;
 
 public class StationsFragment extends Fragment implements LocationListener, SearchView.OnQueryTextListener {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    public static final double MAX_DISTANCE = 1000.0;
     private static final String CIRCLE_LAYER_ID = "circle_layer";
     private static int CIRCLE_MUL = 500;
     private static double METERS_CONV = 1000.00;
@@ -117,6 +118,8 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
     //Variabile statica per memorizzare LatLong ultimo click
     private static LatLng lastClick;
 
+    private HashMap<LatLng, Short> stationNumberHashMap;
+
     @SuppressLint("MissingPermission")
     private void updateMapPosition() {
         locationManager.getLastKnownLocation(locationProvider);
@@ -141,18 +144,44 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
     }
 
     public void printStations() {
+        short markerCounter = 0;
+        stationNumberHashMap.clear();
         mapboxMap.removeAnnotations();
 
         currentSelectedPosition = currentUserLatLng;
 
+        hsv = getView().findViewById(R.id.stationsScrollView);
+        stationsLinearLayout.removeAllViews();
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         Icon pin;
-        Boolean thereAreStations = false;
+        boolean thereAreStations = false;
         LinearLayout notFoundStations = getView().findViewById(R.id.notFoundStations);
 
+        Station station;
+        double distance;
+
+        HashMap<LatLng, Station> stations = stationFactory.getStations();
+        List<Pair<Station, Double>> stationDistancePairs = new ArrayList<>(stations.values().size());
+
+        for (Station s : stations.values()) {
+            stationDistancePairs.add(Pair.create(s, s.getPosition().distanceTo(currentSelectedPosition)));
+        }
+
+        Collections.sort(stationDistancePairs, Station.getComparator(selectedType));
+
         for (LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
-            if (StationFactory.getInstance().getStations().get(currentKey).getPosition().distanceTo(currentUserLatLng) <= getPerimeterSeekBar() * METERS_CONV) {
-                pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
-                mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
+            station = stationFactory.getStations().get(currentKey);
+            distance = station.getPosition().distanceTo(currentUserLatLng);
+            if (distance <= getPerimeterSeekBar() * METERS_CONV) {
+                markerCounter++;
+                stationNumberHashMap.put(station.getPosition(), markerCounter);
+                // TODO lavorare sul pin che segue
+                View view = inflater.inflate(R.layout.station_pin, null, false);
+                ((ImageView)view.findViewById(R.id.station_pin_logo)).setImageResource(stationFactory.getStations().get(currentKey).getImg());
+                ((TextView)view.findViewById(R.id.station_number)).setText(Integer.toString(markerCounter));
+                pin = bitmapToIcon(getActivity(), createBitmapFromView(view));
+                mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(stationFactory.getStations().get(currentKey).getPosition()));
                 thereAreStations = true;
             }
         }
@@ -167,26 +196,9 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
             generateCircle(currentSelectedPosition, currentUserLatLng);
         }
 
-        showStationsInfo(currentSelectedPosition, getPerimeterSeekBar());
-    }
-
-
-    public static Icon drawableToIcon(@NonNull Context context, @DrawableRes int id) {
-        Drawable vectorDrawable = ResourcesCompat.getDrawable(context.getResources(), id, context.getTheme());
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
-                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        vectorDrawable.draw(canvas);
-        return IconFactory.getInstance(context).fromBitmap(bitmap);
-    }
-
-
-    private void showStationsInfo(LatLng position, Double kmDistance) {
+        // si crea la roba che sta sotto
         hsv = getView().findViewById(R.id.stationsScrollView);
         stationsLinearLayout.removeAllViews();
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         DecimalFormat df = new DecimalFormat("##.###");
         DecimalFormat df_km = new DecimalFormat("##.#");
@@ -195,17 +207,10 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         df_km.setRoundingMode(RoundingMode.DOWN);
         df_m.setRoundingMode(RoundingMode.DOWN);
 
-        HashMap<LatLng, Station> stations = stationFactory.getStations();
-        List<Pair<Station, Double>> stationDistancePairs = new ArrayList<>(stations.values().size());
 
-        for (Station station : stations.values()) {
-            stationDistancePairs.add(Pair.create(station, station.getPosition().distanceTo(position)));
-        }
-
-        Collections.sort(stationDistancePairs, Station.getComparator(selectedType));
 
         for(Pair<Station, Double> stationDoublePair : stationDistancePairs) {
-            if (stationDoublePair.second < (kmDistance * METERS_CONV)) {
+            if (stationDoublePair.second < (getPerimeterSeekBar() * METERS_CONV)) {
                 GridLayout gridLayout = (GridLayout) inflater.inflate(R.layout.station_grid_layout, stationsLinearLayout, false);
                 ((ImageView) gridLayout.getChildAt(0)).setImageResource(stationDoublePair.first.getImg());
 
@@ -240,6 +245,44 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         hsv.smoothScrollTo(0, hsv.getBottom());
     }
 
+
+    public Bitmap createBitmapFromView(View v) {
+        v.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT));
+        v.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
+        Bitmap bitmap = Bitmap.createBitmap(v.getMeasuredWidth(),
+                v.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+
+        Canvas c = new Canvas(bitmap);
+        v.layout(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+        v.draw(c);
+        return bitmap;
+    }
+
+
+
+    public static Icon drawableToIcon(@NonNull Context context, @DrawableRes int id) {
+        Drawable vectorDrawable = ResourcesCompat.getDrawable(context.getResources(), id, context.getTheme());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
+                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        vectorDrawable.draw(canvas);
+        return IconFactory.getInstance(context).fromBitmap(bitmap);
+    }
+
+    public static Icon bitmapToIcon(@NonNull Context context, Bitmap bmp) {
+        Canvas canvas = new Canvas(bmp);
+        //vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        //vectorDrawable.draw(canvas);
+        return IconFactory.getInstance(context).fromBitmap(bmp);
+    }
+
     @SuppressLint("MissingPermission")
     private void initialize() {
         stationFactory = StationFactory.getInstance();
@@ -251,6 +294,8 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         locationProvider = locationManager.getBestProvider(criteria, true);
 
         currentPositionMarker = new MarkerOptions();
+
+        stationNumberHashMap = new HashMap<>();
 
         updateMapPosition();
 
@@ -289,7 +334,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         Icon pin;
         for (LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
             if (StationFactory.getInstance().getStations().get(currentKey).getPosition().distanceTo(currentUserLatLng) <= getPerimeterSeekBar() * METERS_CONV) {
-                pin = drawableToIcon(getActivity(), StationFactory.getInstance().getStations().get(currentKey).getImg());
+                pin = drawableToIcon(getActivity(), stationFactory.getStations().get(currentKey).getImg());
                 mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
             }
         }
@@ -306,9 +351,8 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         if (mapboxMap.getPolygons().size() != 0) {
             mapboxMap.removePolygon(mapboxMap.getPolygons().get(0));
         }
-        printStations();
         mapboxMap.addPolygon(generatePerimeter(currentSelectedPosition, getPerimeterSeekBar(), 64));
-        showStationsInfo(currentSelectedPosition, getPerimeterSeekBar());
+        printStations();
     }
 
     private double getPerimeterSeekBar() {
@@ -368,12 +412,9 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         });
 
         currentPositionButton = getView().findViewById(R.id.currentPositionButton);
-        currentPositionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateMapPosition();
-                generateCircle(currentSelectedPosition, currentUserLatLng);
-            }
+        currentPositionButton.setOnClickListener(view1 -> {
+            updateMapPosition();
+            generateCircle(currentSelectedPosition, currentUserLatLng);
         });
 
         // gestione linear layout delle stazioni
@@ -391,7 +432,8 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedType = Station.ComparationType.values()[i];
                 if (mapboxMap != null) {
-                    showStationsInfo(currentSelectedPosition, getPerimeterSeekBar());
+                    //showStationsInfo(currentSelectedPosition, getPerimeterSeekBar());
+                    printStations();
                 }
             }
 
@@ -509,12 +551,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.title_location_permission)
                         .setMessage(R.string.text_location_permission)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
-                            }
-                        })
+                        .setPositiveButton("OK", (dialogInterface, i) -> ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION))
                         .create()
                         .show();
             } else {
