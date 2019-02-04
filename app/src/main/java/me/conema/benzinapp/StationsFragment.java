@@ -67,7 +67,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import me.conema.benzinapp.classes.AppFactory;
 import me.conema.benzinapp.classes.Station;
@@ -183,6 +182,8 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
                 View view = inflater.inflate(R.layout.station_pin, null, false);
                 ((ImageView)view.findViewById(R.id.station_pin_logo)).setImageResource(stationFactory.getStations().get(currentKey).getImg());
                 ((TextView)view.findViewById(R.id.station_number)).setText(Integer.toString(markerCounter));
+                ((TextView) view.findViewById(R.id.station_number)).setShadowLayer(1.5f, -1, 1, Color.WHITE);
+                ((TextView) view.findViewById(R.id.station_number)).setTextColor(Color.DKGRAY);
                 pin = bitmapToIcon(getActivity(), createBitmapFromView(view));
 
                 mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(stationFactory.getStations().get(currentKey).getPosition()));
@@ -377,7 +378,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         }
         return new PolygonOptions()
                 .addAll(positions)
-                .fillColor(Color.BLUE)
+                .fillColor(Color.parseColor("#0094CF"))
                 .alpha(0.4f);
     }
 

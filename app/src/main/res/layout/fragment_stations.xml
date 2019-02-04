@@ -25,8 +25,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/infoMaps"
-            app:layout_constraintStart_toStartOf="@+id/infoMaps"
+            app:layout_constraintBottom_toTopOf="@+id/infoContainer"
+            app:layout_constraintStart_toStartOf="@+id/infoContainer"
             android:orientation="horizontal"
             android:layout_marginBottom="10dp">
 
@@ -58,102 +58,108 @@
 
         <!-- va settato visible/gone a seconda che venga mostrato oppure no -->
         <LinearLayout
-            android:id="@+id/infoMaps"
+            android:id="@+id/infoContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/stationsScrollView"
-            app:layout_constraintStart_toStartOf="@+id/stationsScrollView"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+            app:layout_constraintBottom_toBottomOf="@+id/mapquestMapView"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@android:color/white"
+            android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/infoMaps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/colorWhite">
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
 
-
-                <Spinner
-                    android:id="@+id/orderSpinner"
-                    android:layout_width="180dp"
-                    android:layout_height="50dp"
-                    android:spinnerMode="dialog" />
-
-                <!-- 1 incremento = 200m -->
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_gravity="center"
-                    android:background="@drawable/left_broder_seekbar">
+                    android:orientation="horizontal"
+                    android:background="@color/colorWhite">
 
-                    <TextView
-                        android:id="@+id/seekKm"
+
+                    <Spinner
+                        android:id="@+id/orderSpinner"
+                        android:layout_width="180dp"
+                        android:layout_height="50dp"
+                        android:spinnerMode="dialog" />
+
+                    <!-- 1 incremento = 200m -->
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingRight="10dp"
-                        android:gravity="center"
-                        android:text="500M"
+                        android:orientation="vertical"
                         android:layout_gravity="center"
-                        android:fontFamily="@font/lato_regular"
-                        android:textSize="16sp" />
+                        android:background="@drawable/left_broder_seekbar">
 
-                    <SeekBar
-                        android:id="@+id/circleDim"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:max="15"
-                        android:layout_gravity="center"
-                        android:thumb="@drawable/bigger_seek" />
+                        <TextView
+                            android:id="@+id/seekKm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="10dp"
+                            android:gravity="center"
+                            android:text="500M"
+                            android:layout_gravity="center"
+                            android:fontFamily="@font/lato_regular"
+                            android:textSize="16sp" />
+
+                        <SeekBar
+                            android:id="@+id/circleDim"
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:max="15"
+                            android:layout_gravity="center"
+                            android:thumb="@drawable/bigger_seek" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/notFoundStations"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/colorWhite"
-                android:layout_marginTop="25dp"
-                android:padding="20dp"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:drawable/stat_sys_warning"
-                    android:tint="@android:color/holo_red_dark"
-                    android:layout_gravity="center" />
-
-                <TextView
+                <LinearLayout
+                    android:id="@+id/notFoundStations"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="In questa zona non son presenti stazioni"
-                    android:gravity="center"
-                    android:fontFamily="@font/lato_regular"
-                    android:textSize="18sp" />
+                    android:layout_gravity="center"
+                    android:background="@color/colorWhite"
+                    android:layout_marginTop="25dp"
+                    android:padding="20dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/stat_sys_warning"
+                        android:tint="@android:color/holo_red_dark"
+                        android:layout_gravity="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="In questa zona non son presenti stazioni"
+                        android:gravity="center"
+                        android:fontFamily="@font/lato_regular"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
             </LinearLayout>
 
+            <HorizontalScrollView
+                android:id="@+id/stationsScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:id="@+id/stationsLinearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"></LinearLayout>
+            </HorizontalScrollView>
         </LinearLayout>
-
-        <HorizontalScrollView
-            android:id="@+id/stationsScrollView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/mapquestMapView"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <LinearLayout
-                android:id="@+id/stationsLinearLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"></LinearLayout>
-        </HorizontalScrollView>
 
     </android.support.constraint.ConstraintLayout>
 
