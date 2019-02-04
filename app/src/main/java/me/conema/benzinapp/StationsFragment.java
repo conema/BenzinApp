@@ -67,6 +67,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import me.conema.benzinapp.classes.AppFactory;
 import me.conema.benzinapp.classes.Station;
@@ -227,7 +228,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
                     ((TextView) currentLinearLayout.getChildAt(1)).setText(df_m.format(stationDoublePair.second) + " m");
                 }
 
-                ((TextView) gridLayout.getChildAt(2)).setText(stationDoublePair.first.getName());
+                ((TextView) gridLayout.getChildAt(2)).setText(Short.toString(stationNumberHashMap.get(stationDoublePair.first.getPosition())));
 
                 ((TextView) gridLayout.getChildAt(4)).setText(df.format(stationDoublePair.first.getPrice()) + " €/L");
 
