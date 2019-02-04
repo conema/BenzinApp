@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -45,7 +44,6 @@ import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -114,14 +112,17 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
     SeekBar circleDim;
     TextView seekKm;
     LinearLayout notFoundStations;
+    LatLng realUserPosition;
 
     //Variabile statica per memorizzare LatLong ultimo click
     private static LatLng lastClick;
 
     private HashMap<LatLng, Short> stationNumberHashMap;
 
+
     @SuppressLint("MissingPermission")
     private void updateMapPosition() {
+
         locationManager.getLastKnownLocation(locationProvider);
         locationManager.requestLocationUpdates(locationProvider, 5000, (float) 2.0, this);
 
@@ -133,20 +134,21 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
             currentUserLatLng = new LatLng(39.222487, 9.114134);
         }
 
+        realUserPosition = new LatLng(currentUserLatLng);
+
         mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentUserLatLng, 14));
 
         printStations();
-
-        mapboxMap.addMarker(currentPositionMarker
-                .icon(drawableToIcon(getActivity(), R.drawable.ic_navigation_black_24dp))
-                .setPosition(currentUserLatLng));
-
     }
 
     public void printStations() {
         short markerCounter = 0;
         stationNumberHashMap.clear();
         mapboxMap.removeAnnotations();
+
+        mapboxMap.addMarker(currentPositionMarker
+                .icon(drawableToIcon(getActivity(), R.drawable.ic_navigation_black_24dp))
+                .setPosition(realUserPosition));
 
         currentSelectedPosition = currentUserLatLng;
 
@@ -181,6 +183,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
                 ((ImageView)view.findViewById(R.id.station_pin_logo)).setImageResource(stationFactory.getStations().get(currentKey).getImg());
                 ((TextView)view.findViewById(R.id.station_number)).setText(Integer.toString(markerCounter));
                 pin = bitmapToIcon(getActivity(), createBitmapFromView(view));
+
                 mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(stationFactory.getStations().get(currentKey).getPosition()));
                 thereAreStations = true;
             }
@@ -262,8 +265,6 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         return bitmap;
     }
 
-
-
     public static Icon drawableToIcon(@NonNull Context context, @DrawableRes int id) {
         Drawable vectorDrawable = ResourcesCompat.getDrawable(context.getResources(), id, context.getTheme());
         Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
@@ -329,15 +330,6 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
                 generateCircle(currentSelectedPosition, point);
             }
         });
-
-        //Aggiunta stazioni
-        Icon pin;
-        for (LatLng currentKey : StationFactory.getInstance().getStations().keySet()) {
-            if (StationFactory.getInstance().getStations().get(currentKey).getPosition().distanceTo(currentUserLatLng) <= getPerimeterSeekBar() * METERS_CONV) {
-                pin = drawableToIcon(getActivity(), stationFactory.getStations().get(currentKey).getImg());
-                mapboxMap.addMarker(currentPositionMarker.icon(pin).setPosition(StationFactory.getInstance().getStations().get(currentKey).getPosition()));
-            }
-        }
     }
 
     private void generateCircle(LatLng currentSelectedPosition, LatLng point) {
@@ -346,13 +338,15 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
 
         lastClick = new LatLng(point.getLatitude(), point.getLongitude());
 
-        /* hardcoded da far schifo */
+        printStations();
+
+        /* hardcoded da far schifo
         mapboxMap.removeLayer(CIRCLE_LAYER_ID);
         if (mapboxMap.getPolygons().size() != 0) {
             mapboxMap.removePolygon(mapboxMap.getPolygons().get(0));
-        }
+        }*/
         mapboxMap.addPolygon(generatePerimeter(currentSelectedPosition, getPerimeterSeekBar(), 64));
-        printStations();
+
     }
 
     private double getPerimeterSeekBar() {
@@ -434,6 +428,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
                 if (mapboxMap != null) {
                     //showStationsInfo(currentSelectedPosition, getPerimeterSeekBar());
                     printStations();
+                    generateCircle(currentSelectedPosition, lastClick);
                 }
             }
 
@@ -633,6 +628,9 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
                 Address address = CitySearchProvider.getLoc((cursor.getString(1)), getContext());
 
                 mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(address.getLatitude(), address.getLongitude()), 12));
+
+
+                generateCircle(currentSelectedPosition, new LatLng(address.getLatitude(), address.getLongitude()));
                 searchMenuItem.collapseActionView();
                 searchView.setQuery("", false);
                 return false;
