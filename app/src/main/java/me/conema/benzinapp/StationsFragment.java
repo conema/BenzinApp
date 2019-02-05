@@ -605,6 +605,7 @@ public class StationsFragment extends Fragment implements LocationListener, Sear
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchView.setSubmitButtonEnabled(false);
         searchView.setOnQueryTextListener(this);
+        searchView.setQueryHint("Cerca città...");
 
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
