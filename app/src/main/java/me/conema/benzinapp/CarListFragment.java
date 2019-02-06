@@ -245,9 +245,8 @@ public class CarListFragment extends Fragment {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.addCar:
-                Intent syncedCar = new Intent(getActivity(), SyncedCar.class);
-                syncedCar.putExtra("sync", false);
-                startActivity(syncedCar);
+                Intent carSync = new Intent(getActivity(), CarSync.class);
+                startActivity(carSync);
                 /*Intent station = new Intent(getActivity(), SingleStation.class);
                 station.putExtra("stationId", 0);
                 startActivity(station);*/

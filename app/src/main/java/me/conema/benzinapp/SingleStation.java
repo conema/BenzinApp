@@ -78,6 +78,8 @@ public class SingleStation extends AppCompatActivity implements LocationListener
     RelativeLayout addressLayout;
     int idStation = -1;
 
+    TextView noRewiew;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +94,7 @@ public class SingleStation extends AppCompatActivity implements LocationListener
         addressView = findViewById(R.id.addressView);
         addressLayout = findViewById(R.id.addressLayout);
         gpsDistance = findViewById(R.id.gpsDistance);
+        noRewiew = findViewById(R.id.noReview);
 
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         TextView mTitle = myToolbar.findViewById(R.id.toolbar_title);
@@ -201,6 +204,8 @@ public class SingleStation extends AppCompatActivity implements LocationListener
 
         reviewContainer.removeAllViews();
 
+        boolean thereAreReview = false;
+
         for (Review review : reviewArrayList) {
             View view = getLayoutInflater().from(this).inflate(R.layout.review_linear_layout, reviewContainer, false);
             TextView nomeReview = view.findViewById(R.id.nomeReview);
@@ -210,6 +215,14 @@ public class SingleStation extends AppCompatActivity implements LocationListener
             TextView testoReview = view.findViewById(R.id.testoReview);
             testoReview.setText(review.getDescription());
             reviewContainer.addView(view);
+
+            thereAreReview = true;
+        }
+
+        if (!thereAreReview) {
+            noRewiew.setVisibility(View.VISIBLE);
+        } else {
+            noRewiew.setVisibility(View.GONE);
         }
     }
 

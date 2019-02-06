@@ -221,6 +221,18 @@
                     android:textSize="20sp" />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/noReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Non sono ancora presenti recensioni"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:fontFamily="@font/lato_regular"
+                android:textSize="18sp"
+                android:paddingTop="10dp"
+                android:visibility="gone" />
+
             <LinearLayout
                 android:id="@+id/container"
                 android:layout_width="match_parent"
